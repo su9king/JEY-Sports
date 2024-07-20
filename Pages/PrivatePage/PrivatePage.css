@@ -1,0 +1,10 @@
+.btn {
+    margin-right: 5px; /* 버튼 사이 간격 */
+    width: 100px;
+    height: 30px;
+    border-radius: 5px; /* 버튼 모서리를 둥글게 */
+    border: none;
+    background-color: #007bff;
+    color: white; /* 버튼 텍스트 색상을 흰색으로 설정합니다 */
+    cursor: pointer; /* 커서를 포인터로 변경하여 버튼을 클릭할 때 인터랙션을 제공합니다 */
+  }

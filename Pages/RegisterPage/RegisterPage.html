@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register JEY Sports</title>
+    <script src="RegisterPage.js"></script>
+    <link rel="stylesheet" href="RegisterPage.css">
+</head>
+<body>
+    <div id="navbar"></div>
+    <div class="container">
+        <div>
+            <h1>Register Information</h1>
+            <div class="inputs">
+                <form id="idForm"> <!-- 새로운 ID 작성 -->
+                    <input class="inputRequired" id="userID" type="text" placeholder="New ID" required> </br>
+                    <button class="btn" type="submit">ID Duplicate Check</button>
+                    <div id="idAlert" style="display: none;">사용 가능한 ID입니다!</div>
+                </form>
+
+                <form id="phoneForm"> <!-- 휴대폰 번호 입력 -->
+                    <input class="inputRequired" id="userPhone" type="text" placeholder="Your Phone Number" required> </br>
+                    <button class="btn" type="submit">전화번호 인증번호 전송</button>
+                </form>
+                <form id="phoneCheckForm" style="display: none;"> <!-- 인증번호 작성 -->
+                    <input class="inputRequired" id="code" type="text" placeholder="Code Number by Phone Message" required> </br>
+                    <button class="btn" type="submit">인증하기</button>
+                </form>
+
+                <input class="inputRequired" id="userEmail" type="email" placeholder="Your Email" required> </br> <!-- 회원 email 작성 -->
+                
+                <input class="input" id="userAddress" type="text" placeholder="Your Address"> </br>
+                <input class="input" id="userGender" type="text" placeholder="Your Gender"> </br>
+                <input class="input" id="userBirth" type="text" placeholder="Your BirthDay"> </br> <!-- 주소 작성 -->
+
+                <input type="password" id="PW1" placeholder="New Password" class="inputRequired"> </br> <!-- 새로운 PW 작성 -->
+                <input type="password" id="PW2" placeholder="Password Double Check" class="inputRequired"> </br> <!-- 다시 한 번 PW 작성 -->
+                <div id="pwAlert" style="display: none;">비밀번호가 일치하지 않습니다.</div>
+            </div>
+            <div class="buttons">
+                <button class="btn" id="register">회원가입</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
