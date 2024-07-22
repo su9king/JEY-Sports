@@ -48,12 +48,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'Pages')));
 
+// 세션 보안 설정
 app.use(session({
-    secret: '123456',
+    secret: '164365',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true } // HTTPS를 사용할 경우 true로 설정
+    cookie: { secure: true, maxAge: 20 * 60 * 1000 } // HTTPS를 사용할 경우 true로 설정
 }));
+
+// 서버 사이드 오류처리 미들웨어 
+app.use((err, req, res, next) => {
+    console.error(err.stack); 
+    res.status(500).send({result : 99, message : '서버 오류 발생'});
+});
 
 //자기서명한 SSL 인증키를 통한 서버 생성
 const options = {
@@ -94,7 +101,11 @@ app.post('/Login' , async (req,res) => {
     const {userID , userPW} = req.body;
 
     console.log("로그인 요청 성공")
-    const result = await Modules["Login"].Login(userID,userPW);
+    try {
+        const result = await Modules["Login"].Login(userID,userPW);
+    }catch(error) {
+        next(error);
+    }
 
     //result 값에 userToken 값이 들어감, ID,PW 검증 실패시 0이 첨부됨.
     if (result != 0){
@@ -114,7 +125,12 @@ app.post('/Login' , async (req,res) => {
 app.post('/Register' , async (req,res) => {
 
     const data = req.body;
-    const result = await Modules["Register"].Register(data);
+    try {
+        const result = await Modules["Register"].Register(data);
+    }catch(error) {
+        next(error);
+    }
+
     res.status(200).send({result : result});
     
 })
@@ -133,25 +149,40 @@ app.post('/Logout' , (req,res) => {
 });
 
 //전화번호 인증 요청 (Register에 포함관계)
-app.post('/CheckPhone' , async (req,res) => {
+app.post('/CheckPhone' , async (req,res,next) => {
     console.log("전화번호 인증 요청 성공");
     const data = req.body;
+    try {
+        const result = await Modules["CheckPhone"].CheckPhone(data);
+        res.status(200).send({result : result});
+    }catch(error) {
+        next(error);
+    }
 
-    const result = await Modules["CheckPhone"].CheckPhone(data);
-    res.status(200).send({result : result});
 });
 
 //유저 회원인증 요청
-app.post('/Certification' , async (req,res) => {
+app.get('/Certification' , async (req,res) => {
     console.log("회원인증 요청 성공");
 
-    var { userToken,page } = req.body;
+    let query = req.query;
+    let userToken = query["userToken"];
+    let page = query["page"]; 
     //클라이언트 세션과 서버 세션 토큰 검증
 
     if ( userToken == req.sessionID ) {
+        // 세션토큰 만료기간 초기화
+        req.session._lastAccess = Date.now();
+        req.session.cookie.maxAge = 20 * 60 * 1000;
+
         //검증 후 리소스 접근권한을 위한 유저토큰 사용
         userToken = req.session.userID;
-        const result = await Modules["Certification"].Certification(userToken,page);
+
+        try {
+            const result = await Modules["Certification"].Certification(userToken,page);
+        }catch(error) {
+            next(error);
+        }
         res.status(200).send({result : 1 , resources : result});
     } else {
         res.status(401).send({result : 0});

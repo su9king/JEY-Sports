@@ -1,7 +1,9 @@
 //필요한 변수 및 모듈 , API 선언
 const { rand } = require('../Utility.js');
+const { CheckDuplicate } = require('./CheckDuplicate.js');
+
 const coolsms = require('../node_modules/coolsms-node-sdk').default
-const messageService = new coolsms('API-KEY', 'API-SECRET-KEY')
+const messageService = new coolsms('API_KEY', 'API_SECRET_KEY')
 let phoneList = {}
 let successList = {}
 
@@ -17,8 +19,15 @@ module.exports = {
         
         if( functionType == 0 ){
             
-            const result = await sendMessage(userPhone);
-            return result;
+            data = {userPhone : userPhone};
+            var result = await CheckDuplicate(data);
+            
+            if (result == 1){
+                return 2
+            }else{
+                result = await sendMessage(userPhone);
+                return result
+            }
             
         }else if( functionType == 1){
             
@@ -38,6 +47,8 @@ module.exports = {
 phoneList = {}
 async function sendMessage(userPhone){
     return new Promise((resolve, reject) => {
+
+
 
         const code = rand(100000, 999999);
         phoneList[userPhone] = code;

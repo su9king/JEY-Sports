@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             data =  await response.json();
-
             if (data.result == 1) {
                 phoneCheckForm.style.display = 'block';
                 alert('인증번호가 전송되었습니다!')
@@ -115,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const PW2 = document.getElementById('PW2').value;
         const userEmail = document.getElementById('userEmail').value;
 
+            
         let userAddress = document.getElementById('userAddress').value;
         let userGender = document.getElementById('userGender').value;
         let userBirth = document.getElementById('userBirth').value;
@@ -173,10 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 });
-
-
-
-
 
 
 

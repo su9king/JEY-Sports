@@ -1,4 +1,5 @@
 const { checkCode } = require('./CheckPhone.js');
+const { CheckDuplicate } = require('./CheckDuplicate.js');
 const connection = require('../DatabaseLoad');
 
 
@@ -9,12 +10,11 @@ module.exports = {
         const functionType = data["functionType"];
         const userID = data["userID"];
         
-        
 
-        //ID 중복확인
+        //데이터(userID) 중복확인
         if( functionType == 0 ){
-            
-            const result = await checkDuplicate(userID);
+            data = {userID : userID};
+            const result = await CheckDuplicate(data);
             return result;
         
         //회원가입
@@ -32,9 +32,14 @@ module.exports = {
                 const userBirth = data["userBirth"];
                 const userMail = data["userMail"];
                 const userAddress = data["userAddress"];
+                const userName = data["userName"];
+                const userConsented = data["userConsented"];
+                const userConsentedDate = data["userConsentedDate"];
+                const userImage = data["userImage"];
 
                 const result = await registerUser(userID,userPW,userPhone,userGender,
-                    userBirth,userMail,userAddress)
+                    userBirth,userMail,userAddress,userName,userConsented,
+                    userConsentedDate,userImage)
                 return result;
 
             }else{
@@ -47,35 +52,20 @@ module.exports = {
     }
 };
 
-//ID 중복확인
-async function checkDuplicate(userID){
-    return new Promise((resolve, reject) => {
-
-        //입력받은 userID 존재하면 1 출력
-        connection.query('SELECT 1 FROM users WHERE userID = ?', [userID],
-            (error, results, fields) => {
-                if (error) {
-                    console.error('쿼리 실행 오류:', error);
-                    return reject(error);
-
-                } //쿼리 결과가 없다면 ID가 존재하지 않다는 뜻
-                if (results.length > 0) {
-                    resolve(1);
-                } else {
-                    resolve(0);
-                }
-            }
-        );
-    });
-}
+//데이터 중복확인
 
 //회원가입
-async function registerUser(userID,userPW,userPhone,userGender,userBirth,userMail,userAddress){  /////////////////////////수정사항 맞다면 주석 삭제 요망
+async function registerUser(userID,userPW,userPhone,userGender,userBirth,userMail,userAddress
+                            ,userName,userConsented,userConsentedDate,userImage)
+{  /////////////////////////수정사항 맞다면 주석 삭제 요망
     return new Promise((resolve, reject) => {
 
         //입력받은 userID 존재하면 1 출력
-        connection.query(`INSERT INTO Users (userID,userPW,userPhone,userGender,userBirth,userMail,userAddress)
-                        VALUES(?,?,?,?,?,?,?)`, [userID,userPW,userPhone,userGender,userBirth,userMail,userAddress],
+        connection.query(`INSERT INTO Users (userID,userPW,userPhone,userGender,userBirth,userMail,userAddress,
+                                            userName,userConsented,userConsentedDate,userImage)
+                          VALUES(?,?,?,?,?,?,?,?,?,?,?)`, [userID,userPW,userPhone,userGender,
+                                                    userBirth,userMail,userAddress,userName,
+                                                    userConsented,userConsentedDate,userImage],
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);
