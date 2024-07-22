@@ -142,10 +142,12 @@ app.post('/CheckPhone' , async (req,res) => {
 });
 
 //유저 회원인증 요청
-app.post('/Certification' , async (req,res) => {
+app.get('/Certification' , async (req,res) => {
     console.log("회원인증 요청 성공");
-
-    var { userToken,page } = req.body;
+    
+    var userToken = req.query.userToken;
+    var page = req.query.page;
+    
     //클라이언트 세션과 서버 세션 토큰 검증
 
     if ( userToken == req.sessionID ) {
