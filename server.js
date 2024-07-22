@@ -168,7 +168,6 @@ app.get('/Certification' , async (req,res) => {
     let query = req.query;
     let userToken = query["userToken"];
     let page = query["page"]; 
-    //클라이언트 세션과 서버 세션 토큰 검증
 
     if ( userToken == req.sessionID ) {
         // 세션토큰 만료기간 초기화

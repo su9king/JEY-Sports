@@ -1,3 +1,7 @@
+window.onerror = function (message, source, lineno, colno, error) {
+    console.error('전역 에러 발생:', message, source, lineno, colno, error);
+};
+
 async function login() {
 
     var ID = document.getElementById('ID').value;

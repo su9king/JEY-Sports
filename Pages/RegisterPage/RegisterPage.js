@@ -1,16 +1,23 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const idForm = document.getElementById('idForm');
-    const phoneForm = document.getElementById('phoneForm');
     const phoneCheckForm = document.getElementById('phoneCheckForm');
+    const registerForm = document.getElementById('registrationForm');
     
-    const register = document.getElementById('register');
+    const idCheckButton = document.getElementById('idCheckButton');
+    const sendCodeButton = document.getElementById('sendCodeButton');
+    const verifyCodeButton = document.getElementById('verifyCodeButton');
 
-    ////// ID 중복 확인 폼 //////
-    idForm.addEventListener('submit', async function(e) {
+    let idCheck = false;
+    let codeCheck = false;
+    let consentedCheck = false;
+
+    ////// ID 중복 확인 버튼 //////
+    idCheckButton.addEventListener('click', async function(e) {
         e.preventDefault();
-
-        const userID = document.getElementById('userID').value;
+        
+        var userID = document.getElementById('userID').value;
         const allowID = document.getElementById('idAlert');
+
+        allowID.style.display = 'none' // 가능한 id를 작성했다가 불가능한 id를 확인하는 경우, 가능하다는 알림을 삭제하기 위해
 
         const functionType = 0;
         
@@ -21,12 +28,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({ functionType: functionType, userID: userID })
             });
 
-            data =  await response.json();
+            data = await response.json();
 
             if (data.result == 0) {
                 allowID.style.display = 'block';
+                idCheck = true;
             } else {
-                userID.innerHTML = '';
+                document.getElementById('userID').value = '';
                 alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
             }
         } catch (error) {
@@ -34,12 +42,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    ////// 인증번호 전송 폼 //////
-    phoneForm.addEventListener('submit', async function(e) {
+    ////// 인증번호 전송 버튼 //////
+    sendCodeButton.addEventListener('click', async function(e) {
         e.preventDefault();
 
         const userPhone = document.getElementById('userPhone').value;
         const functionType = 0;
+
+        if (!/^\d{10,11}$/.test(userPhone)) {
+            alert('전화번호는 숫자만 입력해주세요! \nex)01012345678');
+            document.getElementById('userPhone').value = '';
+            return;
+        }
 
         try {
             const response = await fetch('/CheckPhone', {
@@ -47,24 +61,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ functionType: functionType, userPhone: userPhone })
             });
-
             data =  await response.json();
+
             if (data.result == 1) {
                 phoneCheckForm.style.display = 'block';
                 alert('인증번호가 전송되었습니다!')
+            } else if (data.result == 2) {
+                alert('이미 가입된 전화번호입니다!');
+                document.getElementById('userPhone').value = '';
             }
         } catch (error) {
             console.error('Error:', error);
         }
     });
 
-    ////// 인증번호 확인 폼 //////
-    phoneCheckForm.addEventListener('submit', async function(e) {
+    ////// 인증번호 확인 버튼 //////
+    verifyCodeButton.addEventListener('click', async function(e) {
         e.preventDefault();
         
         const userPhone = document.getElementById('userPhone').value;
         const code = document.getElementById('code').value;
-        const codeHTML = document.getElementById('code');
         const functionType = 1;
         
         try {
@@ -74,20 +90,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({ functionType: functionType, code: code, userPhone: userPhone })
             });
 
-            data =  await response.json();
+            data = await response.json();
 
             if (data.result == 1) {
                 alert('휴대폰 인증이 완료되었습니다!')
+                codeCheck = true;
+                document.getElementById('userPhone').readOnly = true; // 인증 완료하면 수정 금지
+                document.getElementById('code').readOnly = true; // 인증 완료하면 수정 금지
             } else if (data.result == 0) {
-                codeHTML.value = '';
+                document.getElementById('code').value = '';
                 alert('옳지 않은 인증번호입니다. \n휴대폰 인증을 다시 시도해주세요!');
-                phoneCheckForm.style.display = 'none';
             }
         } catch (error) {
             console.error('Error:', error);
         }
     });
-    
+
     ////// 비밀번호 확인 기능 상시 활성화 //////
     const PW1 = document.getElementById('PW1');
     const PW2 = document.getElementById('PW2');
@@ -104,45 +122,110 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    ////// 최종 회원가입 버튼 //////
-    register.addEventListener('click', registerBtn);
 
-    async function registerBtn() {
+    //// 개인 정보 수집 동의 ////
+    const privacyPolicyLabel = document.getElementById('privacyPolicyLabel');
+    const overlay = document.getElementById('overlay');
+    const privacyModal = document.getElementById('privacyModal');
+    const privacyContent = document.getElementById('privacyContent');
+    const modalPrivacyPolicy = document.getElementById('modalPrivacyPolicy');
+    const closeModalButton = document.getElementById('closeModalButton');
+
+    // 개인정보 동의 레이블 클릭 시 모달 열기
+    privacyPolicyLabel.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('test');
+        overlay.classList.remove('hidden');
+        privacyModal.classList.remove('hidden');
+    });
+
+    // 모달 내 스크롤이 끝까지 내려가면 동의 체크박스 활성화
+    privacyContent.addEventListener('scroll', function() {
+        if (privacyContent.scrollTop + privacyContent.clientHeight >= privacyContent.scrollHeight) {
+            modalPrivacyPolicy.disabled = false;
+            closeModalButton.disabled = false;
+        }
+    });
+
+    // 모달 동의 체크박스 변경 시 처리
+    modalPrivacyPolicy.addEventListener('change', function() {
+        if (modalPrivacyPolicy.checked) {
+            document.getElementById('userConsented').checked = true;
+            consentedCheck = true;
+            overlay.classList.add('hidden');
+            privacyModal.classList.add('hidden');
+        } else {
+            document.getElementById('userConsented').checked = false;
+        }
+    });
+
+    // 모달 닫기 버튼 클릭 시 처리
+    closeModalButton.addEventListener('click', function() {
+        if (modalPrivacyPolicy.checked) {
+            overlay.classList.add('hidden');
+            privacyModal.classList.add('hidden');
+        } else {
+            alert('약관에 동의하셔야 합니다.');
+        }
+    });
+
+
+    ////// 최종 회원가입 폼 제출 //////
+    registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+    
+        const userName = document.getElementById('userName').value;
         const userID = document.getElementById('userID').value;
         const userPhone = document.getElementById('userPhone').value;
         const PW1 = document.getElementById('PW1').value;
         const PW2 = document.getElementById('PW2').value;
         const userEmail = document.getElementById('userEmail').value;
 
-            
-        let userAddress = document.getElementById('userAddress').value;
-        let userGender = document.getElementById('userGender').value;
-        let userBirth = document.getElementById('userBirth').value;
-
         const code = document.getElementById('code').value;
 
-        console.log(userAddress,userGender,userBirth)
+        let userAddress = document.getElementById('userAddress').value;
+        let userBirth = document.getElementById('userBirth').value;
+        let userGender = document.querySelector('input[name="gender"]:checked');
+        let userImage = document.getElementById('userImage').files[0];
 
+        const userConsented = document.getElementById('userConsented').checked;
+        const userConsentedDate = userConsented ? new Date().toISOString().split('T')[0] : null;
+
+
+
+        
+        console.log('userConsented', userConsented);
+        console.log('userConsentedDate', userConsentedDate);
+
+        // null값 허용
         userAddress = allowNull(userAddress);
-        userGender = allowNull(userGender);
         userBirth = allowNull(userBirth);
+        userGender = userGender ? userGender.value : null;
+        userImage = userImage ? userImage : null;
+        
 
-        console.log(userAddress,userGender,userBirth)
 
-        if (userID && userPhone && code && userEmail && PW1 == PW2) {
+
+
+        if (userName && userID && userPhone && code && userEmail && PW1 && PW1 == PW2 && idCheck == true && codeCheck == true && consentedCheck == true ) {
             const functionType = 1;
 
             const response = await fetch('/Register', {
                 method : 'POST',
                 headers : {'Content-Type': 'application/json'},
                 body : JSON.stringify({ functionType: functionType,
+                                        userName: userName,
+                                        userImage: userImage,
                                         userID: userID, 
                                         userPW: PW1, 
                                         userPhone: userPhone, 
                                         userMail: userEmail, 
                                         userAddress: userAddress, 
                                         userGender: userGender, 
-                                        userBirth: userBirth})
+                                        userBirth: userBirth,
+                                        userConsented: userConsented,// 약관
+                                        userConsentedDate: userConsentedDate// 약관 날짜
+                                        })
             });
 
             data =  await response.json();
@@ -155,21 +238,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
         } else {
-            alert('제시된 정보를 모두 채워주세요!');
+            if (idCheck == false) {
+                alert('ID 중복 체크를 진행해주세요!!');
+            } else if (codeCheck == false) {
+                alert('인증번호 확인을 진행해주세요!!');
+            } else {
+                alert('제시된 정보를 모두 채워주세요!');
+            }
         }
        
-
-    }
-
-    function allowNull(userData) {
-        console.log(userData)
-        if (userData == '') {
-            userData = null;
-            return userData;
-        }else{
-            return userData;
+        function allowNull(userData) {
+            if (userData == '') {
+                userData = null;
+                return userData;
+            } else {
+                return userData;
+            }
         }
-    }
+
+    });
+
+
 
 
 });
