@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let idCheck = false;
     let codeCheck = false;
     let consentedCheck = false;
+    let emailCheck = false;
 
     ////// ID 중복 확인 버튼 //////
     idCheckButton.addEventListener('click', async function(e) {
@@ -97,6 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 codeCheck = true;
                 document.getElementById('userPhone').readOnly = true; // 인증 완료하면 수정 금지
                 document.getElementById('code').readOnly = true; // 인증 완료하면 수정 금지
+                document.getElementById('verifyCodeButton').disabled = true;
+                document.getElementById('sendCodeButton').disabled = true;
             } else if (data.result == 0) {
                 document.getElementById('code').value = '';
                 alert('옳지 않은 인증번호입니다. \n휴대폰 인증을 다시 시도해주세요!');
@@ -122,6 +125,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // 이메일 //
+    const userEmail = document.getElementById('userEmail');
+    userEmail.addEventListener('input', validateEmail);
+
+    function validateEmail() {
+        const userEmail = document.getElementById('userEmail').value;
+        const emailFeedback = document.getElementById('emailFeedback');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.(com|net|ac\.kr)$/;
+
+        if (emailPattern.test(userEmail)) {
+            emailFeedback.textContent = '';
+            emailFeedback.className = 'valid';
+            emailCheck = true;
+        } else {
+            emailFeedback.textContent = '올바른 이메일 주소를 작성해주세요!';
+            emailFeedback.className = 'invalid';
+        }
+    }
+
 
     //// 개인 정보 수집 동의 ////
     const privacyPolicyLabel = document.getElementById('privacyPolicyLabel');
@@ -129,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const privacyModal = document.getElementById('privacyModal');
     const privacyContent = document.getElementById('privacyContent');
     const modalPrivacyPolicy = document.getElementById('modalPrivacyPolicy');
+    const finishModalButton = document.getElementById('finishModalButton');
     const closeModalButton = document.getElementById('closeModalButton');
 
     // 개인정보 동의 레이블 클릭 시 모달 열기
@@ -143,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
     privacyContent.addEventListener('scroll', function() {
         if (privacyContent.scrollTop + privacyContent.clientHeight >= privacyContent.scrollHeight) {
             modalPrivacyPolicy.disabled = false;
-            closeModalButton.disabled = false;
+            finishModalButton.disabled = false;
         }
     });
 
@@ -159,8 +182,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 모달 닫기 버튼 클릭 시 처리
-    closeModalButton.addEventListener('click', function() {
+    // 완료 후 닫기 버튼 클릭 시 처리
+    finishModalButton.addEventListener('click', function() {
         if (modalPrivacyPolicy.checked) {
             overlay.classList.add('hidden');
             privacyModal.classList.add('hidden');
@@ -168,6 +191,18 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('약관에 동의하셔야 합니다.');
         }
     });
+
+    // 완료 후 닫기 버튼 클릭 시 처리
+    closeModalButton.addEventListener('click', function() {
+        overlay.classList.add('hidden');
+        privacyModal.classList.add('hidden');
+        });
+
+
+
+
+
+
 
 
     ////// 최종 회원가입 폼 제출 //////
@@ -191,23 +226,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const userConsented = document.getElementById('userConsented').checked;
         const userConsentedDate = userConsented ? new Date().toISOString().split('T')[0] : null;
 
-
-
-        
-        console.log('userConsented', userConsented);
-        console.log('userConsentedDate', userConsentedDate);
-
         // null값 허용
         userAddress = allowNull(userAddress);
         userBirth = allowNull(userBirth);
-        userGender = userGender ? userGender.value : null;
+        userGender = userGender | userGender == 'P' ? userGender.value : null;
         userImage = userImage ? userImage : null;
+        
+        console.log('userGender', userGender);
         
 
 
-
-
-        if (userName && userID && userPhone && code && userEmail && PW1 && PW1 == PW2 && idCheck == true && codeCheck == true && consentedCheck == true ) {
+        if (userName && userID && userPhone && code && userEmail && PW1 && PW1 == PW2 && idCheck == true && codeCheck == true && consentedCheck == true && emailCheck == true ) {
             const functionType = 1;
 
             const response = await fetch('/Register', {
@@ -242,6 +271,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('ID 중복 체크를 진행해주세요!!');
             } else if (codeCheck == false) {
                 alert('인증번호 확인을 진행해주세요!!');
+            } else if (consentedCheck == false) {
+                alert('개인 정보 수집에 동의해주세요!');
             } else {
                 alert('제시된 정보를 모두 채워주세요!');
             }

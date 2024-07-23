@@ -22,7 +22,7 @@
                     </div>
 
                     <!-- 이미지 파일 업로드 -->
-                    <div class="form-group">
+                    <div class="form-group" style="display: none;">
                         <label for="userImage">프로필 사진:</label>
                         <input type="file" id="userImage" name="profilePicture" accept="image/*">
                     </div>
@@ -48,7 +48,8 @@
 
                     <!-- 이메일 작성 -->
                     <div class="form-group">
-                        <input class="inputRequired" id="userEmail" type="email" placeholder="Your Email" autocomplete="email"> </br>
+                        <input class="inputRequired" id="userEmail" type="text" placeholder="Your Email" autocomplete="email"> </br>
+                        <span id="emailFeedback"></span>
                     </div>
 
                     <!-- 주소 작성 -->
@@ -59,10 +60,12 @@
                     <!-- 성별 선택 -->
                     <div class="form-group">
                         <label>성별:</label>
-                        <input type="radio" id="male" name="gender" value="male">
+                        <input type="radio" id="male" name="gender" value="M">
                         <label for="male">남성</label>
-                        <input type="radio" id="female" name="gender" value="female">
+                        <input type="radio" id="female" name="gender" value="F">
                         <label for="female">여성</label> </br>
+                        <input type="radio" id="private" name="gender" value="P">
+                        <label for="private">미공개</label> </br>
                     </div>
 
                     <!-- 생년월일 입력 -->
@@ -160,7 +163,8 @@
             <label>
                 <input type="checkbox" id="modalPrivacyPolicy" disabled> 약관에 동의합니다.
             </label>
-            <button id="closeModalButton" class="btn" disabled>확인</button>
+            <button id="finishModalButton" class="btn" disabled>확인</button>
+            <button id="closeModalButton" class="btn">닫기</button>
         </div>
     </div>
     
