@@ -61,11 +61,13 @@ async function registerUser(userID,userPW,userPhone,userGender,userBirth,userMai
     return new Promise((resolve, reject) => {
 
         //입력받은 userID 존재하면 1 출력
-        connection.query(`INSERT INTO Users (userID,userPW,userPhone,userGender,userBirth,userMail,userAddress,
-                                            userName,userConsented,userConsentedDate,userImage)
-                          VALUES(?,?,?,?,?,?,?,?,?,?,?)`, [userID,userPW,userPhone,userGender,
-                                                    userBirth,userMail,userAddress,userName,
-                                                    userConsented,userConsentedDate,userImage],
+        connection.query(`INSERT INTO Users (userID,userPW,userPhone,userGender,userBirth,
+                                            userMail,userAddress,userName,userConsented,
+                                            userConsentedDate,userImage) 
+                          VALUES(?,?,?,?,?,?,?,?,?,?,?)`, 
+                        [userID,userPW,userPhone,userGender,
+                        userBirth,userMail,userAddress,userName,
+                        userConsented,userConsentedDate,userImage],
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);

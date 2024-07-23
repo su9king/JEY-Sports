@@ -97,54 +97,62 @@ server.listen(PORT, () => console.log(`\n서버 작동 성공 , 현재 포트 : 
 //////////////////////////////////클라이언트 Request <-> 서버 Response 파트//////////
 
 //로그인 요청 
-app.post('/Login' , async (req,res) => {
+app.post('/Login' , async (req,res,next) => {
     const {userID , userPW} = req.body;
 
     console.log("로그인 요청 성공")
     try {
         const result = await Modules["Login"].Login(userID,userPW);
+
+        //result 값에 userToken 값이 들어감, ID,PW 검증 실패시 0이 첨부됨.
+        if (result != 0){
+            console.log("로그인 성공!");
+            req.session.userID = result;
+            res.status(200).send({userToken : req.sessionID});
+            
+        }else{
+            console.log("로그인 실패");
+            res.status(200).send({result : 0});
+            
+        }
     }catch(error) {
         next(error);
     }
 
-    //result 값에 userToken 값이 들어감, ID,PW 검증 실패시 0이 첨부됨.
-    if (result != 0){
-        console.log("로그인 성공!");
-        req.session.userID = result;
-        res.status(200).send({userToken : req.sessionID});
-        
-    }else{
-        console.log("로그인 실패");
-        res.status(200).send({result : 0});
-        
-    }
+
 
 })
 
 //회원가입 요청 (ID 중복확인 기능 확장, CheckTelephon.js 에게 의존성 존재)
-app.post('/Register' , async (req,res) => {
+app.post('/Register' , async (req,res,next) => {
 
     const data = req.body;
+
     try {
         const result = await Modules["Register"].Register(data);
+        res.status(200).send({result : result});
     }catch(error) {
         next(error);
     }
 
-    res.status(200).send({result : result});
+
     
 })
 
 //로그아웃 요청
-app.post('/Logout' , (req,res) => {
+app.post('/Logout' , (req,res,next) => {
     console.log("로그아웃 요청 성공")
-
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).send({ result : 0 });
-        }
-        res.status(200).send({ result : 1 });
-    });
+    try{
+        req.session.destroy(err => {
+            if (err) {
+                return res.status(500).send({ result : 0 });
+            }
+            res.status(200).send({ result : 1 });
+        });
+    }catch(error){
+        next(error);
+    }
+    
     
 });
 
@@ -162,13 +170,13 @@ app.post('/CheckPhone' , async (req,res,next) => {
 });
 
 //유저 회원인증 요청
-app.get('/Certification' , async (req,res) => {
+app.get('/Certification' , async (req,res,next) => {
     console.log("회원인증 요청 성공");
 
     let query = req.query;
     let userToken = query["userToken"];
     let page = query["page"]; 
-
+    
     if ( userToken == req.sessionID ) {
         // 세션토큰 만료기간 초기화
         req.session._lastAccess = Date.now();
@@ -178,11 +186,13 @@ app.get('/Certification' , async (req,res) => {
         userToken = req.session.userID;
 
         try {
-            const result = await Modules["Certification"].Certification(userToken,page);
+            const result = await Modules["Certification"].Certification(page);
+            res.status(200).send({result : 1 , resources : result});
+            
         }catch(error) {
             next(error);
         }
-        res.status(200).send({result : 1 , resources : result});
+        
     } else {
         res.status(401).send({result : 0});
     

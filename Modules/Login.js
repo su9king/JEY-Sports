@@ -23,7 +23,7 @@ module.exports = {
                         resolve([results[0]['userToken']]);
                     } else {
                         console.log("Fail");
-                        resolve([0]);
+                        resolve(0);
                     }
                 }
             );

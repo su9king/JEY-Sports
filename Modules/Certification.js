@@ -3,7 +3,7 @@
 module.exports = {
 
     //page 와 userToken 기반으로 각 페이지에 맞는 리소스 제공
-    Certification: async (userToken,page) => {
+    Certification: async (page) => {
         return new Promise((resolve, reject) => {
             
             if (page == "PrivatePage"){
