@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreateGroupPage</title>
+    <script src="CreateGroupPage.js"></script>
+    <script type="module" src="../CommonFeature.js"></script>
+    <link rel="stylesheet" href="CreateGroupPage.css">
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1>Register Information</h1>
+            <div class="inputs">
+                <form id="CreateGroupForm"> <!-- 전체 form으로 묶기 -->
+
+                    <!-- 조직 이름 작성 -->
+                    <div class="form-group">
+                        <label for="groupName">조직 이름:</label>
+                        <input class="inputRequired" id="groupName" type="text" placeholder="Group Name"> </br>
+                    </div>
+
+                    <!-- 이미지 파일 업로드 -->
+                    <div class="form-group">
+                        <br> <label for="groupImage" id="groupImageLabel">조직 프로필 사진:</label>
+                        <input type="file" id="groupImage" name="profilePicture" accept="image/*">
+                    </div>
+
+                    <!-- 조직 전화 번호 입력 -->
+                    <div class="form-group">
+                        <label for="groupNumber">조직 대표 번호:</label>
+                        <input class="inputRequired" id="groupNumber" type="tel" pattern="[0-9]{10,11}" placeholder="Phone Number(Only Number)" required> </br>
+                    </div>
+
+                    <!-- 조직 분류 -->
+                    <div class="form-group">
+                        <label for="groupClassification">조직 분류:</label>
+                        <select id="groupClassification">
+                            <option value="empty">선택하세요</option> 
+                            <option value="동호회">동호회</option>
+                            <option value="동아리">동아리</option>
+                            <option value="클럽">클럽</option>
+                            <option value="레슨">레슨</option>
+                            <option value="소모임">소모임</option>
+                            <option value="">기타</option>
+                        </select>
+                    </div>
+
+                    <!-- 조직 스포츠 타입 -->
+                    <div class="form-group">
+                        <label for="groupSportType">활동 스포츠:</label>
+                        <select id="groupSportType">
+                            <option value="empty">선택하세요</option> 
+                            <option value="배드민턴">배드민턴</option>
+                            <option value="러닝">러닝</option>
+                            <option value="싸이클">싸이클</option>
+                            <option value="수영">수영</option>
+                            <option value="클라이밍">클라이밍</option>
+                            <option value="">기타</option>
+                        </select>
+                    </div>
+
+                    <!-- 활동 장소 작성 -->
+                    <div class="form-group">
+                        <input class="inputRequired" id="groupLocation" type="text" placeholder="조직 활동 장소" required> </br>
+                    </div>
+                    
+                    <!-- 조직 검색 ID 작성 -->
+                    <div class="form-group">
+                        <input class="inputRequired" id="groupID" type="text" placeholder="Group ID" required> </br>
+                        <button class="btn" type="button" id="groupIDBtn">Group ID Duplicate Check</button>
+                        <div id="groupIDAlert" style="display: none;">사용 가능한 조직 ID입니다!</div>
+                    </div>
+
+                    <!-- 새로운 PW 작성 -->
+                    <div class="form-group">
+                        <input type="password" id="groupPW" placeholder="Invite Code Password" class="inputRequired"> </br>
+                    </div>
+
+                    <!-- 최종 조직 등록 버튼 -->
+                    <div class="form-group">
+                        <button class="btn" type="submit">조직 등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+</body>
+</html>
