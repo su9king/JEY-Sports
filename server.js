@@ -2,13 +2,11 @@
 /////////////////////////////////STEP 0/////////////////////////////////////////
 // Node.js 관련 모듈 불러오기
 const https = require('https');
-const connection = require('./DatabaseLoad');
 const express = require('express');
 const session = require('express-session')
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-const Certification = require('./Modules/Certification');
 
 console.log("Node.js 모듈 불러오기 성공")
 
@@ -129,7 +127,7 @@ app.post('/Register' , async (req,res,next) => {
     const data = req.body;
 
     try {
-        const result = await Modules["Register"].Register(data);
+           result = await Modules["Register"].Register(data);
         res.status(200).send({result : result});
     }catch(error) {
         next(error);
@@ -186,8 +184,13 @@ app.get('/Certification' , async (req,res,next) => {
         userToken = req.session.userID;
 
         try {
-            const result = await Modules["Certification"].Certification(page);
-            res.status(200).send({result : 1 , resources : result});
+            if (page == undefined){
+                res.status(200).send({result : 0 , resources : null});
+
+            }else{
+                const result = await Modules["Certification"].Certification(userToken,page,query);
+                res.status(200).send({result : 1 , resources : result});
+            }
             
         }catch(error) {
             next(error);
@@ -199,3 +202,42 @@ app.get('/Certification' , async (req,res,next) => {
     
 }});
 
+// 이미지 업로드
+app.post('/ImageUpload', async(req,res,next) => {
+
+    try{
+        const jsonData = req.body.jsonData; // JSON 데이터는 req.body에서 가져옴
+        console.log('업로드된 JSON 데이터:', jsonData);
+        const data = req.file;
+        const data1 = req;
+        const data2 = res;
+        if (data) {
+            return res.status(400).send('파일이 업로드되지 않았습니다.');
+        }
+
+        const result = await Modules["ImageUpload"].ImageUpload(data1,data2);
+        res.status(200).send({result : result});
+
+    }catch(error){
+        next(error);
+    }
+})
+
+// 그룹 생성
+app.post('/CreateGroup', async(req,res,next) => {
+    console.log("CreateGroup 요청 성공")
+    const data = req.body;
+
+    try {
+        const result = await Modules["CreateGroup"].CreateGroup(data);
+        if (result == 0){
+            console.log("CreateGroup 실패")
+            res.status(200).send({result : 0, resources : null});
+        }else{
+            console.log("CreateGroup 성공")
+            res.status(200).send({result : 1, resources : result});
+        }
+    }catch(error) {
+        next(error);
+    }
+})

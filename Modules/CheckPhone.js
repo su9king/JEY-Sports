@@ -20,7 +20,8 @@ module.exports = {
         if( functionType == 0 ){
             
             data = {userPhone : userPhone};
-            var result = await CheckDuplicate(data);
+            table = "Users"
+            var result = await CheckDuplicate(table,data);
             
             if (result == 1){
                 return 2

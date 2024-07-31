@@ -1,3 +1,4 @@
+//필요한 변수 및 모듈 
 const connection = require('../DatabaseLoad');
 
 //메인 실행 코드

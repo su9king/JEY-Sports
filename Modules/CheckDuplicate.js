@@ -1,14 +1,16 @@
+
+//필요한 모듈 선언
 const connection = require('../DatabaseLoad');
 
 module.exports = {
     
-    CheckDuplicate: async (data) => {
+    CheckDuplicate: async (table,data) => {
         return new Promise((resolve, reject) => {
             const [[key,value]] = Object.entries(data);
             console.log(data,key,value);
     
             //입력받은 데이터가 존재하면 1 출력
-            connection.query('SELECT 1 FROM users WHERE ?? = ?', [key,value],
+            connection.query('SELECT 1 FROM ?? WHERE ?? = ?', [table,key,value],
                 (error, results, fields) => {
                     if (error) {
                         console.error('쿼리 실행 오류:', error);

@@ -1,3 +1,5 @@
+//필요한 변수 및 모듈 선언
+
 const { checkCode } = require('./CheckPhone.js');
 const { CheckDuplicate } = require('./CheckDuplicate.js');
 const connection = require('../DatabaseLoad');
@@ -13,8 +15,9 @@ module.exports = {
 
         //데이터(userID) 중복확인
         if( functionType == 0 ){
+            table = "Users"
             data = {userID : userID};
-            const result = await CheckDuplicate(data);
+            const result = await CheckDuplicate(table,data);
             return result;
         
         //회원가입
@@ -25,7 +28,14 @@ module.exports = {
             //인증되었다면 1, 인증이 되지 않은 전화번호라면 0 출력
             const phoneCheck = await checkCode(userPhone,0); 
 
-            if (phoneCheck == 1){
+
+            //CheckDuplicate.js 의존 코드
+            //ID가 중복되지 않았다면 0 출력
+            table = "Users"
+            data = {userID : userID};
+            const userIDCheck = await CheckDuplicate(table,data);
+
+            if (phoneCheck == 1 && userIDCheck == 0){
                 
                 const userPW = data["userPW"];
                 const userGender = data["userGender"];
@@ -55,9 +65,8 @@ module.exports = {
 //데이터 중복확인
 
 //회원가입
-async function registerUser(userID,userPW,userPhone,userGender,userBirth,userMail,userAddress
-                            ,userName,userConsented,userConsentedDate,userImage)
-{  /////////////////////////수정사항 맞다면 주석 삭제 요망
+async function registerUser(userID,userPW,userPhone,userGender,userBirth,userMail,userAddress,
+userName,userConsented,userConsentedDate,userImage){  /////////////////////////수정사항 맞다면 주석 삭제 요망
     return new Promise((resolve, reject) => {
 
         //입력받은 userID 존재하면 1 출력
@@ -73,7 +82,7 @@ async function registerUser(userID,userPW,userPhone,userGender,userBirth,userMai
                     console.error('쿼리 실행 오류:', error);
                     return reject(error);
 
-                } //쿼리 결과가 없다면 ID가 존재하지 않다는 뜻
+                } //쿼리 결과가 없다면 데이터 삽입이 제대로 작동하지 않은 것
                 if (results.affectedRows > 0) {
                     resolve(1);
                 } else {
