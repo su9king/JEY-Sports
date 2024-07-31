@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const phoneCheckForm = document.getElementById('phoneCheckForm');
     const registerForm = document.getElementById('registrationForm');
     
+    const userID = document.getElementById('userID');
+    const allowID = document.getElementById('idAlert');
+
     const idCheckButton = document.getElementById('idCheckButton');
     const sendCodeButton = document.getElementById('sendCodeButton');
     const verifyCodeButton = document.getElementById('verifyCodeButton');
@@ -12,35 +15,46 @@ document.addEventListener('DOMContentLoaded', function() {
     let emailCheck = false;
 
     ////// ID 중복 확인 버튼 //////
+    userID.addEventListener('input', async function(e) {
+        e.preventDefault();
+        allowID.style.display = 'none'
+        idCheck = false;
+    });
+
     idCheckButton.addEventListener('click', async function(e) {
         e.preventDefault();
         
         var userID = document.getElementById('userID').value;
-        const allowID = document.getElementById('idAlert');
+        
 
         allowID.style.display = 'none' // 가능한 id를 작성했다가 불가능한 id를 확인하는 경우, 가능하다는 알림을 삭제하기 위해
 
         const functionType = 0;
         
-        try {
-            const response = await fetch('/Register', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ functionType: functionType, userID: userID })
-            });
-
-            data = await response.json();
-
-            if (data.result == 0) {
-                allowID.style.display = 'block';
-                idCheck = true;
-            } else {
-                document.getElementById('userID').value = '';
-                alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
+        if (userID) {
+            try {
+                const response = await fetch('/Register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ functionType: functionType, userID: userID })
+                });
+    
+                data = await response.json();
+    
+                if (data.result == 0) {
+                    allowID.style.display = 'block';
+                    idCheck = true;
+                } else {
+                    document.getElementById('userID').value = '';
+                    alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
+        } else {
+            alert('원하는 ID를 작성해주세요!');
         }
+        
     });
 
     ////// 인증번호 전송 버튼 //////
