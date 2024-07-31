@@ -30,9 +30,10 @@ async function certification(page, data) {
     console.log('certification 함수 실행');
     const getData = data;
     const getPage = page;
+    
 
     try {
-        const response = await fetch(`/Certification?data=${getData}&page=${getPage}`, {
+        const response = await fetch(`/Certification?${getData}&page=${getPage}`, {
             method: 'GET'
         });
 
@@ -53,19 +54,20 @@ async function certification(page, data) {
 async function imageUpload(functionType, userToken, imageData, extraData) {
     let imageFormData = new FormData()
     
-    let imageFormJson = {'functionType': functionType, 'userToken': userToken}
+    let imageFormJson = { functionType: functionType, userToken: userToken }
       
         console.log('이미지 업로드 함수 실행 성공');
 
     if (functionType == 1) {  // 유저 개인 프로필 사진
 
-        imageFormData.append('userImage', imageData);
+        imageFormData.append('Image', imageData);
         imageFormData.append('json', JSON.stringify(imageFormJson));
 
     } else if (functionType == 2) {  // 조직 그룹 프로필 사진
 
-        imageFormData.append('groupImage', imageData);
+        imageFormData.append('Image', imageData);
         imageFormJson.groupToken = extraData  // 그룹 이미지에 필요한 그룹토큰 추가
+        console.log(imageFormJson);
         imageFormData.append('json', JSON.stringify(imageFormJson));
 
     }

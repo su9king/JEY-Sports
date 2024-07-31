@@ -1,6 +1,8 @@
 window.onload = async function() {
     const page = 'CreateGroupPage';
-    const data = {userToken: sessionStorage.getItem('userID')};
+    const userToken = sessionStorage.getItem('userToken');
+    const data = `userToken=${userToken}`
+
     const resources = await certification(page, data);
 
     if (resources.result == 0) {
@@ -32,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         
         var groupID = document.getElementById('groupID').value;
-
+        const userToken = sessionStorage.getItem('userToken');
         allowGroupID.style.display = 'none' // 가능한 조직명을 작성했다가 불가능한 id를 확인하는 경우, 가능하다는 알림을 삭제하기 위해
 
         const functionType = 0;
@@ -41,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch('/CreateGroup', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ functionType: functionType, groupID: groupID })
+                body: JSON.stringify({ functionType: functionType, groupID: groupID ,userToken : userToken})
             });
 
             data = await response.json();
@@ -104,6 +106,7 @@ CreateGroupForm.addEventListener('submit', async function(e) {
             method : 'POST',
             headers : {'Content-Type': 'application/json'},
             body : JSON.stringify({ functionType: functionType,
+                                    userToken : groupPublisher,
                                     groupPublisher: groupPublisher,
                                     groupName: groupName,
                                     groupNumber: groupNumber,
@@ -117,12 +120,13 @@ CreateGroupForm.addEventListener('submit', async function(e) {
         });
 
         data =  await response.json();
-
+        console.log(data)
         if (data.result == 1) {
 
-            const groupToken = data.groupToken;
+            const groupToken = data.resources["groupToken"];
             const functionType = 2;
-            imageUpload(functionType, groupPublisher, groupImage, groupToken );             
+
+            await imageUpload(functionType, groupPublisher, groupImage, groupToken );             
             
             alert("조직 생성이 완료되었습니다!");
             window.location.href = '/PrivatePage/PrivatePage.html'; 

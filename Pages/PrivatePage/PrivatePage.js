@@ -2,7 +2,8 @@
 
 window.onload = async function() {
     const page = 'PrivatePage';
-    const data = {userToken: sessionStorage.getItem('userID')};
+    const userToken = sessionStorage.getItem('userToken')
+    const data = `userToken=${userToken}`
     const resources = await certification(page, data);
     
     //const resources = {result : 1 , resources : [{groupToken : 1 , groupName : 'GyuChul1'}, {groupToken : 2, groupName : 'GyuChul2'}]};

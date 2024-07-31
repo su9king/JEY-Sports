@@ -1,6 +1,8 @@
 window.onload = async function() {
     const page = 'GroupPage';
-    const data = {userToken: sessionStorage.getItem('userID'), groupToken: sessionStorage.getItem('groupToken')};
+    const userToken = sessionStorage.getItem('userToken');
+    const groupToken = sessionStorage.getItem('groupToken');
+    const data = `userToken=${userToken}&groupToken=${groupToken}`
 
     const resources = await certification(page, data);
 
@@ -10,7 +12,7 @@ window.onload = async function() {
     } else {
         document.getElementById('groupName').textContent = `${resources.resources[0]["groupName"]}에 오신 것을 환영합니다!`
         // document.getElementById('groupImage').src = 'JEY_text_icon.jpg';
-        document.getElementById('groupImage').src = `${resources.resources[0]["groupImage"]}`;  ///////////////////////이미지 불러오기
+        document.getElementById('groupImage').src = `/GroupImages/${resources.resources[0]["groupImage"]}.png`;  ///////////////////////이미지 불러오기
         console.log('회원 인증 성공');
     }
 }

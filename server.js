@@ -7,6 +7,7 @@ const session = require('express-session')
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 
 console.log("Node.js 모듈 불러오기 성공")
 
@@ -45,7 +46,7 @@ console.log("JEYSport 모듈 불러오기 성공")
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'Pages')));
-
+app.use(express.static(path.join(__dirname, 'Images')));
 // 세션 보안 설정
 app.use(session({
     secret: '164365',
@@ -70,7 +71,22 @@ const server = https.createServer(options,app);
 console.log("HTTPS 서버 구축 성공")
 
 
+//로그인된 유저(세션토큰) 확인 후,소프트웨어 내 유저토큰으로 리턴 함수
+async function checkToken(userToken,req){
 
+    if ( userToken == req.sessionID ) {
+
+        // 세션토큰 만료기간 초기화
+        req.session._lastAccess = Date.now();
+        req.session.cookie.maxAge = 20 * 60 * 1000;
+
+        //검증 후 리소스 접근권한을 위한 유저토큰 사용
+        userToken = req.session.userToken;
+        return userToken
+    }else{
+        return 0
+    }
+}
 
 
 
@@ -96,20 +112,17 @@ server.listen(PORT, () => console.log(`\n서버 작동 성공 , 현재 포트 : 
 
 //로그인 요청 
 app.post('/Login' , async (req,res,next) => {
-    const {userID , userPW} = req.body;
-
-    console.log("로그인 요청 성공")
+    console.log("Login sign");
     try {
+        const {userID , userPW} = req.body;
         const result = await Modules["Login"].Login(userID,userPW);
 
         //result 값에 userToken 값이 들어감, ID,PW 검증 실패시 0이 첨부됨.
         if (result != 0){
-            console.log("로그인 성공!");
-            req.session.userID = result;
+            req.session.userToken = result;
             res.status(200).send({userToken : req.sessionID});
             
         }else{
-            console.log("로그인 실패");
             res.status(200).send({result : 0});
             
         }
@@ -124,10 +137,10 @@ app.post('/Login' , async (req,res,next) => {
 //회원가입 요청 (ID 중복확인 기능 확장, CheckTelephon.js 에게 의존성 존재)
 app.post('/Register' , async (req,res,next) => {
 
-    const data = req.body;
-
+    console.log("Register sign");
     try {
-           result = await Modules["Register"].Register(data);
+        const data = req.body;
+        result = await Modules["Register"].Register(data);
         res.status(200).send({result : result});
     }catch(error) {
         next(error);
@@ -139,7 +152,7 @@ app.post('/Register' , async (req,res,next) => {
 
 //로그아웃 요청
 app.post('/Logout' , (req,res,next) => {
-    console.log("로그아웃 요청 성공")
+    console.log("Logout sign");
     try{
         req.session.destroy(err => {
             if (err) {
@@ -156,9 +169,9 @@ app.post('/Logout' , (req,res,next) => {
 
 //전화번호 인증 요청 (Register에 포함관계)
 app.post('/CheckPhone' , async (req,res,next) => {
-    console.log("전화번호 인증 요청 성공");
-    const data = req.body;
+    console.log("CheckPhone sign");
     try {
+        const data = req.body;
         const result = await Modules["CheckPhone"].CheckPhone(data);
         res.status(200).send({result : result});
     }catch(error) {
@@ -169,21 +182,17 @@ app.post('/CheckPhone' , async (req,res,next) => {
 
 //유저 회원인증 요청
 app.get('/Certification' , async (req,res,next) => {
-    console.log("회원인증 요청 성공");
 
-    let query = req.query;
-    let userToken = query["userToken"];
-    let page = query["page"]; 
-    
-    if ( userToken == req.sessionID ) {
-        // 세션토큰 만료기간 초기화
-        req.session._lastAccess = Date.now();
-        req.session.cookie.maxAge = 20 * 60 * 1000;
+    console.log("Certification sign");
+    try {
+        let query = req.query;
+        var userToken = query["userToken"];
+        let page = query["page"]; 
 
-        //검증 후 리소스 접근권한을 위한 유저토큰 사용
-        userToken = req.session.userID;
+        userToken = await checkToken(userToken,req);
 
-        try {
+        if ( userToken != 0 ) {
+
             if (page == undefined){
                 res.status(200).send({result : 0 , resources : null});
 
@@ -191,53 +200,69 @@ app.get('/Certification' , async (req,res,next) => {
                 const result = await Modules["Certification"].Certification(userToken,page,query);
                 res.status(200).send({result : 1 , resources : result});
             }
-            
-        }catch(error) {
-            next(error);
-        }
-        
-    } else {
-        res.status(401).send({result : 0});
-    
-    
-}});
-
-// 이미지 업로드
-app.post('/ImageUpload', async(req,res,next) => {
-
-    try{
-        const jsonData = req.body.jsonData; // JSON 데이터는 req.body에서 가져옴
-        console.log('업로드된 JSON 데이터:', jsonData);
-        const data = req.file;
-        const data1 = req;
-        const data2 = res;
-        if (data) {
-            return res.status(400).send('파일이 업로드되지 않았습니다.');
-        }
-
-        const result = await Modules["ImageUpload"].ImageUpload(data1,data2);
-        res.status(200).send({result : result});
-
-    }catch(error){
-        next(error);
-    }
-})
-
-// 그룹 생성
-app.post('/CreateGroup', async(req,res,next) => {
-    console.log("CreateGroup 요청 성공")
-    const data = req.body;
-
-    try {
-        const result = await Modules["CreateGroup"].CreateGroup(data);
-        if (result == 0){
-            console.log("CreateGroup 실패")
-            res.status(200).send({result : 0, resources : null});
-        }else{
-            console.log("CreateGroup 성공")
-            res.status(200).send({result : 1, resources : result});
+        } else {
+            res.status(401).send({result : 0});
         }
     }catch(error) {
         next(error);
     }
-})
+        
+    
+    
+    
+});
+
+
+// 이미지 업로드
+app.post('/ImageUpload', Modules["ImageUpload"].upload.single('Image'), async (req, res, next) => {
+
+    console.log("ImageUpload sign")
+
+    try {
+        const JSONdata = JSON.parse(req.body.json);
+        const Imagedata = req.file;
+        let userToken = JSONdata["userToken"];
+        
+        userToken = await checkToken(userToken, req);
+
+        if (userToken !== 0) {
+            if (!Imagedata) {
+                return res.status(400).send('파일이 업로드되지 않았습니다.');
+            }
+
+            // ImageUpload 함수 호출
+            const result = await Modules["ImageUpload"].ImageUpload(req, res);
+            return res.status(200).send({ result: result });
+        } else {
+            return res.status(403).send({ result: 99, message: '인증 실패' });
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 그룹 생성
+app.post('/CreateGroup', async(req,res,next) => {
+    
+    console.log("CreateGroup sign")
+    try {
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ) {
+                
+            const result = await Modules["CreateGroup"].CreateGroup(userToken,data);
+
+            if (result == 0){
+                res.status(200).send({result : 0, resources : null});
+            }else{
+                res.status(200).send({result : 1, resources : result});
+            }
+        }else{
+            res.status(500).send({result : 99, message : '서버 오류 발생'});
+        }
+    }catch(error) {
+        next(error);
+    }
+});

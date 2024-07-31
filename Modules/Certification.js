@@ -17,7 +17,7 @@ module.exports = {
             return null;
 
         }else if (page == "GroupPage"){
-            const groupToken = 1;
+            const groupToken = query["groupToken"];
             var data = await GroupPage(groupToken)
             return data;
         }
