@@ -31,7 +31,7 @@ async function certification(page, data) {
     const getData = data;
     const getPage = page;
     
-
+    console.log(getData)
     try {
         const response = await fetch(`/Certification?${getData}&page=${getPage}`, {
             method: 'GET'

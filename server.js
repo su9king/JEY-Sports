@@ -19,7 +19,6 @@ console.log("Node.js 모듈 불러오기 성공")
 
 /////////////////////////////////STEP 1/////////////////////////////////////////
 const app = express();
-
 // Modules 디렉토리의 모든 모듈 불러오기
 const ModulesDiretory = path.join(__dirname,'Modules');
 const Modules = {};
@@ -198,7 +197,7 @@ app.get('/Certification' , async (req,res,next) => {
 
             }else{
                 const result = await Modules["Certification"].Certification(userToken,page,query);
-                res.status(200).send({result : 1 , resources : result});
+                res.status(200).send(result);
             }
         } else {
             res.status(401).send({result : 0});
@@ -214,6 +213,7 @@ app.get('/Certification' , async (req,res,next) => {
 
 
 // 이미지 업로드
+
 app.post('/ImageUpload', Modules["ImageUpload"].upload.single('Image'), async (req, res, next) => {
 
     console.log("ImageUpload sign")

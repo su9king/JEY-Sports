@@ -10,16 +10,27 @@ module.exports = {
 
         if (page == "PrivatePage"){
             var data = await PrivatePage(userToken)
-            return data;
+            return {result : 1 , resources : data};
 
         }else if (page == "CreateGroupPage"){
             console.log("필요한 리소스가 존재하지 않습니다.")
-            return null;
+            return {result : 1 , resources : null};
 
         }else if (page == "GroupPage"){
             const groupToken = query["groupToken"];
+
+            if (groupToken == undefined){ // 그룹 토큰을 전달 받지 않음
+                return {result : 0 , resources : null}
+            }
+
             var data = await GroupPage(groupToken)
-            return data;
+
+            if (data == null){ //그룹 토큰이 잘못 됨 
+                return {result : 0 , resources : data};
+            }else{
+                return {result : 1 , resources : data};
+            }
+            
         }
 
         

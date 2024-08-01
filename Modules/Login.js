@@ -20,7 +20,6 @@ module.exports = {
                     }
                     //결과물이 존재한다면, 어차피 ID가 공통되는 것이 없기때문에 1개만 출력 될 것임.
                     if (results.length > 0) {
-                        console.log("Success",results);
                         resolve([results[0]['userToken']]);
                     } else {
                         console.log("Fail");
