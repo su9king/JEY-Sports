@@ -12,6 +12,7 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
   if (err) {
     console.error('데이터베이스 연결 실패:', err.stack);
+    console.log("DatabaseLoad.js 의 설정을 확인하시기 바랍니다.")
     return;
   }
   console.log('데이터베이스에 연결되었습니다. 연결 ID:', connection.threadId);

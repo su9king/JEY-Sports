@@ -2,6 +2,7 @@
 /////////////////////////////////STEP 0/////////////////////////////////////////
 // Node.js 관련 모듈 불러오기
 const https = require('https');
+const http = require('http');
 const express = require('express');
 const session = require('express-session')
 const path = require('path');
@@ -18,7 +19,6 @@ console.log("Node.js 모듈 불러오기 성공")
 
 
 /////////////////////////////////STEP 1/////////////////////////////////////////
-const app = express();
 // Modules 디렉토리의 모든 모듈 불러오기
 const ModulesDiretory = path.join(__dirname,'Modules');
 const Modules = {};
@@ -42,6 +42,9 @@ console.log("JEYSport 모듈 불러오기 성공")
 
 /////////////////////////////////STEP 2/////////////////////////////////////////
 // 리소스 접근 권한 제어 및 JSON 파싱 기술 사용
+// 서버 구축, 미들웨어 및 서버 보안 설정
+
+const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'Pages')));
@@ -60,14 +63,23 @@ app.use((err, req, res, next) => {
     res.status(500).send({result : 99, message : '서버 오류 발생'});
 });
 
-//자기서명한 SSL 인증키를 통한 서버 생성
+
 const options = {
+    //자기서명한 SSL 인증키를 통한 서버 생성
     key: fs.readFileSync(path.join(__dirname, 'SecurityKeys/key.pem')),
     cert: fs.readFileSync(path.join(__dirname, 'SecurityKeys/cert.pem'))
-};
-const server = https.createServer(options,app);
 
-console.log("HTTPS 서버 구축 성공")
+    //메인서버 운영용 SSL 인증키
+    //key: fs.readFileSync('/etc/letsencrypt/live/jeysport.codns.com/privkey.pem'),
+    //cert: fs.readFileSync('/etc/letsencrypt/live/jeysport.codns.com/fullchain.pem')
+};
+
+const server = https.createServer(options,app);
+const httpServer = http.createServer((req,res) => {
+    res.writeHead(301,{"Location" : `https://${req.headers.host}${req.url}`});
+    res.end();
+})
+console.log("HTTPS , HTTP 서버 구축 성공")
 
 
 //로그인된 유저(세션토큰) 확인 후,소프트웨어 내 유저토큰으로 리턴 함수
@@ -99,7 +111,7 @@ app.get('/', (req, res) => {
 //서버 작동
 const PORT = process.env.PORT || 443;
 server.listen(PORT, () => console.log(`\n서버 작동 성공 , 현재 포트 : ${PORT} 에서 작동중입니다.`));
-
+httpServer.listen(80,() => console.log(`서버 작동 성공 , 현재 포트 : ${80} 에서 작동중입니다.`));
 
 
 
