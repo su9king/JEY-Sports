@@ -2,10 +2,19 @@ window.onerror = function (message, source, lineno, colno, error) {
     console.error('전역 에러 발생:', message, source, lineno, colno, error);
 };
 
+
+// 엔터 누르면 로그인 버튼 작동
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        document.getElementById('loginBtn').click(); 
+    }
+});
+
 async function login() {
 
-    var ID = document.getElementById('ID').value;
-    var PW = document.getElementById('PW').value;
+    const ID = document.getElementById('ID').value;
+    const PW = document.getElementById('PW').value;
     
     if ( ID && PW ) {
         const response = await fetch('/Login', {

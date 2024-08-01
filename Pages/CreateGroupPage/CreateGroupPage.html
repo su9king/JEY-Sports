@@ -24,7 +24,7 @@
                     <!-- 이미지 파일 업로드 -->
                     <div class="form-group">
                         <br> <label for="groupImage" id="groupImageLabel">조직 프로필 사진:</label>
-                        <input type="file" id="groupImage" name="profilePicture" accept="image/*">
+                        <input type="file" id="groupImage" name="profilePicture" accept="image/jpeg, image/png">
                     </div>
 
                     <!-- 조직 전화 번호 입력 -->
@@ -68,6 +68,9 @@
                     
                     <!-- 조직 검색 ID 작성 -->
                     <div class="form-group">
+                        <label for="groupID">조직 아이디:
+                            <span class="info-icon" id="infoIcon" title="조직 아이디가 필요한 이유?">?</span>
+                        </label>
                         <input class="inputRequired" id="groupID" type="text" placeholder="Group ID" required> </br>
                         <button class="btn" type="button" id="groupIDBtn">Group ID Duplicate Check</button>
                         <div id="groupIDAlert" style="display: none;">사용 가능한 조직 ID입니다!</div>
@@ -75,7 +78,7 @@
 
                     <!-- 새로운 PW 작성 -->
                     <div class="form-group">
-                        <input type="password" id="groupPW" placeholder="Invite Code Password" class="inputRequired"> </br>
+                        <input type="password" id="groupPW" placeholder="Group Password" class="inputRequired"> </br>
                     </div>
 
                     <!-- 최종 조직 등록 버튼 -->
@@ -83,6 +86,19 @@
                         <button class="btn" type="submit">조직 등록</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+
+        <!-- 모달 및 오버레이 -->
+        <div id="overlay" class="overlay hidden"></div>
+        <div id="infoModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>조직 아이디와 비밀번호는 왜 필요한가요?</h2>
+                <p>조직 아이디는 신규 회원을 초대할 때 사용됩니다! <br>
+                    새로운 회원을 조직에 추가하고 싶을 때, 회원이 조직 아이디를 검색하여 조직 참여를 요청할 수 있습니다. <br>
+                   요청을 받으면 조직 대표자가 비밀번호를 통해 수락할 수 있습니다. 비밀번호를 설정하지 않는다면 조직 아이디를 아는 누구나 들어올 수 있기 때문에 비밀번호 설정을 권장합니다!</p>
+                <button id="closeInfoModalButton" class="btn">닫기</button>
             </div>
         </div>
 </body>
