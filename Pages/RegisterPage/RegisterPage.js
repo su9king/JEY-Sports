@@ -14,19 +14,35 @@ document.addEventListener('DOMContentLoaded', function() {
     let consentedCheck = false;
     let emailCheck = false;
 
+    
+    // 모든 label 요소에 클릭 이벤트를 방지하는 핸들러 추가
+    const labels = document.querySelectorAll('label');
+    labels.forEach(label => {
+        label.addEventListener('click', function(e) {
+            e.preventDefault(); // 클릭 이벤트 기본 동작 방지
+        });
+    });
+    
+
     ////// ID 중복 확인 버튼 //////
     userID.addEventListener('input', async function(e) {
         e.preventDefault();
         allowID.style.display = 'none'
         idCheck = false;
+
+        const engFilter = /^[a-zA-Z0-9]*$/;
+
+        if (!engFilter.test(userID.value)) {
+            userID.value = userID.value.replace(/[^a-zA-Z0-9]/g, ''); // 한글 및 기타 문자 제거
+            alert('아이디는 영어와 숫자만 가능합니다!');
+        }
     });
 
     idCheckButton.addEventListener('click', async function(e) {
         e.preventDefault();
         
-        var userID = document.getElementById('userID').value;
+        const userID = document.getElementById('userID').value;
         
-
         allowID.style.display = 'none' // 가능한 id를 작성했다가 불가능한 id를 확인하는 경우, 가능하다는 알림을 삭제하기 위해
 
         const functionType = 0;
@@ -41,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 data = await response.json();
     
-                if (data.result == 0) {
+                if (data.result == 0) {  // 사용 가능한 ID
                     allowID.style.display = 'block';
                     idCheck = true;
                 } else {
@@ -51,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } catch (error) {
                 console.error('Error:', error);
             }
-        } else {
+        } else {  // 빈칸으로 제출한 경우
             alert('원하는 ID를 작성해주세요!');
         }
         
@@ -64,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const userPhone = document.getElementById('userPhone').value;
         const functionType = 0;
 
-        if (!/^\d{10,11}$/.test(userPhone)) {
+        if (!/^\d{10,11}$/.test(userPhone)) {  // 작성 형태 제한
             alert('전화번호는 숫자만 입력해주세요! \nex)01012345678');
             document.getElementById('userPhone').value = '';
             return;

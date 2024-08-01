@@ -3,10 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warnig</title>
+    <title>Warning</title>
+    <style>
+        /* 전체 페이지 스타일 초기화 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: Arial, sans-serif; /* 기본 폰트 설정 */
+        }
+
+        /* 중앙 정렬을 위한 스타일 */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 세로 중앙 정렬 */
+            align-items: center; /* 가로 중앙 정렬 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            height: 100%;
+            width: 100%;
+            background-color: #f8f9fa; /* 배경 색상 설정 */
+        }
+
+        h1 {
+            color: #dc3545; /* 경고 색상 */
+            margin-bottom: 20px; /* 제목과 버튼 사이 여백 */
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>JEY Sports 접근 권한이 없습니다!</h1><br/>
-    <button onclick="window.location.href ='LoginPage.html'">로그인 페이지</button>
+    <div class="container">
+        <h1>JEY Sports 접근 권한이 없습니다!</h1>
+        <button onclick="window.location.href ='LoginPage.html'">로그인 페이지로 이동하기</button>
+    </div>
 </body>
 </html>

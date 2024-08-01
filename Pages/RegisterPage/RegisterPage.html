@@ -29,6 +29,7 @@
 
                     <!-- 새로운 ID 작성 -->
                     <div class="form-group">
+                        <label for="userID">ID:</label>
                         <input class="inputRequired" id="userID" type="text" placeholder="New ID" required autocomplete="username"> </br>
                         <button class="btn" type="button" id="idCheckButton">ID Duplicate Check</button>
                         <div id="idAlert" style="display: none;">사용 가능한 ID입니다!</div>
@@ -36,6 +37,7 @@
 
                     <!-- 휴대폰 번호 입력 -->
                     <div class="form-group">
+                        <label for="userPhone">휴대폰 번호:</label>
                         <input class="inputRequired" id="userPhone" type="tel" pattern="[0-9]{10,11}" placeholder="Phone Number(Only Number)" required autocomplete="tel"> </br>
                         <button class="btn" type="button" id="sendCodeButton">전화번호 인증번호 전송</button>
                     </div>
@@ -48,12 +50,14 @@
 
                     <!-- 이메일 작성 -->
                     <div class="form-group">
+                        <label for="userEmail">이메일:</label>
                         <input class="inputRequired" id="userEmail" type="text" placeholder="Your Email" autocomplete="email"> </br>
                         <span id="emailFeedback"></span>
                     </div>
 
                     <!-- 주소 작성 -->
                     <div class="form-group">
+                        <label for="userAddress">주소:</label>
                         <input class="input" id="userAddress" type="text" placeholder="Your Address" autocomplete="street-address"> </br>
                     </div>
 
@@ -63,13 +67,14 @@
                         <input type="radio" id="male" name="gender" value="M">
                         <label for="male">남성</label>
                         <input type="radio" id="female" name="gender" value="F">
-                        <label for="female">여성</label> </br>
+                        <label for="female">여성</label>
                         <input type="radio" id="private" name="gender" value="P">
                         <label for="private">미공개</label> </br>
                     </div>
 
                     <!-- 생년월일 입력 -->
                     <div class="form-group">
+                        <label for="userBirth">생일:</label>
                         <input class="input" id="userBirth" type="date" placeholder="Your BirthDay"> </br>
                     </div>
 
@@ -161,7 +166,7 @@
                     </p>
             </div>
             <label>
-                <input type="checkbox" id="modalPrivacyPolicy" disabled> 약관에 동의합니다.
+                <input type="checkbox" id="modalPrivacyPolicy" disabled> 약관에 동의합니다. <br>
             </label>
             <button id="finishModalButton" class="btn" disabled>확인</button>
             <button id="closeModalButton" class="btn">닫기</button>

@@ -2,7 +2,8 @@ window.logout = logout;
 window.certification = certification;
 window.imageUpload = imageUpload;
 
-async function logout() {
+//////////////// 로그아웃 함수 ////////////////
+async function logout() {  
     console.log('로그아웃 함수 실행');
     const userToken = sessionStorage.getItem('userToken');
     try {
@@ -26,11 +27,11 @@ async function logout() {
     }
 }
 
-async function certification(page, data) {
+//////////////// 회원 인증 함수 ////////////////
+async function certification(page, data) {   
     console.log('certification 함수 실행');
     const getData = data;
     const getPage = page;
-    
 
     try {
         const response = await fetch(`/Certification?${getData}&page=${getPage}`, {
@@ -40,8 +41,7 @@ async function certification(page, data) {
         const data =  await response.json();
         console.log(data);
 
-        if (data.result == 1) {            
-            console.log('리소스 데이터 반환 성공');
+        if (data.result == 1) {
             return data;
         } else if (data.result == 0) {
             window.location.href = '/WarningPage.html'; 
@@ -51,12 +51,13 @@ async function certification(page, data) {
     }
 }
 
-async function imageUpload(functionType, userToken, imageData, extraData) {
-    let imageFormData = new FormData()
-    
+//////////////// 이미지 업로드 함수 ////////////////
+async function imageUpload(functionType, userToken, imageData, extraData) { 
+
+    let imageFormData = new FormData()    
     let imageFormJson = { functionType: functionType, userToken: userToken }
       
-        console.log('이미지 업로드 함수 실행 성공');
+    console.log('이미지 업로드 함수 실행 성공');
 
     if (functionType == 1) {  // 유저 개인 프로필 사진
 
@@ -71,8 +72,6 @@ async function imageUpload(functionType, userToken, imageData, extraData) {
         imageFormData.append('json', JSON.stringify(imageFormJson));
 
     }
-
-    console.log(imageFormData);  // 콘솔에서는 formdata 형식의 데이터를 확인할 수 없는 것이 정상
 
     try {
         const response = await fetch('/ImageUpload', {

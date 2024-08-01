@@ -1,6 +1,8 @@
+/* 공통 스타일 */
 .container {
-  width: 500px;
-  height: 300px;
+  width: 100%;
+  max-width: 400px; /* 최대 너비 설정 */
+  height: auto; /* 높이를 콘텐츠에 맞게 자동 조정 */
   border-radius: 20px; /* 모서리를 둥글게 */
   background-color: #f2f2f2;
 
@@ -14,51 +16,71 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  padding: 2rem; /* 내부 여백 추가 */
+  box-sizing: border-box; /* 패딩을 포함한 크기 계산 */
 }
 
 .input {
   background-color: #ffffff;
-  border: #00ccff;
-  padding: 1rem 3rem;
+  border: 1px solid #00ccff;
+  padding: 1rem;
   margin: 1rem 0;
+  width: 100%; /* 인풋 박스가 부모 요소의 너비를 채우도록 */
+  box-sizing: border-box; /* 패딩을 포함한 크기 계산 */
 }
 
 .inputs {
   text-align: center;
-  margin-top: 5px;;
+  width: 100%;
 }
 
 .buttons {
-  margin-right: 5px; /* 인풋 박스 사이 간격 */
   text-align: center;
+  margin-top: 1rem;
+  width: 100%;
 }
 
 .btn {
-  margin-right: 5px; /* 버튼 사이 간격 */
-  width: 100px;
-  height: 30px;
+  margin: 0.5rem 0; /* 버튼 사이 간격 */
+  width: 45%;
+  max-width: 200px; /* 최대 너비 설정 */
+  height: 40px;
   border-radius: 5px; /* 버튼 모서리를 둥글게 */
   border: none;
   background-color: #007bff;
-  color: white; /* 버튼 텍스트 색상을 흰색으로 설정합니다 */
-  cursor: pointer; /* 커서를 포인터로 변경하여 버튼을 클릭할 때 인터랙션을 제공합니다 */
-}
-
-.kakaoBtn {
-  margin-top: 5px; /* 버튼 사이 간격 */
-  width: 200px; /* 버튼의 가로 길이 */
-  height: 30px; /* 버튼의 높이 */
-  border-radius: 5px; /* 버튼 모서리를 둥글게 */
-  border: none;
   color: white; /* 버튼 텍스트 색상을 흰색으로 설정 */
-  cursor: pointer; /* 커서를 포인터로 변경하여 버튼을 클릭할 때 인터랙션을 제공합니다 */
-  background-image: url('kakaoLoginBtn.jpg'); /* 이미지 경로를 여기 입력 */
-  background-size: contain; /* 이미지 비율을 유지하며 버튼 크기에 맞춤 */
-  background-repeat: no-repeat; /* 이미지 반복을 하지 않음 */
-  background-position: center; /* 이미지를 가운데로 정렬 */
-  background-color: transparent; /* 배경색 투명으로 설정 */
+  cursor: pointer; /* 커서를 포인터로 변경하여 버튼을 클릭할 때 인터랙션 제공 */
 }
 
 ::placeholder {
   text-align: center;
+}
+
+/* -----------------------모바일----------------------- */
+@media (max-width: 600px) {
+  body {
+      font-size: 1rem; /* 16px */
+  }
+  .container {
+      width: 90%;
+      padding: 1rem;
+  }
+  .input {
+      padding: 0.8rem;
+  }
+  .btn {
+      max-width: 30%; /* 최대 너비 해제 */
+      height: 36px;
+      margin: 5%;
+  }
+}
+
+@media (min-width: 601px) {
+  body {
+      font-size: 1.125rem; /* 18px */
+  }
+  .container {
+      width: 80%;
+      max-width: 500px; /* 데스크탑에서 최대 너비 설정 */
+  }
 }
