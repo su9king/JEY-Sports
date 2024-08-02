@@ -14,13 +14,20 @@ document.addEventListener('DOMContentLoaded', function() {
     let consentedCheck = false;
     let emailCheck = false;
 
-    
+    // 뒤로가기
+    document.getElementById('backButton').addEventListener('click', function() {
+        window.history.back();
+    });
+
+
     // 모든 label 요소에 클릭 이벤트를 방지하는 핸들러 추가
     const labels = document.querySelectorAll('label');
     labels.forEach(label => {
-        label.addEventListener('click', function(e) {
-            e.preventDefault(); // 클릭 이벤트 기본 동작 방지
+        if (label.id !== 'checkboxLabel') { // 특정 라벨 제외
+            label.addEventListener('click', function(e) {
+                e.preventDefault(); // 클릭 이벤트 기본 동작 방지
         });
+    }
     });
     
 
@@ -194,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 모달 내 스크롤이 끝까지 내려가면 동의 체크박스 활성화
     privacyContent.addEventListener('scroll', function() {
-        if (privacyContent.scrollTop + privacyContent.clientHeight >= privacyContent.scrollHeight) {
+        if (privacyContent.scrollTop + privacyContent.clientHeight >= privacyContent.scrollHeight - 20) {
             modalPrivacyPolicy.disabled = false;
             finishModalButton.disabled = false;
         }
@@ -205,8 +212,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (modalPrivacyPolicy.checked) {
             document.getElementById('userConsented').checked = true;
             consentedCheck = true;
-            overlay.classList.add('hidden');
-            privacyModal.classList.add('hidden');
+            // overlay.classList.add('hidden');
+            // privacyModal.classList.add('hidden');
         } else {
             document.getElementById('userConsented').checked = false;
         }

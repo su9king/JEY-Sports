@@ -25,7 +25,7 @@ body {
   border: none;
   padding: 1rem;
   margin: 1rem 0;
-  width: calc(100% - 6rem); /* 패딩을 고려한 너비 설정 */
+  width: calc(100% - 8rem); /* 패딩을 고려한 너비 설정 */
   box-sizing: border-box; /* 패딩 포함 */
 }
 
@@ -55,6 +55,16 @@ body {
   margin-bottom: 1rem; /* 그룹 간 간격 조정 */
 }
 
+#backButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start; /* 좌측 정렬을 위한 속성 추가 */
+  margin-bottom: 10px; /* 아래쪽 간격 추가 */
+}
 
 
 /* -----------------------모달----------------------- */
@@ -94,6 +104,14 @@ body {
 #privacyContent {
   height: 200px;
   overflow-y: auto;
+}
+
+.smallNotice {
+  font-size: 12px; /* 폰트 크기를 작게 설정 */
+  color: gray; /* 글씨 색상을 회색으로 설정 */
+  margin: 0; /* 위아래 빈 공간을 제거 */
+  padding: 0; /* 패딩을 제거 */
+  line-height: 1; /* 줄 간격을 최소화 */
 }
 
 

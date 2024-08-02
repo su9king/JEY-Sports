@@ -23,4 +23,10 @@ window.onload = async function() {
         
        
     }
+
+    // 뒤로가기
+    document.getElementById('backButton').addEventListener('click', function() {
+        window.history.back();
+    });
 }
+

@@ -23,6 +23,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let idCheck = false;
 
+    // 뒤로가기
+    document.getElementById('backButton').addEventListener('click', function() {
+        window.history.back();
+    });
+
     // 모든 label 요소에 클릭 이벤트를 방지하는 핸들러 추가
     const labels = document.querySelectorAll('label');
     labels.forEach(label => {
@@ -107,16 +112,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ////// 이미지 저장 ////// 
     const groupImage = document.getElementById('groupImage');
-    groupImage.addEventListener('change', function() {  // 용량 제한
+
+    groupImage.addEventListener('change', function() {  
         const file = groupImage.files[0];
 
         if (file) {
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('JPG와 PNG 파일만 업로드 가능합니다!');
+                groupImage.value = ''; // Clear the input
+                return;
+            }
+
             if (file.size > 5 * 1024 * 1024) { // 5MB
                 alert('5MB 이하의 파일만 가능합니다!');
-                fileInput.value = ''; // Clear the input
+                groupImage.value = ''; // Clear the input
+                return;
             } 
         }
-
     });
 
 

@@ -48,6 +48,18 @@
   text-align: center;
 }
 
+
+#backButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start; /* 좌측 정렬을 위한 속성 추가 */
+  margin-bottom: 10px; /* 아래쪽 간격 추가 */
+}
+
 /* -----------------------모달----------------------- */
 
 /* 정보 아이콘 스타일 */
