@@ -16,14 +16,14 @@ module.exports = {
             console.log("필요한 리소스가 존재하지 않습니다.")
             return {result : 1 , resources : null};
 
-        }else if (page == "GroupPage"){
+        }else if (page == "GroupMainPage"){
             const groupToken = query["groupToken"];
 
             if (groupToken == undefined){ // 그룹 토큰을 전달 받지 않음
                 return {result : 0 , resources : null}
             }
 
-            var data = await GroupPage(groupToken)
+            var data = await GroupMainPage(groupToken)
 
             if (data == null){ //그룹 토큰이 잘못 됨 
                 return {result : 0 , resources : data};
@@ -31,6 +31,28 @@ module.exports = {
                 return {result : 1 , resources : data};
             }
             
+            //개발중. 테스트를 위한 Default Code
+        }else if (page == "EditUserPage"){
+            console.log("필요한 리소스가 존재하지 않습니다.")
+            return {result : 1 , resources : null};
+        }else if (page == "EditGroupPage"){
+            console.log("필요한 리소스가 존재하지 않습니다.")
+            return {result : 1 , resources : null};
+        }else if (page == "GroupMemberPage"){
+            console.log("필요한 리소스가 존재하지 않습니다.")
+            return {result : 1 , resources : null};
+        }else if (page == "GroupSchedulePage"){
+            console.log("필요한 리소스가 존재하지 않습니다.")
+            return {result : 1 , resources : null};
+        }else if (page == "GroupNoticePage"){
+            console.log("필요한 리소스가 존재하지 않습니다.")
+            return {result : 1 , resources : null};
+        }else if (page == "CreateGroupNoticePage"){
+            console.log("필요한 리소스가 존재하지 않습니다.")
+            return {result : 1 , resources : null};
+        }else if (page == "CreateGroupSchedulePage"){
+            console.log("필요한 리소스가 존재하지 않습니다.")
+            return {result : 1 , resources : null};
         }
 
         
@@ -61,7 +83,7 @@ async function PrivatePage(userToken){
     })
 }
 
-async function GroupPage(groupToken){
+async function GroupMainPage(groupToken){
 
     return new Promise((resolve, reject) => {
         connection.query(`SELECT groupName,groupImage FROM Organizations
@@ -81,3 +103,4 @@ async function GroupPage(groupToken){
         );
     })
 }
+
