@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EditGroupPage</title>
+    <script src="EditGroupPage.js"></script>
+    <link rel="stylesheet" href="EditGroupPage.css">
+    <script type="module" src="../Certification.js"></script>
+    <script src="../SideBar/SideBar.js" defer></script>
+</head>
+<body>
+    <div class="content">
+
+         <label for="groupName">ID:</label>
+        <input class="inputRequired" id="groupName" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="groupNameBtn">이름 변경</button>
+
+        <label for="groupPW">PW:</label>
+        <input class="inputRequired" id="groupPW" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="groupPWBtn">비밀번호 변경</button>
+
+        <label for="groupImage">Image:</label>
+        <input class="inputRequired" id="groupImage" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="groupImageBtn">사진 변경</button>
+
+        <label for="groupID">groupID:</label>
+        <input class="inputRequired" id="groupID" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="groupIDBtn">groupID 변경</button>
+
+        <label for="groupIntro">Introduction:</label>
+        <input class="inputRequired" id="groupIntro" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="groupIntroBtn">자기소개 변경</button>
+
+        <label for="groupAccount">groupAccount:</label>
+        <input class="inputRequired" id="groupAccount" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="groupAccountBtn">groupAccount 변경</button>
+
+        <button class="btn" type="button" id="deleteGroupBtn">그룹 삭제</button>
+
+
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GroupNoticePage</title>
+    <script src="GroupNoticePage.js"></script>
+    <link rel="stylesheet" href="GroupNoticePage.css">
+    <script type="module" src="../Certification.js"></script>
+    <script src="../SideBar/SideBar.js" defer></script>
+</head>
+<body>
+    <div class="content">
+        <button class="btn" type="button" id="noticeLoadBtn">공지사항 조회</button>
+
+        <button class="btn" type="button" id="noticeAddBtn">공지사항 추가</button>
+
+        <button class="btn" type="button" id="noticeDeleteBtn">공지사항 삭제</button>
+
+        <button class="btn" type="button" id="noticeFixBtn">일적 수정</button>
+
+        <a onclick="window.location.href = 'CreateGroupNoticePage.html'">공지사항 생성</a>
+
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+    </div>
+</body>
+</html>

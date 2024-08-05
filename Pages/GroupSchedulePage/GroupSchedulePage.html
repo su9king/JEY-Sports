@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GroupSchedulePage</title>
+    <script src="GroupSchedulePage.js"></script>
+    <link rel="stylesheet" href="GroupSchedulePage.css">
+    <script type="module" src="../Certification.js"></script>
+    <script src="../SideBar/SideBar.js" defer></script>
+</head>
+<body>
+    <div class="content">
+        <button class="btn" type="button" id="scheduleLoadBtn">일정 조회</button>
+
+        <button class="btn" type="button" id="scheduleAddBtn">일정 추가</button>
+
+        <button class="btn" type="button" id="scheduleDeleteBtn">일정 삭제</button>
+
+        <button class="btn" type="button" id="scheduleFixBtn">일적 수정</button>
+
+        <a onclick="window.location.href = 'CreateGroupSchedulePage.html'">일정 생성</a>
+
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+    </div>
+</body>
+</html>

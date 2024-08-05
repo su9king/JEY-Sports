@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EditUserPage</title>
+    <script src="EditUserPage.js"></script>
+    <link rel="stylesheet" href="EditUserPage.css">
+    <script type="module" src="../Certification.js"></script>
+    <script src="../SideBar/SideBar.js" defer></script>
+</head>
+<body>
+    <div class="content">
+
+        <label for="userName">ID:</label>
+        <input class="inputRequired" id="userName" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="userNameBtn">이름 변경</button>
+
+        <label for="userPW">PW:</label>
+        <input class="inputRequired" id="userPW" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="userPWBtn">비밀번호 변경</button>
+
+        <label for="userImage">Image:</label>
+        <input class="inputRequired" id="userImage" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="userImageBtn">사진 변경</button>
+
+        <label for="userEmail">Email:</label>
+        <input class="inputRequired" id="userEmail" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="userEmailBtn">email 변경</button>
+
+        <label for="userIntro">Introduction:</label>
+        <input class="inputRequired" id="userIntro" type="text" placeholder="New Name" require> </br>
+        <button class="btn" type="button" id="userIntroBtn">자기소개 변경</button>
+
+        <button class="btn" type="button" id="leaveJEYBtn">회원 탈퇴</button>
+
+
+
+
+
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+    </div>
+</body>
+</html>

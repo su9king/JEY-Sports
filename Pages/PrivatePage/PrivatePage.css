@@ -8,3 +8,30 @@
     color: white; /* 버튼 텍스트 색상을 흰색으로 설정합니다 */
     cursor: pointer; /* 커서를 포인터로 변경하여 버튼을 클릭할 때 인터랙션을 제공합니다 */
   }
+
+
+
+/* -----------------------사이드바----------------------- */
+/* 사이드바가 열려 있을 때의 스타일 */
+.sidebar-open .content {
+  margin-right: 250px; /* 사이드바의 너비에 맞게 조정 */
+  transition: margin-left 0.5s ease; /* 애니메이션 효과 적용 */
+}
+
+/* 사이드바가 닫혀 있을 때의 기본 스타일 */
+.content {
+  margin-right: 0;
+  transition: margin-left 0.5s ease; /* 애니메이션 효과 적용 */
+}
+
+#toggleButton {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+}

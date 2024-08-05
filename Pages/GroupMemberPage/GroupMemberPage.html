@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GroupMemberPage</title>
+    <script src="GroupMemberPage.js"></script>
+    <link rel="stylesheet" href="GroupMemberPage.css">
+    <script type="module" src="../Certification.js"></script>
+    <script src="../SideBar/SideBar.js" defer></script>
+</head>
+<body>
+    <div class="content">
+
+        <input class="inputRequired" id="changePermission" type="text" placeholder="functionType 5(일반 유저) , 6(관리자) , 7(창시자)"> </br>
+        <button class="btn" type="button" id="changePermissionBtn">권한 조정</button>
+
+        <button class="btn" type="button" id="deleteUserBtn">강제 퇴장</button>
+
+        <button class="btn" type="button" id="allowUserBtn">입장 수락</button>
+
+        <button class="btn" type="button" id="inviteUserBtn">유저 초대</button>
+
+        <button class="btn" type="button" id="addUserBtn">비유저 등록</button>
+
+
+
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+    </div>
+</body>
+</html>

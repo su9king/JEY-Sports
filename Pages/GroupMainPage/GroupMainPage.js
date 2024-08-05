@@ -1,5 +1,5 @@
 window.onload = async function() {
-    const page = 'GroupPage';
+    const page = 'GroupMainPage';
     const userToken = sessionStorage.getItem('userToken');
     const groupToken = sessionStorage.getItem('groupToken');
     const data = `userToken=${userToken}&groupToken=${groupToken}`
@@ -10,8 +10,12 @@ window.onload = async function() {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
     } else {
+
+        const userPermission = response.userPermission;
+        loadSidebar(page, userPermission);
+
+
         document.getElementById('groupName').textContent = `${response.resources[0]["groupName"]}에 오신 것을 환영합니다!`
-        // document.getElementById('groupImage').src = 'JEY_text_icon.jpg';
 
         ///////////////////////이미지 불러오기
         const groupImage = response.resources[0]["groupImage"];
@@ -30,3 +34,7 @@ window.onload = async function() {
     });
 }
 
+//////////////////// 사이드바 열기 ////////////////////
+function toggleSidebar() {
+    document.body.classList.toggle('sidebar-open');
+}
