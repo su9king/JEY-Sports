@@ -1,5 +1,5 @@
 //필요한 변수 및 모듈 , API 선언
-const { rand } = require('../Utility.js');
+const { rand } = require('../BackEndUtility.js');
 const { CheckDuplicate } = require('./CheckDuplicate.js');
 
 const coolsms = require('../node_modules/coolsms-node-sdk').default
