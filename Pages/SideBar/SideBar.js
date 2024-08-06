@@ -25,10 +25,10 @@ async function logout() {
 
 
 //////////////// 사이드바 호출 함수 ////////////////
-function loadSidebar(page, userPermission) {
+function loadSidebar(page, userPermission, resources) {
     // 사용 조건: 사용할 HTML 파일에 <div id="navbar"></div>가 존재
 
-    fetch('../SideBar/SideBar.html')
+    fetch('/SideBar/SideBar.html')
     .then(response => {
         if (!response.ok) {
             throw new Error('네트워크 응답 X');
@@ -37,7 +37,7 @@ function loadSidebar(page, userPermission) {
     })
     .then(data => {
         document.getElementById('sidebar').innerHTML = data;
-        sidebar_createButtons(page, userPermission);
+        sidebar_createButtons(page, userPermission, resources);
     })
     .catch(error => {
         console.error('문제가 발생했습니다:', error);
@@ -45,9 +45,17 @@ function loadSidebar(page, userPermission) {
 }
 
 //////////////// 사이드바의 버튼 생성 함수 ////////////////
-function sidebar_createButtons(page, userPermission) {
+function sidebar_createButtons(page, userPermission, resources) {
     const buttonContainer = document.getElementById('sidebar-button-container');
     buttonContainer.innerHTML = '';
+
+    const userImageSample = resources.resources[0]["userImage"];
+    if (userImageSample == null){
+        console.log(userImageSample)
+        document.getElementById('sidebar-userImageSample').src = `/UserImages/NULL.jpg`
+    } else{
+        document.getElementById('sidebar-userImageSample').src = `/UserImages/${userImage}`;  
+    }
 
     // 기본 버튼 목록 생성
     const buttons = [
@@ -56,17 +64,17 @@ function sidebar_createButtons(page, userPermission) {
     ];
 
     // GroupMainPage인 경우 추가 버튼 생성
-    // if (page === 'GroupMainPage') {  /////////////////////////////////////일단 다 열어놨으니 개발시 조건 추가 필요
+    if (page !== 'PrivatePage') {  
         buttons.push(
             { text: '멤버페이지', onClick: () => window.location.href = '../GroupMemberPage/GroupMemberPage.html' },
             { text: '일정', onClick: () => window.location.href = '../GroupSchedulePage/GroupSchedulePage.html' },
             { text: '공지사항', onClick: () => window.location.href = '../GroupNoticePage/GroupNoticePage.html' }
         );
 
-        if (userPermission == 2) {  // 그룹 창시자인 경우 조직 정보 수정 가능
+        if (userPermission == 3) {  // 그룹 창시자인 경우 조직 정보 수정 가능
             buttons.push({ text: '조직정보수정', onClick: () => window.location.href = '../EditDataPage/EditGroupPage.html' });
         }
-    // }
+    }
 
     // 버튼들을 생성하고 컨테이너에 추가
     buttons.forEach(buttonData => {
@@ -80,6 +88,5 @@ function sidebar_createButtons(page, userPermission) {
 
 
 function toggleSidebar() {
-    console.log('testse')
     document.body.classList.toggle('sidebar-open');
 }

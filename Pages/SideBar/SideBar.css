@@ -53,3 +53,23 @@
 .sidebar-button:hover, .sidebar ul li button:hover {
     background-color: #575757;
 }
+
+
+.sidebar-profile-image-container {
+    margin: 20px auto; /* 중앙 정렬을 위해 자동 마진 추가 */
+    width: 120px; /* 원하는 이미지 크기로 설정 */
+    height: 120px;
+    border-radius: 50%; /* 원형으로 만들기 위해 반지름을 이미지 크기의 절반으로 설정 */
+    overflow: hidden;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1); /* 약간의 그림자 추가 */
+  }
+  
+  .sidebar-profile-image {
+    width: 100%; /* 컨테이너 크기에 맞게 조정 */
+    height: auto;
+    display: block;
+  }

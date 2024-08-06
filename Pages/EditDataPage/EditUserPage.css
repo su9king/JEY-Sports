@@ -1,30 +1,191 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 500px; /* 최대 너비 설정 */
+  height: auto;
+  border-radius: 20px; /* 모서리를 둥글게 */
+  background-color: #f2f2f2;
+  margin: 10px auto; /* 상하 마진 추가 */
+  box-sizing: border-box; /* 패딩 포함 */
+  padding: 1rem; /* 내부 패딩 추가 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 내부 요소 상하 중앙 정렬 */
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 박스 그림자 추가 */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1.5rem; /* 그룹 간 간격 조정 */
+}
+
+.form-group label {
+  width: 45%; /* 라벨과 인풋 너비 설정 */
+  max-width: 300px; /* 최대 너비 설정 */
+  margin-right: 1rem;
+}
 
 
 
+.inputRequired {
+  background-color: #ffffff;
+  border: none;
+  padding: 1rem;
+  margin: 1rem 0;
+  width: 45%; /* 패딩을 고려한 너비 설정 */
+  box-sizing: border-box; /* 패딩 포함 */
+}
+
+.btn {
+  margin: 5px;
+  width: 40%;
+  max-width: 300px;
+  height: 30px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3; /* 호버 시 배경색 변화 */
+}
+
+.btn.leave-btn {
+  width: 100%; /* 탈퇴 버튼은 전체 너비를 차지 */
+  background-color: #dc3545; /* 탈퇴 버튼의 배경색 변경 */
+}
+
+.btn.leave-btn:hover {
+  background-color: #c82333; /* 호버 시 탈퇴 버튼의 배경색 변화 */
+}
+
+::placeholder {
+  text-align: center;
+  color: #6c757d; /* 플레이스홀더 색상 변경 */
+}
+
+textarea {
+  resize: none;
+}
 
 
+.profile-image-container {
+  margin: 20px auto; /* 중앙 정렬을 위해 자동 마진 추가 */
+  width: 120px; /* 원하는 이미지 크기로 설정 */
+  height: 120px;
+  border-radius: 50%; /* 원형으로 만들기 위해 반지름을 이미지 크기의 절반으로 설정 */
+  overflow: hidden;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1); /* 약간의 그림자 추가 */
+}
+
+.profile-image {
+  width: 100%; /* 컨테이너 크기에 맞게 조정 */
+  height: auto;
+  display: block;
+}
+
+
+/* -----------------------모바일----------------------- */
+@media (max-width: 600px) {
+  .sidebar-open .content {
+    margin-left: 100px; /* 사이드바의 너비에 맞게 조정 */
+    transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+  }
+
+  /* 사이드바가 닫혀 있을 때의 기본 스타일 */
+  .content {
+    transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+  }
+}
+
+@media (min-width: 601px) {
+  .sidebar-open .content {
+    margin-left: 100px; /* 사이드바의 너비에 맞게 조정 */
+    transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+  }
+
+  /* 사이드바가 닫혀 있을 때의 기본 스타일 */
+  .content {
+    transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+  }
+}
+.hidden {
+  display: none;
+}
 
 /* -----------------------사이드바----------------------- */
 /* 사이드바가 열려 있을 때의 스타일 */
 .sidebar-open .content {
-    margin-right: 250px; /* 사이드바의 너비에 맞게 조정 */
-    transition: margin-left 0.5s ease; /* 애니메이션 효과 적용 */
-  }
-  
+  margin-right: 250px; /* 사이드바의 너비에 맞게 조정 */
+  transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+}
+
 /* 사이드바가 닫혀 있을 때의 기본 스타일 */
 .content {
-margin-right: 0;
-transition: margin-left 0.5s ease; /* 애니메이션 효과 적용 */
+  transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
 }
 
 #toggleButton {
-position: fixed;
-top: 10px;
-right: 10px;
-background-color: #333;
-color: white;
-border: none;
-padding: 10px 20px;
-cursor: pointer;
-z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+}
+
+/* -----------------------이전 버튼----------------------- */
+.back-button {
+  position: absolute; /* 화면 상단 좌측에 고정 */
+  top: 10px; /* 위쪽 간격 */
+  left: 10px; /* 왼쪽 간격 */
+  width: 30px; /* 화살표 전체 너비 */
+  height: 30px; /* 화살표 전체 높이 */
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer; /* 마우스 커서 변경 */
+  outline: none; /* 포커스 시 외곽선 제거 */
+}
+
+.back-button::before {
+  content: "";
+  display: block;
+  width: 15px; /* 화살표 너비 */
+  height: 15px; /* 화살표 높이 */
+  border-left: 5px solid #007bff; /* 화살표 두께와 색상 */
+  border-top: 5px solid #007bff; /* 화살표 두께와 색상 */
+  transform: rotate(-45deg); /* 화살표 회전 */
+  position: absolute;
+  top: 50%; /* 수직 중앙 정렬 */
+  left: 50%; /* 수평 중앙 정렬 */
+  transform: translate(-50%, -50%) rotate(-45deg); /* 중앙 정렬 및 회전 */
+}
+
+.back-button:hover::before {
+  border-left-color: #0056b3; /* 마우스 오버 시 색상 변경 */
+  border-top-color: #0056b3; /* 마우스 오버 시 색상 변경 */
+}
+
+.back-button:active::before {
+  border-left-color: #003366; /* 클릭 시 색상 변경 */
+  border-top-color: #003366; /* 클릭 시 색상 변경 */
 }

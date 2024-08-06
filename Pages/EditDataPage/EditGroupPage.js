@@ -1,10 +1,11 @@
 //////////////////// Step0 : 회원인증, 사이드바 ////////////////////
 window.onload = async function() {
     const page = 'EditGroupPage';
-    const userToken = sessionStorage.getItem('userToken')
-    const data = `userToken=${userToken}`
+    const userToken = sessionStorage.getItem('userToken');
+    const groupToken = sessionStorage.getItem('groupToken');
+    const data = `userToken=${userToken}&groupToken=${groupToken}`
     
-    const resources = await certification(page, data);
+    resources = await certification(page, data);
     
 
     if (resources.result == 0) {
@@ -12,18 +13,32 @@ window.onload = async function() {
         window.location.href = '/WarningPage.html';
     } else {
         const userPermission = resources.userPermission;
-        loadSidebar(page, userPermission);
-        
+        loadSidebar(page, userPermission, resources);
+        document.getElementById('groupName').value = resources.resources[0]['groupName'];
+        document.getElementById('groupID').value = resources.resources[0]['groupID'];
+        document.getElementById('groupIntro').value = resources.resources[0]['groupIntro'];
+        document.getElementById('groupBankAccountName').value = resources.resources[0]['groupBankAccountName'];
+        document.getElementById('groupBankAccountNumber').value = resources.resources[0]['groupBankAccountNumber'];
 
+        const groupImage = resources.resources[0]["groupImage"];
+        if (groupImage == null){
+            document.getElementById('groupImageSample').src = `/GroupImages/NULL.png`
+        } else{
+            document.getElementById('groupImageSample').src = `/GroupImages/${groupImage}`;  
+        }
+           
+    
+        // 뒤로가기
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.history.back();
+        });
     }
-       
 }
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    const groupToken = sessionStorage.getItem('groupToken')
-
-    
+    const userToken = sessionStorage.getItem('userToken');
+    const groupToken = sessionStorage.getItem('groupToken')    
 
     const groupNameBtn = document.getElementById('groupNameBtn');
     const groupPWBtn = document.getElementById('groupPWBtn');
@@ -33,177 +48,372 @@ document.addEventListener('DOMContentLoaded', function() {
     const groupAccountBtn = document.getElementById('groupAccountBtn');
     const deleteGroupBtn = document.getElementById('deleteGroupBtn');
 
+    // 모든 label 요소에 클릭 이벤트를 방지하는 핸들러 추가
+    const labels = document.querySelectorAll('label');
+    labels.forEach(label => {
+        label.addEventListener('click', function(e) {
+            e.preventDefault(); // 클릭 이벤트 기본 동작 방지
+        });
+    });
+
+
+    /////////////////////////////////// 프로필 사진 변경 ///////////////////////////////////
+    ////// 이미지 저장 ////// 
+    const groupImage = document.getElementById('groupImage');
+
+    groupImage.addEventListener('change', function(event) {  
+        const file = event.target.files[0];
+
+        if (file) {  // 파일 확장자, 용량 제한
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            if (!allowedTypes.includes(file.type)) {  // 파일 확장자, 용량 제한
+                alert('JPG와 PNG 파일만 업로드 가능합니다!');
+                groupImage.value = '';
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) { // 5MB // 파일 확장자, 용량 제한
+                alert('5MB 이하의 파일만 가능합니다!');
+                groupImage.value = '';
+                return;
+            } 
+            
+            // 첨부 이미지 미리보기
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('groupImageSample').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+        } else {
+            alert('변경할 이미지를 첨부해주세요!');
+        }
+    });
+    ////// 이미지 버튼 ////// 
+    groupImageBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+
+        const groupImage = document.getElementById('groupImage').files[0];
+        const functionType = 2; // 조직 프로필
+
+        if (groupImage) {
+            await imageUpload(functionType, groupToken, groupImage );
+            alert("조직 프로필 사진이 수정되었습니다!");
+        }
+
+    });
+
+
+
+
+    /////////////////////////////////// 조직 이름 변경 ///////////////////////////////////
     groupNameBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
         const groupName = document.getElementById('groupName').value;
-        const functionType = 1;
-
-        try {
-            const response = await fetch('/ChangeNormalData', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ functionType: functionType, groupToken: groupToken, groupName: groupName })
-            });
-
-            data = await response.json();
-
-            if (data.result == 0) {  // 사용 가능한 ID
-                alert('다시 시도해주세요!')
-            } else {
-                alert('이름이 성공적으로 수정되었습니다!')
+        const functionType = 2;
+        
+        if (groupName && groupName != resources.resources[0]['groupName']) {
+            try {
+                const response = await fetch('/ChangeNormalData', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, groupName: groupName })
+                });
+    
+                data = await response.json();
+    
+                if (data.result == 0) {
+                    alert('다시 시도해주세요!')
+                } else {
+                    alert('조직명이 성공적으로 수정되었습니다!')
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
+        } else {
+            alert('새로운 조직명을 작성해주세요!');
         }
+        
     });
 
-    groupPWBtn.addEventListener('click', async function(e) {
+    
+    /////////////////////////////////// ID 변경 ///////////////////////////////////
+    const groupID = document.getElementById('groupID');
+    const allowID = document.getElementById('idAlert');
+    const idCheckButton = document.getElementById('idCheckButton');
+    
+    ////// 입력 가능 문자 제한 ////// 
+    let idCheck = false;
+    
+    groupID.addEventListener('input', async function(e) {
         e.preventDefault();
+        allowID.style.display = 'none'
+        idCheck = false;
 
-        const groupPW = document.getElementById('groupPW').value;
-        const functionType = 1;
+        const engFilter = /^[a-zA-Z0-9]*$/;
 
-        try {
-            const response = await fetch('/ChangeNormalData', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ functionType: functionType, groupToken: groupToken, groupPW: groupPW })
-            });
-
-            data = await response.json();
-
-            if (data.result == 0) {  
-                alert('다시 시도해주세요!')
-            } else {
-                alert('groupPW이 성공적으로 수정되었습니다!')
-            }
-        } catch (error) {
-            console.error('Error:', error);
+        if (!engFilter.test(groupID.value)) {
+            groupID.value = groupID.value.replace(/[^a-zA-Z0-9]/g, '');
+            alert('아이디는 영어와 숫자만 가능합니다!');
         }
     });
 
-    groupImageBtn.addEventListener('click', async function(e) {
+    
+    ////// ID 중복 확인 버튼 ////// 
+    idCheckButton.addEventListener('click', async function(e) {
         e.preventDefault();
+        
+        const groupID = document.getElementById('groupID').value;
 
-        const groupImage = document.getElementById('groupImage').value;
-        const functionType = 1;
+        allowID.style.display = 'none'
 
-        try {
-            const response = await fetch('/ChangeNormalData', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ functionType: functionType, groupToken: groupToken, groupImage: groupImage })
-            });
-
-            data = await response.json();
-
-            if (data.result == 0) {
-                alert('다시 시도해주세요!')
+        const functionType = 4;
+        
+        if (groupID) {
+            if (groupID != resources.resources[0]['groupID']) {
+                try {
+                    const response = await fetch('/ChangeNormalData', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, groupID: groupID })
+                    });
+        
+                    data = await response.json();
+        
+                    if (data.result == 1) {  // 사용 가능한 ID
+                        idCheck = true;
+                        allowID.style.display = 'block';
+                        alert('사용가능한 ID입니다!')
+                    } else {
+                        document.getElementById('groupID').value = resources.resources[0]['groupID'];
+                        alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
             } else {
-                alert('groupImage이 성공적으로 수정되었습니다!')
+                document.getElementById('groupID').value = resources.resources[0]['groupID'];
+                alert('새로운 ID를 작성해주세요!')
             }
-        } catch (error) {
-            console.error('Error:', error);
+            
+        } else {  // 빈칸으로 제출한 경우
+            document.getElementById('groupID').value = resources.resources[0]['groupID'];
+            alert('원하는 ID를 작성해주세요!');
         }
+        
     });
 
+
+    ////// ID 중복 확인 버튼 ////// 
     groupIDBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
         const groupID = document.getElementById('groupID').value;
-        const functionType = 1;
+        const functionType = 2;
 
-        try {
-            const response = await fetch('/ChangeNormalData', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ functionType: functionType, groupToken: groupToken, groupID: groupID })
-            });
-
-            data = await response.json();
-
-            if (data.result == 0) {
-                alert('다시 시도해주세요!')
-            } else {
-                alert('groupID이 성공적으로 수정되었습니다!')
+        if (idCheck == true) {
+            try {
+                const response = await fetch('/ChangeNormalData', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, groupID: groupID })
+                });
+    
+                data = await response.json();
+    
+                if (data.result == 0) {
+                    alert('다시 시도해주세요!')
+                } else {
+                    alert('groupID이 성공적으로 수정되었습니다!')
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
+        } else {
+            alert('ID 중복 체크를 해주세요!');
         }
+        
     });
 
+    /////////////////////////////////// 비밀 번호 변경 ///////////////////////////////////
+    ////// 비밀번호 확인 기능 상시 활성화 //////
+    const PW1 = document.getElementById('PW1');
+    const PW2 = document.getElementById('PW2');
+    const pwAlert = document.getElementById('pwAlert');
+
+    PW1.addEventListener('input', checkPasswords); 
+    PW2.addEventListener('input', checkPasswords);
+
+    function checkPasswords() {
+        if (PW1.value !== PW2.value) {
+            pwAlert.style.display = 'block';
+        } else {
+            pwAlert.style.display = 'none';
+        }
+    }
+
+    ////// 비밀번호 버튼 ////// 
+    groupPWBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+
+        const PW1 = document.getElementById('PW1').value;
+        const PW2 = document.getElementById('PW2').value;
+
+        const functionType = 2;
+
+        if (PW2) {
+            if (PW1 == PW2) {
+                try {
+                    const response = await fetch('/ChangeNormalData', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, groupPW: PW1 })
+                    });
+        
+                    data = await response.json();
+        
+                    if (data.result == 0) {  
+                        alert('다시 시도해주세요!')
+                    } else {
+                        alert('userPW이 성공적으로 수정되었습니다!')
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                alert('비밀번호가 일치하지 않습니다!');
+            }
+        } else {
+            alert('변경할 비밀번호를 작성해주세요!');
+        }
+        
+    });
+
+
+
+
+
+    /////////////////////////////////// 개인소개 변경 ///////////////////////////////////
+    ////// 조직 소개 글자수 제한 ////// 
+    const textarea = document.getElementById('groupIntro');
+
+    textarea.addEventListener('input', function() {
+        if (this.value.length > 50) {
+            alert('50자까지만 입력할 수 있습니다.');
+            this.value = this.value.substring(0, 50);
+        }
+    });
+    
+    ////// 조직 소개 버튼 ////// 
     groupIntroBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
         const groupIntro = document.getElementById('groupIntro').value;
-        const functionType = 1;
-
-        try {
-            const response = await fetch('/ChangeNormalData', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ functionType: functionType, groupToken: groupToken, groupIntro: groupIntro })
-            });
-
-            data = await response.json();
-
-            if (data.result == 0) {
-                alert('다시 시도해주세요!')
-            } else {
-                alert('groupIntro이 성공적으로 수정되었습니다!')
+        const functionType = 2;
+        
+        if ( groupIntro != resources.resources[0]['groupIntro'] ){
+            try {
+                const response = await fetch('/ChangeNormalData', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, groupIntro: groupIntro })
+                });
+    
+                data = await response.json();
+    
+                if (data.result == 0) {
+                    alert('다시 시도해주세요!')
+                } else {
+                    alert('조직소개가 성공적으로 수정되었습니다!')
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
+        } else {
+            alert('새로운 조직소개를 작성해주세요!')
         }
+        
     });
 
+
+    /////////////////////////////////// 조직 계좌 작성 ///////////////////////////////////
+    ////// 조직 계좌 숫자로 제한 //////
+    const groupBankAccountNumber = document.getElementById('groupBankAccountNumber');
+    groupBankAccountNumber.addEventListener('input', async function(e) {
+        e.preventDefault();
+
+        const engFilter = /^[0-9]*$/;
+
+        if (!engFilter.test(groupBankAccountNumber.value)) {
+            document.getElementById('groupBankAccountNumber').value = ''
+            alert('계좌번호의 숫자만 작성해주세요!');
+        }
+    
+    });
+    ////// 조직 계좌 버튼 ////// 
     groupAccountBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
-        const groupAccount = document.getElementById('groupAccount').value;
-        const functionType = 1;
+        const groupBankAccountName = document.getElementById('groupBankAccountName').value;
+        const groupBankAccountNumber = document.getElementById('groupBankAccountNumber').value;
 
-        try {
-            const response = await fetch('/ChangeNormalData', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ functionType: functionType, groupToken: groupToken, groupAccount: groupAccount })
-            });
+        const functionType = 2;
 
-            data = await response.json();
-
-            if (data.result == 0) {
-                alert('다시 시도해주세요!')
-            } else {
-                alert('groupAccount 성공적으로 수정되었습니다!')
+        if (groupBankAccountName == 'empty' ) {
+            alert('계좌의 은행을 선택해주세요!');
+        } else if (groupBankAccountNumber) {
+            try {
+                const response = await fetch('/ChangeNormalData', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, groupBankAccountName: groupBankAccountName, groupBankAccountNumber: groupBankAccountNumber })
+                });
+    
+                data = await response.json();
+    
+                if (data.result == 0) {
+                    alert('다시 시도해주세요!')
+                } else {
+                    alert('조직 계좌가 성공적으로 등록되었습니다!')
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
+        } else {
+            alert('계좌번호를 작성해주세요!')
         }
+        
     });
 
+
+
+    /////////////////////////////////// 조직 삭제 ///////////////////////////////////
+    ////// 조직 삭제 버튼 //////
     deleteGroupBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
-        const functionType = 5;
-
-        try {
-            const response = await fetch('/ChangeNormalData', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ functionType: functionType, groupToken: groupToken })
-            });
-
-            data = await response.json();
-
-            if (data.result == 0) {
-                alert('회원이 남아있으면 삭제가 불가능합니다!')
-            } else {
-                alert('그룹이 삭제 되었습니다! 그동안 이용해주셔서 감사합니다.')
+        if (confirm('소속된 회원이 있다면 조직을 삭제하실 수 없습니다. \n정말로 삭제하시겠습니까?')) {
+            try {
+                const response = await fetch('/DeleteGroup', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ userToken: userToken,  groupToken: groupToken })
+                });
+    
+                data = await response.json();
+    
+                if (data.result == 0) {
+                    //alert(`조직의 회원이 남아있다면 조직 삭제가 불가능합니다!\n\n 남아있는 회원 : ${data.resources['userName']} `);
+                    alert(`조직의 회원이 남아있다면 조직 삭제가 불가능합니다!\n\n 남아있는 회원 : 데이터 수신 `);
+                } else if (data.result == 1) {
+                    alert('조직이 삭제 되었습니다! 그동안 이용해주셔서 감사합니다.')
+                    window.location.href = '/PrivatePage/PrivatePage.html';
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
+
         }
     });
 });

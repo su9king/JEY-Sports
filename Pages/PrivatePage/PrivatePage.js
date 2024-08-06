@@ -4,16 +4,13 @@ window.onload = async function() {
     const data = `userToken=${userToken}`
     const resources = await certification(page, data);
     
-    //const resources = {result : 1 , resources : [{groupToken : 1 , groupName : 'GyuChul1'}, {groupToken : 2, groupName : 'GyuChul2'}]};
-
     if (resources.result == 0) {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
     } else if (resources.result == 1) {
 
         const userPermission = resources.userPermission;
-        loadSidebar(page, userPermission);
-
+        loadSidebar(page, userPermission, resources);
 
         let groups = [];
         resources.resources.forEach(resource => {
@@ -22,7 +19,6 @@ window.onload = async function() {
                 groupName: resource.groupName
             });
         });
-        console.log(groups)
         createButtons(groups);
     }
     
@@ -44,13 +40,12 @@ function createButtons(groups) {
     buttonContainer.innerHTML = '';
     
     groups.forEach((group, index) => {
-        console.log(group);
         const button = document.createElement('button');
         button.textContent = `Button ${group['groupName']}`;
         button.addEventListener('click', () => {
             alert(`group ${group['groupName']} selected`);
             sessionStorage.setItem('groupToken', group['groupToken'] );
-            window.location.href = '../GroupMainPage/GroupMainPage.html'; 
+            window.location.href = '/GroupMainPage/GroupMainPage.html'; 
         });
         buttonContainer.appendChild(button);
     });
