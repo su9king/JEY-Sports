@@ -131,8 +131,9 @@ app.post('/Login' , async (req,res,next) => {
 
         //result 값에 userToken 값이 들어감, ID,PW 검증 실패시 0이 첨부됨.
         if (result != 0){
-            req.session.userToken = result;
-            res.status(200).send({userToken : req.sessionID});
+            req.session.userToken = result[0]["userToken"];
+            const resources = {userToken : req.sessionID , userImage : result[0]["userImage"]}
+            res.status(200).send({result : 1, resources : resources});
             
         }else{
             res.status(200).send({result : 0});
