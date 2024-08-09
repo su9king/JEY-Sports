@@ -1,4 +1,8 @@
-// 메인 실행 코드. 그냥 복사 붙여넣기 용
+const connection = require('../DatabaseLoad');
+
+// 메인 실행 코드.
+
+
 module.exports = {
     DeleteUser : async(userToken) => {
         return new Promise((resolve, reject) => {
@@ -12,12 +16,12 @@ module.exports = {
     
                     // 삭제된 행의 수 확인
                     if (results.affectedRows > 0) {
-                        resolve(1);  // 데이터가 잘 삭제됨
+                        resolve({result : 1,resources : null});  // 데이터가 잘 삭제됨
                     } else {
-                        resolve(0);  // 데이터가 삭제되지 않음 (해당 userToken이 없음)
+                        resolve({result : 0 , resources : null});  // 데이터가 삭제되지 않음 (해당 userToken이 없음)
                     }
                 }
             );
         });
-};
+}
 }
