@@ -6,23 +6,42 @@
     <title>GroupSchedulePage</title>
     <script src="GroupSchedulePage.js"></script>
     <link rel="stylesheet" href="GroupSchedulePage.css">
-    <script type="module" src="../Certification.js"></script>
-    <script src="../SideBar/SideBar.js" defer></script>
+    <script type="module" src="/Certification.js"></script>
+    <script src="/SideBar/SideBar.js" defer></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 </head>
 <body>
     <div class="content">
-        <button class="btn" type="button" id="scheduleLoadBtn">일정 조회</button>
+        <div class="container">
+            <!-- 캘린더 -->
+            <div id='calendar'></div>
 
-        <button class="btn" type="button" id="scheduleAddBtn">일정 추가</button>
+            <!-- 일정 세부사항 모달 -->
+            <div id="eventModal" class="modal">
+                <div class="modal-content">
+                    <!-- 닫기 버튼 -->
+                    <div id="closeBtn" class="close" >&times;</div>
+                    
+                    <!-- 일정 세부사항 -->
+                    <div id="eventDetails"></div>
+                    
+                    <!-- 버튼들 -->
+                    <div class="modal-buttons">
+                        <button id="saveEventButton" class="modal-button">수정</button>
+                        <button id="deleteEventButton" class="modal-button">삭제</button>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container"></div>
+            
+            <!-- 뒤로가기 버튼 -->
+            <button id="backButton" class="back-button"></button>
 
-        <button class="btn" type="button" id="scheduleDeleteBtn">일정 삭제</button>
-
-        <button class="btn" type="button" id="scheduleFixBtn">일적 수정</button>
-
-        <a onclick="window.location.href = 'CreateGroupSchedulePage.html'">일정 생성</a>
-
-        <div id="sidebar"></div>
-        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+            <!-- 사이드바 -->
+            <div id="sidebar"></div>
+            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
+        </div>
     </div>
 </body>
+
 </html>

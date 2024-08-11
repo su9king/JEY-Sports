@@ -3,17 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GroupSchedulePage</title>
-    <script src="CreateGroupSchedule.js"></script>
-    <link rel="stylesheet" href="CreateGroupSchedule.css">
-    <script type="module" src="../Certification.js"></script>
-    <script src="../SideBar/SideBar.js" defer></script>
+    <title>CreateGroupSchedulePage</title>
+    <script src="CreateGroupSchedulePage.js" defer></script>
+    <link rel="stylesheet" href="CreateGroupSchedulePage.css">
+    <script type="module" src="/Certification.js"></script>
+    <script src="/SideBar/SideBar.js" defer></script>
 </head>
 <body>
     <div class="content">
-        <button class="btn" type="button" id="scheduleSaveBtn">일정 저장</button>
-        <div id="sidebar"></div>
-        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+        <div class="container">
+            <form id="createScheduleForm">
+
+                <!-- 일정 제목 -->
+                <div class="form-group">
+                    <label for="scheduleTitle">일정 제목:</label>
+                    <input type="text" id="scheduleTitle" name="scheduleTitle" required>
+                </div>
+
+                <!-- 일정 시작 날짜 -->
+                <div class="form-group">
+                    <label for="scheduleStartDate">시작 날짜:</label>
+                    <input type="date" id="scheduleStartDate" name="scheduleStartDate" required>
+                </div>
+
+                <!-- 일정 종료 날짜 -->
+                <div class="form-group">
+                    <label for="scheduleEndDate">종료 날짜:</label>
+                    <input type="date" id="scheduleEndDate" name="scheduleEndDate" required>
+                    
+                    <!-- 당일 체크박스 -->
+                    <label for="noEndDate">당일</label>
+                    <input type="checkbox" id="noEndDate" name="noEndDate">
+                </div>
+
+                <!-- 일정 중요도 -->
+                <div class="form-group">
+                    <label for="scheduleImportance">중요도:</label>
+                    <select id="scheduleImportance" name="scheduleImportance" required>
+                        <option value="True">중요</option>
+                        <option value="False">일반</option>
+                    </select>
+                </div>
+
+                <!-- 일정 알람 설정 -->
+                <div class="form-group">
+                    <label for="scheduleAlert">알람 설정:</label>
+                    <select id="scheduleAlert" name="scheduleAlert" required>
+                        <option value="True">알람 설정</option>
+                        <option value="False">미설정</option>
+                    </select>
+                </div>
+
+                <!-- 일정 내용 -->
+                <div class="form-group">
+                    <label for="scheduleContent">일정 내용:</label>
+                    <textarea id="scheduleContent" name="scheduleContent" rows="5" required></textarea>
+                </div>
+
+                <!-- 일정 장소 -->
+                <div class="form-group">
+                    <label for="scheduleLocation">장소:</label>
+                    <input type="text" id="scheduleLocation" name="scheduleLocation">
+                </div>
+
+                <!-- 저장 버튼 -->
+                <button class="btn" type="button" id="scheduleSaveBtn">일정 저장</button>
+            </form>
+
+            <!-- 뒤로가기 버튼 -->
+            <button id="backButton" class="back-button"></button>
+
+            <!-- 사이드바 및 토글 버튼 -->
+            <div id="sidebar"></div>
+            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
+        </div>
     </div>
 </body>
 </html>

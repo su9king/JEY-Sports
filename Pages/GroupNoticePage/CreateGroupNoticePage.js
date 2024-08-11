@@ -52,6 +52,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const noticeEndDateInput = document.getElementById('noticeEndDate');
     const noEndDateCheckbox = document.getElementById('noEndDate');
 
+    // 모든 label 요소에 클릭 이벤트를 방지하는 핸들러 추가
+    const labels = document.querySelectorAll('label');
+    labels.forEach(label => {
+        label.addEventListener('click', function(e) {
+            e.preventDefault(); // 클릭 이벤트 기본 동작 방지
+        });
+    });
+    
     // 종료날짜 없음 체크박스
     noEndDateCheckbox.addEventListener('change', function() {
         if (this.checked) {

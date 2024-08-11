@@ -1,112 +1,75 @@
-  /* 캘린더 */
-#calendar {
-  width: 100%;
-  max-width: 1200px;
-  margin: 20px 0;
+    /* 공통 스타일링 */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
 
-/* 폼 */
-#eventForm {
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-  width: 100%;
-  max-width: 500px;
-}
-
-#eventForm input, #eventForm button {
-  margin: 5px 0;
-  padding: 10px;
-  font-size: 16px;
-}
-
-
-
-/* 모달 창 */
-#eventModal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
+.container {
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
-  position: relative; /* 수정 */
 }
 
-
-#eventDetails {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+/* 폼 요소 스타일링 */
+.form-group {
+  margin-bottom: 15px;
 }
 
-.edit-button, #saveEventButton, #deleteEventButton {
-  margin-top: 20px;
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-}
-  
-  
-  /* 모달 버튼들 */
-.modal-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.modal-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  flex: 1; /* 버튼들이 같은 너비를 가지도록 */
-  margin: 0 5px; /* 버튼들 간의 간격 조정 */
-}
-
-.modal-button:hover {
-  background-color: #45a049;
-}
-  
-  /* 모달의 닫기 버튼 */
-.close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 28px;
+label {
+  display: block;
+  margin-bottom: 5px;
   font-weight: bold;
-  color: #aaa;
-  cursor: pointer;
 }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+  width: 100%;
+  padding: 8px;
+  margin: 4px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}/* 공통 스타일링 */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
+
+.container {
+  padding: 20px;
+}
+
+/* 폼 요소 스타일링 */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+  width: 100%;
+  padding: 8px;
+  margin: 4px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+  
+  
+  
+  
+  
   
   
   
