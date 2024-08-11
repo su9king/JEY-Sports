@@ -18,7 +18,7 @@ window.onload = async function() {
         document.getElementById('userIntro').value = resources.resources[0]['userIntro'];
         document.getElementById('userEmail').value = resources.resources[0]['userEmail'];
 
-        const userImage = resources.resources[0]["userImage"];
+        const userImage = sessionStorage.getItem('userImage');
         if (userImage == null){
             document.getElementById('userImageSample').src = `/UserImages/NULL.jpg`
         } else{
@@ -309,9 +309,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     //alert(`소속된 조직이 있으면 탈퇴가 불가능합니다!\n\n 소속된 조직 : ${data.resources['groupName']} `);
                     alert(`소속된 조직이 있으면 탈퇴가 불가능합니다!\n\n 소속된 조직 : 데이터 수신 `);
                 } else if (data.result == 1) {
-                    alert('회원 탈퇴 되었습니다! 그동안 이용해주셔서 감사합니다.')
-                    sessionStorage.clear();
-                    window.location.href = '/LoginPage.html';
+                    console.log('Delete response 성공')
+                    try {
+                        const response = await fetch('/Logout', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({ userToken: userToken })
+                        });
+                
+                        const dataBuffer =  await response.json();
+                
+                        if (dataBuffer.result == 1) {
+                            sessionStorage.clear();
+                            alert('회원 탈퇴 되었습니다! 그동안 이용해주셔서 감사합니다.')
+                            window.location.href = '/LoginPage.html';
+                        } else {
+                            alert('로그아웃 실패!')
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
                 }
             } catch (error) {
                 console.error('Error:', error);

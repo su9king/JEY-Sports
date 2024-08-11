@@ -3,7 +3,8 @@ window.onload = async function() {
     const page = 'EditGroupPage';
     const userToken = sessionStorage.getItem('userToken');
     const groupToken = sessionStorage.getItem('groupToken');
-    const data = `userToken=${userToken}&groupToken=${groupToken}`
+    const userPermission = sessionStorage.getItem('userPermission');
+    const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}`;
     
     resources = await certification(page, data);
     
@@ -12,7 +13,6 @@ window.onload = async function() {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
     } else {
-        const userPermission = resources.userPermission;
         loadSidebar(page, userPermission, resources);
         document.getElementById('groupName').value = resources.resources[0]['groupName'];
         document.getElementById('groupID').value = resources.resources[0]['groupID'];
@@ -343,9 +343,9 @@ document.addEventListener('DOMContentLoaded', function() {
     groupBankAccountNumber.addEventListener('input', async function(e) {
         e.preventDefault();
 
-        const engFilter = /^[0-9]*$/;
+        const numFilter = /^[0-9]*$/;
 
-        if (!engFilter.test(groupBankAccountNumber.value)) {
+        if (!numFilter.test(groupBankAccountNumber.value)) {
             document.getElementById('groupBankAccountNumber').value = ''
             alert('계좌번호의 숫자만 작성해주세요!');
         }

@@ -12,6 +12,7 @@ window.onload = async function() {
     } else {
 
         const userPermission = resources.userPermission;
+        sessionStorage.setItem('userPermission', userPermission);
         loadSidebar(page, userPermission, resources);
 
 

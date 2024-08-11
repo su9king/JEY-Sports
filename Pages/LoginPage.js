@@ -29,6 +29,7 @@ async function login() {
             alert("일치하는 정보가 없습니다.")    
         } else {
             sessionStorage.setItem('userToken', data.userToken);
+            sessionStorage.setItem('userImage', data.userImage);
             alert("로그인 되었습니다!");
             window.location.href = 'PrivatePage/PrivatePage.html'; 
         }

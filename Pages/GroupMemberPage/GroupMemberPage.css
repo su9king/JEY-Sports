@@ -1,30 +1,347 @@
+/* 멤버 박스 스타일 */
+.memberBox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  position: relative;
+  width: calc(100% - 20px); /* 전체 너비에서 padding을 제외 */
+  max-width: 600px;
+}
+
+/* 멤버 이미지 스타일 */
+.member-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+/* 멤버 정보 스타일 */
+.member-info {
+  flex: 1;
+}
 
 
 
+
+
+
+/* 버튼 컨테이너 스타일 */
+.button-container {
+  display: flex; /* 수평 배치 */
+  flex-direction: row; /* 버튼들이 한 줄에 배치되도록 설정 */
+  justify-content: flex-end; /* 버튼들을 컨테이너의 오른쪽 끝에 정렬 */
+  align-items: center; /* 버튼들을 수직으로 중앙에 맞춤 */
+  gap: 10px; /* 버튼 간의 간격 */
+  margin-top: 10px; /* 컨테이너와 위 요소 간의 간격 */
+}
+
+/* 권한 변경 버튼 스타일 */
+.change-permission-button {
+  margin-right: 10px;
+  width: 100px;
+  height: 30px;
+  background-color: #2196F3; /* 파란색 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* 삭제 버튼 스타일 */
+.delete-button {
+  width: 80px;
+  height: 30px;
+  background-color: #f44336; /* 빨간색 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.basicBtn {
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+
+/* --------------권한 변경 컨테이너-------------- */
+.permission-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.permission-select {
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+
+
+.change-permission-button:hover {
+  background-color: #0056b3;
+}
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+  
+/* -----------------------모달----------------------- */
+
+/* 모달 기본 스타일 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.modal.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh; /* 최대 높이를 지정 */
+  overflow-y: auto;  /* 높이를 초과하면 스크롤 생기도록 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+/* 모달 닫기 버튼 스타일 */
+#closeModalBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#closeModalBtn:hover {
+  background: #c0392b;
+}
+
+/* 멤버 요청 박스 스타일 */
+.requestBox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  background: #f9f9f9;
+}
+
+/* 요청 이미지 스타일 */
+.request-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+/* 요청 정보 스타일 */
+.request-info {
+  flex: 1;
+}
+
+/* 요청 수락 버튼 스타일 */
+.accept-button {
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.accept-button:hover {
+  background: #27ae60;
+}
+
+/* 초대하기 및 등록 섹션 스타일 */
+#invite-container, #register-container {
+  margin-top: 20px;
+}
+
+#invite-container label, #register-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#invite-container input, #register-container input {
+  width: 30%;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#invite-container button, #register-container button {
+  padding: 10px 20px;
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#invite-container button:hover, #register-container button:hover {
+  background: #2980b9;
+}
+
+
+
+
+
+
+  
+/* -----------------------페이지 구성요소----------------------- */
+.btn {
+  margin: 5px;
+  width: 40%;
+  max-width: 300px;
+  height: 30px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3; /* 호버 시 배경색 변화 */
+}
+
+::placeholder {
+  text-align: center;
+  color: #6c757d; /* 플레이스홀더 색상 변경 */
+}
+
+
+
+
+/* -----------------------모바일----------------------- */
+@media (max-width: 600px) {
+  .sidebar-open .content {
+    margin-right: 250px; /* 사이드바의 너비에 맞게 조정 */
+    transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+  }
+
+  /* 사이드바가 닫혀 있을 때의 기본 스타일 */
+  .content {
+    transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+  }
+}
+
+@media (min-width: 601px) {
+  .sidebar-open .content {
+    margin-left: 100px; /* 사이드바의 너비에 맞게 조정 */
+    transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+  }
+
+  /* 사이드바가 닫혀 있을 때의 기본 스타일 */
+  .content {
+    transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+  }
+}
+.hidden {
+  display: none;
+}
 
 
 
 /* -----------------------사이드바----------------------- */
 /* 사이드바가 열려 있을 때의 스타일 */
 .sidebar-open .content {
-    margin-right: 250px; /* 사이드바의 너비에 맞게 조정 */
-    transition: margin-left 0.5s ease; /* 애니메이션 효과 적용 */
-  }
-  
+  margin-left: -250px; /* Hide sidebar off-screen */
+  margin-right: 250px; /* 사이드바의 너비에 맞게 조정 */
+  transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
+  overflow-x: hidden;
+}
+
 /* 사이드바가 닫혀 있을 때의 기본 스타일 */
 .content {
-margin-right: 0;
-transition: margin-left 0.5s ease; /* 애니메이션 효과 적용 */
+  transition: margin-right 0.5s ease; /* 애니메이션 효과 적용 */
 }
 
 #toggleButton {
-position: fixed;
-top: 10px;
-right: 10px;
-background-color: #333;
-color: white;
-border: none;
-padding: 10px 20px;
-cursor: pointer;
-z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+}
+
+
+
+/* -----------------------이전 버튼----------------------- */
+.back-button {
+  position: absolute; /* 화면 상단 좌측에 고정 */
+  top: 10px; /* 위쪽 간격 */
+  left: 10px; /* 왼쪽 간격 */
+  width: 30px; /* 화살표 전체 너비 */
+  height: 30px; /* 화살표 전체 높이 */
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer; /* 마우스 커서 변경 */
+  outline: none; /* 포커스 시 외곽선 제거 */
+}
+
+.back-button::before {
+  content: "";
+  display: block;
+  width: 15px; /* 화살표 너비 */
+  height: 15px; /* 화살표 높이 */
+  border-left: 5px solid #007bff; /* 화살표 두께와 색상 */
+  border-top: 5px solid #007bff; /* 화살표 두께와 색상 */
+  transform: rotate(-45deg); /* 화살표 회전 */
+  position: absolute;
+  top: 50%; /* 수직 중앙 정렬 */
+  left: 50%; /* 수평 중앙 정렬 */
+  transform: translate(-50%, -50%) rotate(-45deg); /* 중앙 정렬 및 회전 */
+}
+
+.back-button:hover::before {
+  border-left-color: #0056b3; /* 마우스 오버 시 색상 변경 */
+  border-top-color: #0056b3; /* 마우스 오버 시 색상 변경 */
+}
+
+.back-button:active::before {
+  border-left-color: #003366; /* 클릭 시 색상 변경 */
+  border-top-color: #003366; /* 클릭 시 색상 변경 */
 }

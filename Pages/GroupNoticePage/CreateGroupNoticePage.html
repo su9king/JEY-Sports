@@ -6,14 +6,68 @@
     <title>CreateGroupNoticePage</title>
     <script src="CreateGroupNoticePage.js"></script>
     <link rel="stylesheet" href="CreateGroupNoticePage.css">
-    <script type="module" src="../Certification.js"></script>
-    <script src="../SideBar/SideBar.js" defer></script>
+    <script type="module" src="/Certification.js"></script>
+    <script src="/SideBar/SideBar.js" defer></script>
 </head>
 <body>
     <div class="content">
-        <button class="btn" type="button" id="noticeSaveBtn">공지사항 저장</button>
-        <div id="sidebar"></div>
-        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+        <div class="container">
+            <form id="createNoticeForm">
+
+                <!-- 공지사항 제목 -->
+                <div class="form-group">
+                    <label for="noticeTitle">공지사항 제목:</label>
+                    <input type="text" id="noticeTitle" name="noticeTitle" required>
+                </div>
+
+                <!-- 공지사항 중요도 -->
+                <div class="form-group">
+                    <label for="noticeImportance">중요도:</label>
+                    <select id="noticeImportance" name="noticeImportance" required>
+                        <option value="True">High</option>
+                        <option value="False">Low</option>
+                    </select>
+                </div>
+
+                <!-- 공지사항 공개 여부 -->
+                <div class="form-group">
+                    <label for="noticeStatus">상태:</label>
+                    <select id="noticeStatus" name="noticeStatus" required>
+                        <option value="True">공개</option>
+                        <option value="False">비공개</option>
+                    </select>
+                </div>
+
+                <!-- 공지사항 내용 -->
+                <div class="form-group">
+                    <label for="noticeContent">공지사항 내용:</label>
+                    <textarea id="noticeContent" name="noticeContent" rows="5" required></textarea>
+                </div>
+
+                <!-- 공지사항 작성자 -->
+                <div class="form-group">
+                    <label for="noticeWriter">작성자:</label>
+                    <input type="text" id="noticeWriter" name="noticeWriter" required>
+                </div>
+
+                <!-- 공지사항 종료 날짜 -->
+                <div class="form-group">
+                    <label for="noticeEndDate">종료 날짜:</label>
+                    <input type="date" id="noticeEndDate" name="noticeEndDate" required>
+
+                    <!-- '없음' 체크박스 -->
+                    <label for="noEndDate">없음</label>
+                    <input type="checkbox" id="noEndDate" name="noEndDate">
+                </div>                
+
+                <!-- 저장 버튼 -->
+                <button class="btn" type="button" id="noticeSaveBtn">공지사항 저장</button>
+            </form>
+
+            <button id="backButton" class="back-button"></button>
+            <div id="sidebar"></div>
+            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
+        </div>
     </div>
 </body>
 </html>

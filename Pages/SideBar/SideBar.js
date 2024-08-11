@@ -49,12 +49,12 @@ function sidebar_createButtons(page, userPermission, resources) {
     const buttonContainer = document.getElementById('sidebar-button-container');
     buttonContainer.innerHTML = '';
 
-    const userImageSample = resources.resources[0]["userImage"];
+    const userImageSample = sessionStorage.getItem('userImage');
     if (userImageSample == null){
         console.log(userImageSample)
         document.getElementById('sidebar-userImageSample').src = `/UserImages/NULL.jpg`
     } else{
-        document.getElementById('sidebar-userImageSample').src = `/UserImages/${userImage}`;  
+        document.getElementById('sidebar-userImageSample').src = `/UserImages/${userImageSample}`;  
     }
 
     // 기본 버튼 목록 생성

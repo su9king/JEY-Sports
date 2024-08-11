@@ -6,27 +6,24 @@
     <title>GroupMemberPage</title>
     <script src="GroupMemberPage.js"></script>
     <link rel="stylesheet" href="GroupMemberPage.css">
-    <script type="module" src="../Certification.js"></script>
-    <script src="../SideBar/SideBar.js" defer></script>
+    <script type="module" src="/Certification.js"></script>
+    <script src="/SideBar/SideBar.js" defer></script>
 </head>
 <body>
     <div class="content">
+        <div class="container">
 
-        <input class="inputRequired" id="changePermission" type="text" placeholder="functionType 5(일반 유저) , 6(관리자) , 7(창시자)"> </br>
-        <button class="btn" type="button" id="changePermissionBtn">권한 조정</button>
+            <div id="member-container"></div> <!-- 멤버 상자가 들어갈 컨테이너 -->
+            <div class="management-button-container"></div> <!-- 멤버 관리 버튼 컨테이너 -->
 
-        <button class="btn" type="button" id="deleteUserBtn">강제 퇴장</button>
+            <button id="backButton" class="back-button"></button>
+            <div id="sidebar"></div>
+            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
 
-        <button class="btn" type="button" id="allowUserBtn">입장 수락</button>
+            <div id="overlay" class="overlay hidden"></div>
+            <div id="memberManageModal" class="modal hidden"></div>
 
-        <button class="btn" type="button" id="inviteUserBtn">유저 초대</button>
-
-        <button class="btn" type="button" id="addUserBtn">비유저 등록</button>
-
-
-
-        <div id="sidebar"></div>
-        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+        </div>
     </div>
 </body>
 </html>
