@@ -9,6 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const DeleteGroup = require('./Modules/DeleteGroup');
 
 console.log("Node.js 모듈 불러오기 성공")
 
@@ -130,8 +131,9 @@ app.post('/Login' , async (req,res,next) => {
 
         //result 값에 userToken 값이 들어감, ID,PW 검증 실패시 0이 첨부됨.
         if (result != 0){
-            req.session.userToken = result;
-            res.status(200).send({userToken : req.sessionID});
+            req.session.userToken = result[0]["userToken"];
+            const resources = {userToken : req.sessionID , userImage : result[0]["userImage"]}
+            res.status(200).send({result : 1, resources : resources});
             
         }else{
             res.status(200).send({result : 0});
@@ -300,7 +302,7 @@ app.post('/ChangeNormalData', async(req,res,next) => {
 
     }catch(error){
         next(error);
-    }
+    }            
 
 })
 
@@ -333,10 +335,12 @@ app.post('/DeleteGroup', async(req,res,next) => {
     try{
         const data = req.body;
         var userToken = data["userToken"]
+        var groupToken = 58
         userToken = await checkToken(userToken,req);
 
         if ( userToken != 0 ){
-            res.status(200).send({result : 1 , resources : null});
+            const result = await Modules["DeleteGroup"].DeleteGroup(userToken,groupToken);
+            res.status(200).send(result);
         }else{
             res.status(200).send({result : 99 , message : "로그인 바랍니다."});
         }
@@ -355,7 +359,8 @@ app.post('/EditGroupNotices', async(req,res,next) => {
         userToken = await checkToken(userToken,req);
 
         if ( userToken != 0 ){
-            res.status(200).send({result : 1, resources : null});
+            const result = await Modules["EditGroupNotices"].EditGroupNotices(data);
+            res.status(200).send(result);
         }else{
             res.status(200).send({result : 99 , message : "로그인 바랍니다."});
         }
@@ -374,7 +379,30 @@ app.post('/EditGroupSchedules', async(req,res,next) => {
         userToken = await checkToken(userToken,req);
 
         if ( userToken != 0 ){
-            res.status(200).send({result : 1, resources : null});
+            const result = await Modules["EditGroupSchedules"].EditGroupSchedules(data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+app.post('/EditGroupMembers', async(req,res,next) => {
+
+    console.log("EditGroupMembers sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        var groupToken = data["groupToken"]
+        var userPermission = data["userPermission"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["EditGroupMembers"].EditGroupMembers(userToken,groupToken,userPermission,data);
+            res.status(200).send(result);
         }else{
             res.status(200).send({result : 99 , message : "로그인 바랍니다."});
         }

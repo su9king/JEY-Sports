@@ -6,7 +6,8 @@ const connection = mysql.createConnection({
   user: 'su9king',      // 데이터베이스 사용자
   password: '123456', // 데이터베이스 비밀번호
   database: 'JEYSportDB', // 데이터베이스 이름
-  port : 3306
+  port : 3306,
+  multipleStatements : true
 });
 
 connection.connect((err) => {

@@ -8,8 +8,8 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
 
-            //userID,userPW 기반으로 userToken 탐색
-            connection.query('SELECT userToken FROM users WHERE userID = ? AND userPW = ?', [userID, userPW],
+            //userID,userPW 기반으로 userToken,userImage 탐색
+            connection.query('SELECT userToken,userImage FROM users WHERE userID = ? AND userPW = ?', [userID, userPW],
 
                 (error, results, fields) => {
 
@@ -20,7 +20,7 @@ module.exports = {
                     }
                     //결과물이 존재한다면, 어차피 ID가 공통되는 것이 없기때문에 1개만 출력 될 것임.
                     if (results.length > 0) {
-                        resolve([results[0]['userToken']]);
+                        resolve(results);
                     } else {
                         console.log("Fail");
                         resolve(0);
