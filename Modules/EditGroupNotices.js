@@ -11,17 +11,16 @@ module.exports = {
             return result;
 
         }else if (functionType == 2){// 공지사항 삭제
-
+            const userPermission = data["userPermission"]
         
-            if (userPermission == 2 || userPermission == 3){
-                console.log("작동")
+            if (userPermission == 1 || userPermission == 2){
                 const result = await DeleteNotice(noticeToken);
                 return {result : result , resources : null};
             }
 
         }else if (functionType == 3){//공지사항 수정, 공지사항 저장
             const userPermission = data["userPermission"];
-            if (userPermission == 2 || userPermission == 3){
+            if (userPermission == 1 || userPermission == 2){
                 
                 if (noticeToken == null){
                     const result = await CreateNotice(data);
@@ -84,10 +83,10 @@ async function CreateNotice(data) {
     return new Promise((resolve, reject) => {
         // 공지사항 추가하기
         connection.query(`INSERT INTO Notices 
-                          (noticeGroupToken,noticeTitle,noticeContent,noticeWriter,noticeCreatedDate,
+                          (groupToken,noticeTitle,noticeContent,noticeWriter,noticeCreatedDate,
                           noticeEditDate,noticeImportance,noticeStatus,noticeEndDate)
                           VALUES(?,?,?,?,?,?,?,?,?) `, 
-                          [data["noticeGroupToken"],data["noticeTitle"],
+                          [data["groupToken"],data["noticeTitle"],
                            data["noticeContent"],data["noticeWriter"],
                            data["noticeCreatedDate"],data["noticeEditDate"],
                            data["noticeImportance"],data["noticeStatus"],
@@ -112,13 +111,13 @@ async function CreateNotice(data) {
 async function EditNotice(data) {
     return new Promise((resolve, reject) => {
         // 일정 수정하기
-        connection.query(`UPDATE Notices 
-                          SET noticeTitle = ?,noticeContent = ? ,noticeWriter = ? ,noticeCreatedDate = ?,
-                          noticeEditDate = ? ,noticeImportance = ?,noticeStatus = ? ,noticeEndDate = ?)
+        connection.query(`UPDATE Notices
+                          SET noticeTitle = ?,noticeContent = ? ,noticeWriter = ? ,
+                          noticeEditDate = ? ,noticeImportance = ?,noticeStatus = ? ,noticeEndDate = ?
                           WHERE noticeToken = ? `, 
                           [data["noticeTitle"],
                            data["noticeContent"],data["noticeWriter"],
-                           data["noticeCreatedDate"],data["noticeEditDate"],
+                           data["noticeEditDate"],
                            data["noticeImportance"],data["noticeStatus"],
                            data["noticeEndDate"],data["noticeToken"]], 
             (error, results, fields) => {

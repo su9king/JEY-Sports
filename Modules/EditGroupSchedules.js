@@ -84,10 +84,10 @@ async function CreateSchedule(data) {
     return new Promise((resolve, reject) => {
         // 일정 추가하기
         connection.query(`INSERT INTO Schedules 
-                          (scheduleGroupToken,scheduleTitle,scheduleContent,scheduleStartDate,scheduleEndDate,
+                          (groupToken,scheduleTitle,scheduleContent,scheduleStartDate,scheduleEndDate,
                           scheduleLocation,scheduleStatus,scheduleImportance,scheduleAlert)
                           VALUES(?,?,?,?,?,?,?,?,?) `, 
-                          [data["scheduleGroupToken"],data["scheduleTitle"],
+                          [data["groupToken"],data["scheduleTitle"],
                            data["scheduleContent"],data["scheduleStartDate"],
                            data["scheduleEndDate"],data["scheduleLocation"],
                            data["scheduleStatus"],data["scheduleImportance"],

@@ -1,4 +1,5 @@
 let noticeToken
+let originalnoticeCreatedDate
 
 //////////////////// Step0 : 회원인증, 사이드바, 뒤로가기 초기 세팅 ////////////////////
 window.onload = async function() {
@@ -17,8 +18,7 @@ window.onload = async function() {
     noticeContent = urlParams.get('noticeContent');
     noticeEndDate = urlParams.get('noticeEndDate');
     noticeWriter = urlParams.get('noticeWriter');
-
-
+    noticeToken = urlParams.get('noticeToken');
     
     if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
@@ -83,8 +83,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const noticeStatus = document.getElementById('noticeStatus').value;
         const noticeContent = document.getElementById('noticeContent').value;
         const noticeWriter = document.getElementById('noticeWriter').value;
-        const noticeEndDate = noticeEndDateInput.value;
-
+        const noticeEndDate = noticeEndDateInput.value ? noticeEndDateInput.value : null; 
+        const noticeCreatedDate = new Date().toISOString().split('T')[0]; 
+        const noticeChangedDate = new Date().toISOString().split('T')[0];
+        
         
         if (noticeTitle && noticeContent && noticeWriter &&(noticeEndDate || noEndDateCheckbox.checked)) {
             try {
@@ -102,7 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         noticeStatus: noticeStatus,
                         noticeContent: noticeContent,
                         noticeWriter: noticeWriter,
-                        noticeEndDate: noticeEndDate
+                        noticeEndDate: noticeEndDate,
+                        noticeCreatedDate: noticeCreatedDate,
+                        noticeChangedDate: noticeChangedDate
                     })
                 });
 
@@ -121,4 +125,13 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('모든 칸을 채워주세요!');
         }
     });
+
+
+
+    const noticeCancleBtn = document.getElementById('noticeCancleBtn');
+    noticeCancleBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        window.location.href = "GroupNoticePage.html";
+    });
+    
 });

@@ -360,7 +360,6 @@ app.post('/EditGroupNotices', async(req,res,next) => {
 
         if ( userToken != 0 ){
             const result = await Modules["EditGroupNotices"].EditGroupNotices(data);
-            console.log(result)
             res.status(200).send(result);
         }else{
             res.status(200).send({result : 99 , message : "로그인 바랍니다."});

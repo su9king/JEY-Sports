@@ -17,15 +17,17 @@ window.onload = async function() {
     } else {
         loadSidebar(page, userPermission, response);
 
-        notices = response.resources.map(resource => ({
-            noticeToken: resource.noticeToken,
-            noticeTitle: resource.noticeTitle,
-            noticeImportance: resource.noticeImportance,
-            noticeStatus: resource.noticeStatus,
-            noticeChangedDate: resource.noticeChangedDate,
-        }));
-        
-        displayNotices();  //// 게시글 생성 함수 ////
+        if (response.resources !== null) {
+            notices = response.resources.map(resource => ({
+                noticeToken: resource.noticeToken,
+                noticeTitle: resource.noticeTitle,
+                noticeImportance: resource.noticeImportance,
+                noticeStatus: resource.noticeStatus,
+                noticeChangedDate: resource.noticeChangedDate//.toISOString().split('T')[0],
+            }));
+            displayNotices();  //// 게시글 생성 함수 ////
+        }
+
         addCreateNoticeButton(userPermission);  //// 권한에 따라 수정 ////
     }   
 
@@ -67,8 +69,8 @@ async function displayNotices() {
         const noticeInfo = document.createElement("div");
         noticeInfo.classList.add("notice-info");
 
-        const importanceText = notice.noticeImportance === 'True' ? '중요' : '일반';
-        const statusText = notice.noticeStatus === 'True' ? '공개' : '비공개';
+        const importanceText = notice.noticeImportance == true ? '중요' : '일반';
+        const statusText = notice.noticeStatus == true ? '공개' : '비공개';
 
         noticeInfo.innerHTML = `
         마지막 수정일: ${notice.noticeChangedDate} | 중요도: ${importanceText} | 상태: ${statusText}
@@ -133,7 +135,7 @@ async function displayNotices() {
                         const noticeDetails = noticeContents.find(n => n.noticeToken === notice.noticeToken);
                         
                         if (noticeDetails) {
-                            window.location.href = `CreateGroupNoticePage.html?noticeTitle=${notice.noticeTitle}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&noticeContent=${noticeDetails.noticeContent}&noticeEndDate=${noticeDetails.noticeEndDate}&noticeWriter=${noticeDetails.noticeWriter}`;
+                            window.location.href = `CreateGroupNoticePage.html?noticeTitle=${notice.noticeTitle}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&noticeContent=${noticeDetails.noticeContent}&noticeEndDate=${noticeDetails.noticeEndDate}&noticeWriter=${noticeDetails.noticeWriter}&noticeToken=${noticeDetails.noticeToken}`;
                         } else {
                             alert('공지사항 내용을 불러오지 못했습니다. 제목을 클릭해 주세요.');
                         }
@@ -174,8 +176,9 @@ async function displayNoticeContent(noticeToken, noticeContentElement) {
                     noticeToken: noticeToken,
                     noticeContent: resource.noticeContent,
                     noticeWriter: resource.noticeWriter,
-                    noticeCreatedDate: resource.noticeCreatedDate,
-                    noticeEndDate: resource.noticeEndDate
+                    noticeCreatedDate: resource.noticeCreatedDate.split('T')[0],
+                    noticeEndDate: resource.noticeEndDate,
+                    noticeCreateDate: resource.noticeCreateDate
                 });
             });
 
