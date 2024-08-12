@@ -1,3 +1,5 @@
+let userID
+
 //////////////////// Step0 : 회원인증, 사이드바 ////////////////////
 window.onload = async function() {
     const page = 'EditUserPage';
@@ -5,25 +7,23 @@ window.onload = async function() {
     const groupToken = sessionStorage.getItem('groupToken');
     const data = `userToken=${userToken}&groupToken=${groupToken}`
     
-    resources = await certification(page, data);
+    response = await certification(page, data);
+    userID = response.resources[0]['userID']
     
 
-    if (resources.result == 0) {
+    if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
     } else {
-        const userPermission = resources.userPermission;
-        loadSidebar(page, userPermission, resources);
-        document.getElementById('userName').value = resources.resources[0]['userName'];
-        document.getElementById('userIntro').value = resources.resources[0]['userIntro'];
-        document.getElementById('userEmail').value = resources.resources[0]['userEmail'];
+        const userPermission = response.userPermission;
+        loadSidebar(page, userPermission, response);
+        document.getElementById('userName').value = response.resources[0]['userName'];
+        document.getElementById('userIntro').value = response.resources[0]['userIntro'];
+        document.getElementById('userEmail').value = response.resources[0]['userEmail'];
 
         const userImage = sessionStorage.getItem('userImage');
-        if (userImage == null){
-            document.getElementById('userImageSample').src = `/UserImages/NULL.jpg`
-        } else{
-            document.getElementById('userImageSample').src = `/UserImages/${userImage}`;  
-        }
+        document.getElementById('userImageSample').src = userImage == 'null' ? `/UserImages/NULL.jpg` : `/UserImages/${userImage}`;
+
     }
     
 
@@ -92,10 +92,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const userImage = document.getElementById('userImage').files[0];
         const functionType = 1; // 개인 프로필
 
-        if (userImage) {
-            await imageUpload(functionType, userToken, userImage );
+        // if (userImage) {  /////////////////////////// 기본 프로필(null)로 잘 변하는지 확인 필요
+            await imageUpload(functionType, userToken, userImage)
+            sessionStorage.setItem('userImage', await imageUpload(functionType, userToken, userImage) )
             alert("개인 프로필 사진이 수정되었습니다!");
-        }
+        // }
 
     });
 
@@ -110,12 +111,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const userName = document.getElementById('userName').value;
         const functionType = 1;
         
-        if (userName && userName != resources.resources[0]['userName']) {
+        if (userName && userName != response.resources[0]['userName']) {
             try {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userName: userName })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setkey : "userName", setvalue : userName })
                 });
     
                 data = await response.json();
@@ -167,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userPW: PW1 })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setkey : "userPW", setvalue : PW1 })
                     });
         
                     data = await response.json();
@@ -218,13 +219,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const userEmail = document.getElementById('userEmail').value;
         const functionType = 3;
-        if (userEmail != resources.resources[0]['userEmail']) {
+        if (userEmail != response.resources[0]['userEmail']) {
             if (emailCheck == true) {
                 try {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userEmail: userEmail })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setkey : "userEmail", setvalue : userEmail })
                     });
         
                     data = await response.json();
@@ -265,12 +266,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const userIntro = document.getElementById('userIntro').value;
         const functionType = 1;
         
-        if ( userIntro != resources.resources[0]['userIntro'] ){
+        if ( userIntro != response.resources[0]['userIntro'] ){
             try {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userIntro: userIntro })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setkey : "userIntro", setvalue : userIntro })
                 });
     
                 data = await response.json();
@@ -300,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/DeleteUser', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ userToken: userToken })
+                    body: JSON.stringify({ userToken: userToken, userID: userID })
                 });
     
                 data = await response.json();
@@ -317,9 +318,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             body: JSON.stringify({ userToken: userToken })
                         });
                 
-                        const dataBuffer =  await response.json();
+                        const data =  await response.json();
                 
-                        if (dataBuffer.result == 1) {
+                        if (data.result == 1) {
                             sessionStorage.clear();
                             alert('회원 탈퇴 되었습니다! 그동안 이용해주셔서 감사합니다.')
                             window.location.href = '/LoginPage.html';

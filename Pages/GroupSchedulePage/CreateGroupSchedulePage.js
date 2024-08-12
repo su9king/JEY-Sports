@@ -8,7 +8,7 @@ window.onload = async function() {
     userPermission = sessionStorage.getItem('userPermission');
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}`;
     
-    resources = await certification(page, data);
+    response = await certification(page, data);
 
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -21,11 +21,11 @@ window.onload = async function() {
     const scheduleLocation = urlParams.get('scheduleLocation');
     const scheduleStatus = urlParams.get('scheduleStatus');
 
-    if (resources.result == 0) {
+    if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
     } else {
-        loadSidebar(page, userPermission, resources);
+        loadSidebar(page, userPermission, response);
         
         if (scheduleTitle) {
             console.log('수정페이지로 접근');

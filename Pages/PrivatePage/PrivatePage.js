@@ -2,21 +2,22 @@ window.onload = async function() {
     const page = 'PrivatePage';
     const userToken = sessionStorage.getItem('userToken')
     const data = `userToken=${userToken}`
-    const resources = await certification(page, data);
+    const response = await certification(page, data);
     
-    if (resources.result == 0) {
+    if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
-    } else if (resources.result == 1) {
+    } else if (response.result == 1) {
 
-        const userPermission = resources.userPermission;
-        loadSidebar(page, userPermission, resources);
+        const userPermission = 0;
+        loadSidebar(page, userPermission, response);
 
         let groups = [];
-        resources.resources.forEach(resource => {
+        response.resources.forEach(resource => {
             groups.push({
                 groupToken: resource.groupToken,
-                groupName: resource.groupName
+                groupName: resource.groupName,
+                userPermission: resource.userPermission
             });
         });
         createButtons(groups);
@@ -45,6 +46,7 @@ function createButtons(groups) {
         button.addEventListener('click', () => {
             alert(`group ${group['groupName']} selected`);
             sessionStorage.setItem('groupToken', group['groupToken'] );
+            sessionStorage.setItem('userPermission', group['userPermission'] );
             window.location.href = '/GroupMainPage/GroupMainPage.html'; 
         });
         buttonContainer.appendChild(button);

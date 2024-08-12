@@ -6,26 +6,22 @@ window.onload = async function() {
     const userPermission = sessionStorage.getItem('userPermission');
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}`;
     
-    resources = await certification(page, data);
+    response = await certification(page, data);
     
 
-    if (resources.result == 0) {
+    if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
     } else {
-        loadSidebar(page, userPermission, resources);
-        document.getElementById('groupName').value = resources.resources[0]['groupName'];
-        document.getElementById('groupID').value = resources.resources[0]['groupID'];
-        document.getElementById('groupIntro').value = resources.resources[0]['groupIntro'];
-        document.getElementById('groupBankAccountName').value = resources.resources[0]['groupBankAccountName'];
-        document.getElementById('groupBankAccountNumber').value = resources.resources[0]['groupBankAccountNumber'];
+        loadSidebar(page, userPermission, response);
+        document.getElementById('groupName').value = response.resources[0]['groupName'];
+        document.getElementById('groupID').value = response.resources[0]['groupID'];
+        document.getElementById('groupIntro').value = response.resources[0]['groupIntro'];
+        document.getElementById('groupBankAccountName').value = response.resources[0]['groupBankAccountName'];
+        document.getElementById('groupBankAccountNumber').value = response.resources[0]['groupBankAccountNumber'];
 
-        const groupImage = resources.resources[0]["groupImage"];
-        if (groupImage == null){
-            document.getElementById('groupImageSample').src = `/GroupImages/NULL.png`
-        } else{
-            document.getElementById('groupImageSample').src = `/GroupImages/${groupImage}`;  
-        }
+        const groupImage = response.resources[0]["groupImage"];
+        document.getElementById('groupImageSample').src = groupImage == 'null' ? `/UserImages/NULL.jpg` : `/UserImages/${groupImage}`;
            
     
         // 뒤로가기
@@ -113,12 +109,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const groupName = document.getElementById('groupName').value;
         const functionType = 2;
         
-        if (groupName && groupName != resources.resources[0]['groupName']) {
+        if (groupName && groupName != response.resources[0]['groupName']) {
             try {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, groupName: groupName })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupName", setvalue : groupName })
                 });
     
                 data = await response.json();
@@ -171,12 +167,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const functionType = 4;
         
         if (groupID) {
-            if (groupID != resources.resources[0]['groupID']) {
+            if (groupID != response.resources[0]['groupID']) {
                 try {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, groupID: groupID })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupID", setvalue : groupID })
                     });
         
                     data = await response.json();
@@ -186,26 +182,26 @@ document.addEventListener('DOMContentLoaded', function() {
                         allowID.style.display = 'block';
                         alert('사용가능한 ID입니다!')
                     } else {
-                        document.getElementById('groupID').value = resources.resources[0]['groupID'];
+                        document.getElementById('groupID').value = response.resources[0]['groupID'];
                         alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
                     }
                 } catch (error) {
                     console.error('Error:', error);
                 }
             } else {
-                document.getElementById('groupID').value = resources.resources[0]['groupID'];
+                document.getElementById('groupID').value = response.resources[0]['groupID'];
                 alert('새로운 ID를 작성해주세요!')
             }
             
         } else {  // 빈칸으로 제출한 경우
-            document.getElementById('groupID').value = resources.resources[0]['groupID'];
+            document.getElementById('groupID').value = response.resources[0]['groupID'];
             alert('원하는 ID를 작성해주세요!');
         }
         
     });
 
 
-    ////// ID 중복 확인 버튼 ////// 
+    ////// ID 변경 버튼 ////// 
     groupIDBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
@@ -217,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, groupID: groupID })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupID", setvalue : groupID })
                 });
     
                 data = await response.json();
@@ -268,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, groupPW: PW1 })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, setkey : "groupPW", setvalue : PW1 })
                     });
         
                     data = await response.json();
@@ -312,12 +308,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const groupIntro = document.getElementById('groupIntro').value;
         const functionType = 2;
         
-        if ( groupIntro != resources.resources[0]['groupIntro'] ){
+        if ( groupIntro != response.resources[0]['groupIntro'] ){
             try {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, groupIntro: groupIntro })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, setkey : "groupIntro", setvalue : groupIntro })
                 });
     
                 data = await response.json();
@@ -364,19 +360,30 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('계좌의 은행을 선택해주세요!');
         } else if (groupBankAccountNumber) {
             try {
-                const response = await fetch('/ChangeNormalData', {
+                const nameresponse = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, groupBankAccountName: groupBankAccountName, groupBankAccountNumber: groupBankAccountNumber })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupBankAccountName", setvalue : groupBankAccountName })
                 });
     
-                data = await response.json();
+                namedata = await nameresponse.json();
+
+                const numresponse = await fetch('/ChangeNormalData', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupBankAccountNumber", setvalue : groupBankAccountNumber })
+                });
     
-                if (data.result == 0) {
-                    alert('다시 시도해주세요!')
-                } else {
-                    alert('조직 계좌가 성공적으로 등록되었습니다!')
+                numdata = await numresponse.json();
+    
+                if (namedata.result == 1 && numdata.result == 1) {
+                    alert('조직 계좌가 성공적으로 등록되었습니다!');
+                } else if (namedata.result == 0) {
+                    alert('은행명 등록에 실패했습니다!');
+                } else if (numdata.result == 0) {
+                    alert('계좌번호 등록에 실패했습니다!');
                 }
+
             } catch (error) {
                 console.error('Error:', error);
             }

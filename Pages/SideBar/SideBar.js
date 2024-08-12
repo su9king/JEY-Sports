@@ -25,7 +25,7 @@ async function logout() {
 
 
 //////////////// 사이드바 호출 함수 ////////////////
-function loadSidebar(page, userPermission, resources) {
+function loadSidebar(page, userPermission, response) {
     // 사용 조건: 사용할 HTML 파일에 <div id="navbar"></div>가 존재
 
     fetch('/SideBar/SideBar.html')
@@ -37,7 +37,7 @@ function loadSidebar(page, userPermission, resources) {
     })
     .then(data => {
         document.getElementById('sidebar').innerHTML = data;
-        sidebar_createButtons(page, userPermission, resources);
+        sidebar_createButtons(page, userPermission, response);
     })
     .catch(error => {
         console.error('문제가 발생했습니다:', error);
@@ -45,33 +45,30 @@ function loadSidebar(page, userPermission, resources) {
 }
 
 //////////////// 사이드바의 버튼 생성 함수 ////////////////
-function sidebar_createButtons(page, userPermission, resources) {
+function sidebar_createButtons(page, userPermission, response) {
     const buttonContainer = document.getElementById('sidebar-button-container');
     buttonContainer.innerHTML = '';
 
-    const userImageSample = sessionStorage.getItem('userImage');
-    if (userImageSample == null){
-        console.log(userImageSample)
-        document.getElementById('sidebar-userImageSample').src = `/UserImages/NULL.jpg`
-    } else{
-        document.getElementById('sidebar-userImageSample').src = `/UserImages/${userImageSample}`;  
-    }
+    const userImage = sessionStorage.getItem('userImage');
+    const sidebar_userImmageSample = document.getElementById('sidebar-userImageSample');
+    sidebar_userImmageSample.src = userImage == 'null' ? `/UserImages/NULL.jpg` : `/UserImages/${userImage}`;
 
     // 기본 버튼 목록 생성
     const buttons = [
         { text: '로그아웃', onClick: () => logout() },
-        { text: '개인정보수정', onClick: () => window.location.href = '../EditDataPage/EditUserPage.html' }
+        { text: '마이페이지', onClick: () => window.location.href = '/PrivatePage/PrivatePage.html' },
+        { text: '개인정보수정', onClick: () => window.location.href = '/EditDataPage/EditUserPage.html' },
     ];
 
     // GroupMainPage인 경우 추가 버튼 생성
-    if (page !== 'PrivatePage') {  
+    if (page !== 'PrivatePage' && page !== 'EditUserPage') {  
         buttons.push(
-            { text: '멤버페이지', onClick: () => window.location.href = '../GroupMemberPage/GroupMemberPage.html' },
-            { text: '일정', onClick: () => window.location.href = '../GroupSchedulePage/GroupSchedulePage.html' },
-            { text: '공지사항', onClick: () => window.location.href = '../GroupNoticePage/GroupNoticePage.html' }
+            { text: '멤버페이지', onClick: () => window.location.href = '/GroupMemberPage/GroupMemberPage.html' },
+            { text: '일정', onClick: () => window.location.href = '/GroupSchedulePage/GroupSchedulePage.html' },
+            { text: '공지사항', onClick: () => window.location.href = '/GroupNoticePage/GroupNoticePage.html' },
         );
 
-        if (userPermission == 3) {  // 그룹 창시자인 경우 조직 정보 수정 가능
+        if (userPermission == 2) {  // 그룹 창시자인 경우 조직 정보 수정 가능
             buttons.push({ text: '조직정보수정', onClick: () => window.location.href = '../EditDataPage/EditGroupPage.html' });
         }
     }

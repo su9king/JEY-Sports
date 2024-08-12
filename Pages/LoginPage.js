@@ -25,13 +25,13 @@ async function login() {
             
         data =  await response.json();
 
-        if (data.result == 0) {  // 올바르지 않은 ID, PW 입력시 return = 0; 에러 메세지 노출
-            alert("일치하는 정보가 없습니다.")    
-        } else {
+        if (data.result == 1) {  // 올바르지 않은 ID, PW 입력시 return = 0; 에러 메세지 노출
             sessionStorage.setItem('userToken', data.userToken);
             sessionStorage.setItem('userImage', data.userImage);
             alert("로그인 되었습니다!");
             window.location.href = 'PrivatePage/PrivatePage.html'; 
+        } else {
+            alert("일치하는 정보가 없습니다.")    
         }
     } else {
         alert('아이디와 비밀번호를 입력해주세요!')
