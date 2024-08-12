@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupName", setvalue : groupName })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupName", setValue : groupName })
                 });
     
                 data = await response.json();
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupID", setvalue : groupID })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupID", setValue : groupID })
                     });
         
                     data = await response.json();
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupID", setvalue : groupID })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupID", setValue : groupID })
                 });
     
                 data = await response.json();
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, setkey : "groupPW", setvalue : PW1 })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, setKey : "groupPW", setValue : PW1 })
                     });
         
                     data = await response.json();
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, setkey : "groupIntro", setvalue : groupIntro })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, setKey : "groupIntro", setValue : groupIntro })
                 });
     
                 data = await response.json();
@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const nameresponse = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupBankAccountName", setvalue : groupBankAccountName })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupBankAccountName", setValue : groupBankAccountName })
                 });
     
                 namedata = await nameresponse.json();
@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const numresponse = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setkey : "groupBankAccountNumber", setvalue : groupBankAccountNumber })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupBankAccountNumber", setValue : groupBankAccountNumber })
                 });
     
                 numdata = await numresponse.json();

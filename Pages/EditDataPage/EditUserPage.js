@@ -19,7 +19,7 @@ window.onload = async function() {
         loadSidebar(page, userPermission, response);
         document.getElementById('userName').value = response.resources[0]['userName'];
         document.getElementById('userIntro').value = response.resources[0]['userIntro'];
-        document.getElementById('userEmail').value = response.resources[0]['userEmail'];
+        document.getElementById('userMail').value = response.resources[0]['userMail'];
 
         const userImage = sessionStorage.getItem('userImage');
         document.getElementById('userImageSample').src = userImage == 'null' ? `/UserImages/NULL.jpg` : `/UserImages/${userImage}`;
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const userNameBtn = document.getElementById('userNameBtn');
     const userPWBtn = document.getElementById('userPWBtn');
     const userImageBtn = document.getElementById('userImageBtn');
-    const userEmailBtn = document.getElementById('userEmailBtn');
+    const userMailBtn = document.getElementById('userMailBtn');
     const userIntroBtn = document.getElementById('userIntroBtn');
     const leaveJEYBtn = document.getElementById('leaveJEYBtn');
 
@@ -194,16 +194,16 @@ document.addEventListener('DOMContentLoaded', function() {
     /////////////////////////////////// 이메일 변경 ///////////////////////////////////
     ////// 이메일 형식 확인 ////// 
     let emailCheck = false;
-    const userEmail = document.getElementById('userEmail');
-    userEmail.addEventListener('input', validateEmail);
+    const userMail = document.getElementById('userMail');
+    userMail.addEventListener('input', validateEmail);
 
     function validateEmail() {
-        const userEmail = document.getElementById('userEmail').value;
+        const userMail = document.getElementById('userMail').value;
         const emailFeedback = document.getElementById('emailFeedback');
         const emailPattern = /^[^\s@]+@[^\s@]+\.(com|net|ac\.kr)$/;
         emailCheck = false;
 
-        if (emailPattern.test(userEmail)) {
+        if (emailPattern.test(userMail)) {
             emailFeedback.textContent = '';
             emailFeedback.className = 'valid';
             emailCheck = true;
@@ -214,18 +214,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     ////// 이메일 버튼 ////// 
-    userEmailBtn.addEventListener('click', async function(e) {
+    userMailBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
-        const userEmail = document.getElementById('userEmail').value;
+        const userMail = document.getElementById('userMail').value;
         const functionType = 3;
-        if (userEmail != response.resources[0]['userEmail']) {
+        if (userMail != response.resources[0]['userMail']) {
             if (emailCheck == true) {
                 try {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setKey : "userEmail", setvalue : userEmail })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setKey : "userMail", setvalue : userMail })
                     });
         
                     data = await response.json();
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.result == 0) {
                         alert('다시 시도해주세요!')
                     } else {
-                        alert('userEmail이 성공적으로 수정되었습니다!')
+                        alert('userMail이 성공적으로 수정되었습니다!')
                     }
                 } catch (error) {
                     console.error('Error:', error);

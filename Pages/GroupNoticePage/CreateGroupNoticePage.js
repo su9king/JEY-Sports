@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
+                        userPermission: userPermission,
                         functionType: functionType,
                         userToken: userToken,
                         groupToken: groupToken,

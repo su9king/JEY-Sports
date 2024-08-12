@@ -134,7 +134,7 @@ async function displayMembers() {
 						const response = await fetch('/EditGroupMembers', {
 							method: 'POST',
 							headers: {'Content-Type': 'application/json'},
-							body: JSON.stringify({ functionType: selectedValue, userToken: userToken, userID: member.userID, groupToken: groupToken })
+							body: JSON.stringify({ functionType: selectedValue, userToken: userToken, groupToken: groupToken, userPermission: userPermission, userID: member.userID,  })
 						});
 			
 						data = await response.json();
@@ -170,7 +170,7 @@ async function displayMembers() {
 						const response = await fetch('/EditGroupMembers', {
 							method: 'POST',
 							headers: {'Content-Type': 'application/json'},
-							body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: member.userID, groupToken: groupToken })
+							body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: member.userID, groupToken: groupToken, userPermission: userPermission })
 						});
 			
 						data = await response.json();
@@ -283,7 +283,7 @@ function loadModal() {
 						const response = await fetch('/EditGroupMembers', {
 							method: 'POST',
 							headers: {'Content-Type': 'application/json'},
-							body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, groupToken: groupToken })
+							body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, groupToken: groupToken, userPermission: userPermission })
 						});
 			
 						data = await response.json();
@@ -324,7 +324,7 @@ function loadModal() {
 						const response = await fetch('/EditGroupMembers', {
 							method: 'POST',
 							headers: {'Content-Type': 'application/json'},
-							body: JSON.stringify({ functionType: functionType, userToken: userToken, userName: userName, userPhone: userPhone, groupToken: groupToken })
+							body: JSON.stringify({ functionType: functionType, userToken: userToken, userName: userName, userPhone: userPhone, groupToken: groupToken, userPermission: userPermission })
 						});
 			
 						data = await response.json();
@@ -438,7 +438,7 @@ async function displayParticipationRequests() {
                             const response = await fetch('/EditGroupMembers', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: request.userID, groupToken: groupToken })
+                                body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: request.userID, groupToken: groupToken, userPermission: userPermission })
                             });
 
                             data = await response.json();
@@ -521,7 +521,7 @@ async function displayParticipationRequests() {
                             const response = await fetch('/EditGroupMembers', {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
-                                body: JSON.stringify({ functionType: selectedValue, userToken: userToken, userID: request.userID, groupToken: groupToken })
+                                body: JSON.stringify({ functionType: selectedValue, userToken: userToken, userID: request.userID, groupToken: groupToken, userPermission: userPermission })
                             });
                             data = await response.json();
 

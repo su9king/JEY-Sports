@@ -74,10 +74,10 @@ async function displayScheduleDetails(scheduleToken) {
     const saveButton = document.getElementById("saveEventButton");
 
     try {
-        const response = await fetch('/EditGroupSchedule', {
+        const response = await fetch('/EditGroupSchedules', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ functionType: 1, userToken: userToken, groupToken: groupToken, scheduleToken: scheduleToken })
+            body: JSON.stringify({ functionType: 1, userToken: userToken, groupToken: groupToken, scheduleToken: scheduleToken, userPermission: userPermission })
         });
 
         const contentData = await response.json();
@@ -126,10 +126,10 @@ async function displayScheduleDetails(scheduleToken) {
                 deleteEventButton.onclick = async function() {
                     if (confirm('일정을 삭제하시겠습니까?')) {
                         try {
-                            const response = await fetch('/EditGroupSchedule', {
+                            const response = await fetch('/EditGroupSchedules', {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
-                                body: JSON.stringify({ functionType: 2, userToken: userToken, scheduleToken: scheduleToken, groupToken: groupToken })
+                                body: JSON.stringify({ functionType: 2, userToken: userToken, scheduleToken: scheduleToken, groupToken: groupToken, userPermission: userPermission })
                             });
                 
                             const data = await response.json();

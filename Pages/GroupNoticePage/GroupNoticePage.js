@@ -105,7 +105,7 @@ async function displayNotices() {
                                 const response = await fetch('/EditGroupNotices', {
                                     method: 'POST',
                                     headers: {'Content-Type': 'application/json'},
-                                    body: JSON.stringify({ functionType: functionType, groupToken: groupToken, userToken: userToken, noticeToken: notice.noticeToken })
+                                    body: JSON.stringify({ functionType: functionType, groupToken: groupToken, userToken: userToken, noticeToken: notice.noticeToken, userPermission: userPermission })
                                 });
     
                                 data = await response.json();
@@ -163,7 +163,7 @@ async function displayNoticeContent(noticeToken, noticeContentElement) {
         const response = await fetch('/EditGroupNotices', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, noticeToken: noticeToken })
+            body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, noticeToken: noticeToken, userPermission: userPermission })
         });
 
         const contentData = await response.json();

@@ -89,10 +89,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (scheduleTitle && scheduleStartDate && scheduleContent && scheduleLocation && scheduleEndDate ) {
             try {
-                const response = await fetch('/EditGroupSchedule', {
+                const response = await fetch('/EditGroupSchedules', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
+                        userPermission: userPermission,
                         functionType: 3,
                         userToken: userToken,
                         groupToken: groupToken,
