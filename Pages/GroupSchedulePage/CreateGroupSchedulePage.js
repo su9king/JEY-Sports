@@ -19,6 +19,7 @@ window.onload = async function() {
     const scheduleAlert = urlParams.get('scheduleAlert');
     const scheduleContent = urlParams.get('scheduleContent');
     const scheduleLocation = urlParams.get('scheduleLocation');
+    scheduleToken = urlParams.get('scheduleToken');
     const scheduleStatus = urlParams.get('scheduleStatus');
 
     if (response.result == 0) {
@@ -54,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const scheduleStartDateInput = document.getElementById('scheduleStartDate');
     const scheduleEndDateInput = document.getElementById('scheduleEndDate');
     const noEndDateCheckbox = document.getElementById('noEndDate');
+    const scheduleEndDate = document.getElementById('scheduleEndDate');
 
     // 모든 label 요소에 클릭 이벤트를 방지하는 핸들러 추가
     const labels = document.querySelectorAll('label');
@@ -66,8 +68,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // 종료날짜 없음 체크박스
     noEndDateCheckbox.addEventListener('change', function() {
         if (this.checked) {
-            // 체크박스가 체크 -> 종료 날짜와 시작 날짜 동일
-            scheduleEndDateInput.value = scheduleStartDateInput.value;
+            if (scheduleStartDateInput.value) {
+                // 체크박스가 체크 -> 종료 날짜와 시작 날짜 동일
+                scheduleEndDateInput.value = scheduleStartDateInput.value;
+            } else {
+                alert('시작 날짜를 선택해주세요!');
+            }
+
+        }
+    });
+
+
+    // 시작 날짜가 종료 날짜보다 늦은 경우
+    scheduleEndDate.addEventListener('change', function() {
+        const startDate = new Date(document.getElementById('scheduleStartDate').value);
+        const endDate = new Date(document.getElementById('scheduleEndDate').value);
+
+        if (startDate > endDate) {
+            // 경고 메시지를 띄웁니다.
+            alert('시작 날짜는 종료 날짜보다 앞서야 합니다.');
+            document.getElementById('scheduleEndDate').value = '';
         }
     });
 

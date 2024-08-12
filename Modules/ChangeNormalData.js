@@ -17,6 +17,7 @@ module.exports = {
 
         } else if (functionType == 2){ //조직 데이터 수정
             const userPermission = data["userPermission"];
+            const groupToken = data["groupToken"]
 
             if (userPermission == 2){
 

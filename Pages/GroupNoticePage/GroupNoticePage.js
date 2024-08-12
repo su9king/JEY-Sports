@@ -23,7 +23,7 @@ window.onload = async function() {
                 noticeTitle: resource.noticeTitle,
                 noticeImportance: resource.noticeImportance,
                 noticeStatus: resource.noticeStatus,
-                noticeChangedDate: resource.noticeChangedDate//.toISOString().split('T')[0],
+                noticeEditDate: resource.noticeEditDate.split('T')[0],
             }));
             displayNotices();  //// 게시글 생성 함수 ////
         }
@@ -46,7 +46,7 @@ async function displayNotices() {
     notices.forEach(notice => {
 
         // 비공개 공지사항은 관리자, 창설자만 가능
-        if (notice.noticeStatus === 'False' && (userPermission == 0 || userPermission == 3 || userPermission == 4)) {
+        if (notice.noticeStatus == false && (userPermission == 0 || userPermission == 3 || userPermission == 4)) {
             return;
         }
     
@@ -73,7 +73,7 @@ async function displayNotices() {
         const statusText = notice.noticeStatus == true ? '공개' : '비공개';
 
         noticeInfo.innerHTML = `
-        마지막 수정일: ${notice.noticeChangedDate} | 중요도: ${importanceText} | 상태: ${statusText}
+        마지막 수정일: ${notice.noticeEditDate} | 중요도: ${importanceText} | 상태: ${statusText}
         `;
     
         // 게시글 내용이 들어갈 공간 생성
@@ -176,21 +176,22 @@ async function displayNoticeContent(noticeToken, noticeContentElement) {
                     noticeToken: noticeToken,
                     noticeContent: resource.noticeContent,
                     noticeWriter: resource.noticeWriter,
-                    noticeCreatedDate: resource.noticeCreatedDate.split('T')[0],
-                    noticeEndDate: resource.noticeEndDate,
-                    noticeCreateDate: resource.noticeCreateDate
+                    noticeCreatedDate: resource.noticeCreatedDate ? resource.noticeCreatedDate.split('T')[0] : null,
+                    noticeEndDate: resource.noticeEndDate ? resource.noticeEndDate.split('T')[0] : null,       
                 });
             });
 
             //// noticeContents 찾기
             const notice = noticeContents.find(n => n.noticeToken === noticeToken);
 
+            const endDateText = notice.noticeEndDate ? notice.noticeEndDate : '없음';
+
             noticeContentElement.innerHTML = `
                 <div class="notice-info">
                     작성자: ${notice.noticeWriter}
                 </div>
                 <div class="notice-dates">
-                    작성일: ${notice.noticeCreatedDate} | 종료일: ${notice.noticeEndDate}
+                    작성일: ${notice.noticeCreatedDate} | 종료일: ${endDateText}
                 </div>
                 <div class="notice-textContent">
                     ${notice.noticeContent}

@@ -108,13 +108,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const groupName = document.getElementById('groupName').value;
         const functionType = 2;
-        
+        const userPermission = sessionStorage.getItem('userPermission');
         if (groupName && groupName != response.resources[0]['groupName']) {
             try {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupName", setValue : groupName })
+                    body: JSON.stringify({ functionType: functionType, userPermission :userPermission ,userToken: userToken, groupToken: groupToken, setKey : "groupName", setValue : groupName })
                 });
     
                 data = await response.json();

@@ -33,9 +33,10 @@ window.onload = async function() {
 	
 
 		// 모두에게 보여줄 멤버 리스트와 관리자들이 볼 요청멤버 리스트 분리
-		if (resource.userPermission === 0 || resource.userPermission === 1 || resource.userPermission === 2) {
+        
+		if (resource.userPermission == 0 || resource.userPermission == 1 || resource.userPermission == 2) {
 			members.push(buffer);
-		} else if (resource.userPermission === 3 || resource.userPermission === 4 || resource.userPermission === 5) {
+		} else if (resource.userPermission == 3 || resource.userPermission == 4 || resource.userPermission == 5) {
 			participateRequest.push(buffer);
 		}
 	});
@@ -433,7 +434,7 @@ async function displayParticipationRequests() {
                 approveButton.addEventListener("click", async function() {
                     if (confirm(`정말 ${request.userName}의 참가를 승인하시겠습니까?`)) {
                         try {
-                            const functionType = 4;
+                            const functionType = 2;
 
                             const response = await fetch('/EditGroupMembers', {
                                 method: 'POST',

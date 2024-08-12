@@ -7,11 +7,12 @@ module.exports = {
 
         if (functionType == 1){// 멤버 강퇴
             const userID = data["userID"]; //강퇴할 유저 ID
-            
-            if (userPermission == 2 || userPermission == 3){
+            console.log("작동됨");
+            console.log(userID,groupToken);
+            if (userPermission == 1 || userPermission == 2){
                 const kickUserPermission = await GetPermission(userID,groupToken);
-
-                if (kickUserPermission == 1){ // 강퇴 가능함.
+                console.log(kickUserPermission);
+                if (kickUserPermission == 0){ // 강퇴 가능함.
                     
                     const result = await KickUser(userID,groupToken);
                     return {result : result , resources : null}
@@ -24,7 +25,7 @@ module.exports = {
         }else if (functionType == 2){// 멤버 입장 수락
             const userID = data["userID"]; //입장 수락할 유저 ID
 
-            if (userPermission == 2 || userPermission == 3){
+            if (userPermission == 1 || userPermission == 2){
                 const acceptUserPermission = await GetPermission(userID,groupToken);
 
                 if (acceptUserPermission == 4){// 수락 가능함.
@@ -39,7 +40,7 @@ module.exports = {
         }else if (functionType == 3){// 멤버 초대 (소프트웨어 유저 초대)
             const userID = data["userID"];
 
-            if (userPermission == 2 || userPermission == 3){
+            if (userPermission == 1 || userPermission == 2){
                 
                 const result = await InviteUser(userID,groupToken);
                 return {result : result , resources : null};
@@ -53,7 +54,7 @@ module.exports = {
             const userName = data["userName"];
             const userPhone = data["userPhone"];
 
-            if (userPermission == 2 || userPermission == 3){
+            if (userPermission == 1 || userPermission == 2){
                 
                 const result = await SetNotUser(userName,userPhone,groupToken);
 
@@ -67,7 +68,7 @@ module.exports = {
         }else if (functionType == 5){// 멤버 권한 조정 (일반 유저)
 
             const userID = data["userID"];
-            if (userPermission == 3){
+            if (userPermission == 2){
                 
                 const result = await ModifyPermission(userID,groupToken,0);
 
@@ -80,7 +81,7 @@ module.exports = {
         }else if (functionType == 6){// 멤버 권한 조정 ( 관리자 )
 
             const userID = data["userID"];
-            if (userPermission == 3){
+            if (userPermission == 2){
                 
                 const result = await ModifyPermission(userID,groupToken,1);
 
@@ -93,7 +94,7 @@ module.exports = {
             
             const userID = data["userID"];
 
-            if (userPermission == 3){
+            if (userPermission == 2){
 
                 const result = await ChangeGroupPublisher(userToken,userID,groupToken);
 
@@ -112,7 +113,7 @@ async function KickUser(userID,groupToken) {
     return new Promise((resolve, reject) => {
         // 유저 데이터 삭제
         connection.query(`DELETE FROM UsersOrganizations 
-                          WHERE userToken = (SELECT FROM Users WHERE userID = ?)
+                          WHERE userToken = (SELECT userToken FROM Users WHERE userID = ?)
                           and groupToken = ?`, [userID,groupToken], 
             (error, results, fields) => {
                 if (error) {
@@ -134,9 +135,9 @@ async function KickUser(userID,groupToken) {
 async function AcceptUser(userID,groupToken) {
     return new Promise((resolve, reject) => {
         // 유저 조직 참가 수락
-        connection.query(`UPDATE FROM UsersOrganizations 
+        connection.query(`UPDATE UsersOrganizations 
                           SET userPermission = 0
-                          WHERE userToken = (SELECT FROM Users WHERE userID = ?)
+                          WHERE userToken = (SELECT userToken FROM Users WHERE userID = ?)
                           and groupToken = ?`, [userID,groupToken], 
             (error, results, fields) => {
                 if (error) {
@@ -160,7 +161,7 @@ async function InviteUser(userID,groupToken) {
         // 유저 ID 기반으로 초대 발송
         connection.query(`INSERT INTO UsersOrganizations 
                           (userToken,groupToken,userPermission)
-                          (?,?,3)`, [userID,groupToken], 
+                          VALUES ((SELECT userToken FROM Users WHERE userID = ?),?,3)`, [userID,groupToken], 
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);
@@ -183,7 +184,7 @@ async function SetNotUser(userName,userPhone,groupToken) {
         // 소프트웨어 비유저 조직에 등록
         connection.query(`INSERT INTO NotUsersOrganizations 
                           (userName,userPhone,groupToken)
-                          (?,?,?)`, [userName,userPhone,groupToken], 
+                          VALUES (?,?,?)`, [userName,userPhone,groupToken], 
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);
@@ -271,8 +272,9 @@ async function ChangeGroupPublisher(userToken,userID,groupToken) {
 async function GetPermission(userID,groupToken) {
     return new Promise((resolve, reject) => {
         // 유저 데이터 삭제
-        connection.query(`SELECT usrorg.userPermission FROM UsersOrganizations AS usrorg , Users AS usr
-                         WHERE usr.userID = "?" and usrorg.groupToken = ?;`, [userID,groupToken], 
+        connection.query(`SELECT usrorg.userPermission FROM UsersOrganizations AS usrorg 
+            JOIN Users AS usr ON usr.userToken = usrorg.userToken
+            WHERE usr.userID = ? and usrorg.groupToken = ?;`, [userID,groupToken], 
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);

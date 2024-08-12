@@ -13,7 +13,7 @@ module.exports = {
         }else if (functionType == 2){// 일정 삭제
 
             const userPermission = data["userPermission"];
-            if (userPermission == 2 || userPermission == 3){
+            if (userPermission == 1 || userPermission == 2){
 
                 const result = await DeleteSchedule(scheduleToken);
                 return {result : result , resources : null};
@@ -21,13 +21,16 @@ module.exports = {
 
         }else if (functionType == 3){//일정 수정, 일정 저장
             const userPermission = data["userPermission"];
-            if (userPermission == 2 || userPermission == 3){
+            console.log(userPermission)
+            if (userPermission == 1 || userPermission == 2){
                 
                 if (scheduleToken == null){
                     const result = await CreateSchedule(data);
                     return {result : result , resources : null};
                 }else{
+                    console.log("실행됨")
                     const result = await EditSchedule(data);
+                    console.log(result)
                     return {result : result , resources : null};
                 }
             }
@@ -114,13 +117,13 @@ async function EditSchedule(data) {
         // 일정 수정하기
         connection.query(`UPDATE Schedules 
                           SET scheduleTitle = ?,scheduleContent = ? ,scheduleStartDate = ? ,scheduleEndDate = ?,
-                          scheduleLocation = ? ,scheduleStatus = ?,scheduleImportance = ? ,scheduleAlert = ?)
+                          scheduleLocation = ? ,scheduleStatus = ?,scheduleImportance = ? ,scheduleAlert = ?
                           WHERE scheduleToken = ? `, 
                           [data["scheduleTitle"],
                            data["scheduleContent"],data["scheduleStartDate"],
                            data["scheduleEndDate"],data["scheduleLocation"],
                            data["scheduleStatus"],data["scheduleImportance"],
-                           data["scheduleAlert"],data["scheduleGroupToken"]], 
+                           data["scheduleAlert"],data["scheduleToken"]], 
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);

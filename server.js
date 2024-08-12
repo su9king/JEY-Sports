@@ -280,8 +280,7 @@ app.post('/CreateGroup', async(req,res,next) => {
         next(error);
     }
 });
-//여기 코드에서부터는 , result 의 형태가 각 모듈에서 완벽히 제공되도록 작성.
-//데이터 수정 
+
 app.post('/ChangeNormalData', async(req,res,next) => {
 
     console.log("ChangeNormalData sign");

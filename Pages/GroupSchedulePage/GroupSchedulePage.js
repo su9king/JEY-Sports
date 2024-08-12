@@ -17,15 +17,17 @@ window.onload = async function() {
     } else {
         loadSidebar(page, userPermission, response);
 
-        schedules = response.resources.map(resource => ({
-            scheduleToken: resource.scheduleToken,
-            scheduleTitle: resource.scheduleTitle,
-            scheduleStartDate: resource.scheduleStartDate,
-            scheduleEndDate: resource.scheduleEndDate,
-            scheduleImportance: resource.scheduleImportance,
-            scheduleStatus: resource.scheduleStatus,
-        }));
-        
+        if (response.resources !== null) {
+            schedules = response.resources.map(resource => ({
+                scheduleToken: resource.scheduleToken,
+                scheduleTitle: resource.scheduleTitle,
+                scheduleStartDate: resource.scheduleStartDate ? resource.scheduleStartDate.split('T')[0] : null,
+                scheduleEndDate: resource.scheduleEndDate ? resource.scheduleEndDate.split('T')[0] : null,
+                scheduleImportance: resource.scheduleImportance,
+                scheduleStatus: resource.scheduleStatus,
+            }));
+        }
+
         displayCalendar();  //// 달력 생성 함수 ////
         addScheduleAddButton(userPermission)  //// 일정 추가 버튼 생성 함수 ////
     }   
@@ -52,7 +54,7 @@ function displayCalendar() {
             title: schedule.scheduleTitle,
             start: schedule.scheduleStartDate,
             end: schedule.scheduleEndDate,
-            color: schedule.scheduleImportance === 'True' ? '#FF0000' : '#0056b3', // 'True'면 빨간색, 아니면 기본 색상
+            color: schedule.scheduleImportance == true ? '#FF0000' : '#0056b3', // 'True'면 빨간색, 아니면 기본 색상
             extendedProps: {
                 scheduleImportance: schedule.scheduleImportance,
                 scheduleStatus: schedule.scheduleStatus,
@@ -92,15 +94,14 @@ async function displayScheduleDetails(scheduleToken) {
             const scheduleStartDate = currentSchedule.scheduleStartDate;
             const scheduleEndDate = currentSchedule.scheduleEndDate || scheduleStartDate; // undefined라면 StartDate와 동일하게 출력
             const scheduleImportance = currentSchedule.scheduleImportance;
-            const scheduleAlert = scheduleDetails.scheduleAlert || 'False'; // 기본값 'False'
+            const scheduleAlert = scheduleDetails.scheduleAlert || false; // 기본값 'False'
             const scheduleStatus = currentSchedule.scheduleStatus;
             const scheduleContent = scheduleDetails.scheduleContent;
-            const scheduleWriter = scheduleDetails.scheduleWriter;
             const scheduleLocation = scheduleDetails.scheduleLocation;
 
-            const importanceText = scheduleImportance == 'True' ? '중요' : '일반';
-            const alertText = scheduleAlert == 'True' ? '알람 예정' : '알람 없음';
-            const statusText = scheduleStatus == 'True' ? '완료' : (scheduleStatus === 'False' ? '취소' : '예정');
+            const importanceText = scheduleImportance == true ? '중요' : '일반';
+            const alertText = scheduleAlert == true ? '알람 예정' : '알람 없음';
+            const statusText = scheduleStatus == true ? '완료' : (scheduleStatus == false ? '취소' : '예정');
 
             eventDetails.innerHTML = `
                 <strong>제목:</strong> ${scheduleTitle}<br>
@@ -111,7 +112,6 @@ async function displayScheduleDetails(scheduleToken) {
                 <strong>장소:</strong> ${scheduleLocation}<br>
                 <strong>진행 상태:</strong> ${statusText}<br>
                 <strong>일정 내용:</strong> ${scheduleContent}<br>
-                <strong>작성자:</strong> ${scheduleWriter}
             `;
 
             // 권한에 따라 삭제, 수정 버튼 추가
@@ -120,7 +120,7 @@ async function displayScheduleDetails(scheduleToken) {
                 deleteEventButton.style.display = "inline-block";
 
                 saveButton.onclick = function() {
-                    window.location.href = `CreateGroupSchedulePage.html?scheduleTitle=${scheduleTitle}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheduleImportance=${scheduleImportance}&scheduleAlert=${scheduleAlert}&scheduleContent=${scheduleContent}&scheduleLocation=${scheduleLocation}&scheduleStatus=${scheduleStatus}`;
+                    window.location.href = `CreateGroupSchedulePage.html?scheduleTitle=${scheduleTitle}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheduleImportance=${scheduleImportance}&scheduleAlert=${scheduleAlert}&scheduleContent=${scheduleContent}&scheduleLocation=${scheduleLocation}&scheduleStatus=${scheduleStatus}&scheduleToken=${scheduleToken}`;
                 }
 
                 deleteEventButton.onclick = async function() {

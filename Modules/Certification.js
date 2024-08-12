@@ -167,8 +167,8 @@ async function EditGroupPage(groupToken){
     return new Promise((resolve, reject) => {
         connection.query(`SELECT groupImage,groupName,groupIntro,
             groupID, groupPW,
-            groupBankAccountName,group BankAccountNumber
-            FROM Users
+            groupBankAccountName,groupBankAccountNumber
+            FROM Organizations
             WHERE groupToken = ?`, [groupToken],
             (error, results, fields) => {
                 if (error) {
@@ -190,7 +190,7 @@ async function EditGroupPage(groupToken){
 async function GroupMemberPage(groupToken){
 
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT usr.userName, usr.userImage , usr.userIntro, usr.userMail
+        connection.query(`SELECT usr.userID , usr.userPhone, usrorg.userPermission ,usr.userName, usr.userImage , usr.userIntro, usr.userMail
                           FROM Users AS usr
                           JOIN UsersOrganizations AS usrorg ON usrorg.userToken = usr.userToken
                           WHERE usrorg.groupToken = ?`, [groupToken],
@@ -213,7 +213,8 @@ async function GroupMemberPage(groupToken){
 async function GroupSchedulePage(groupToken){
 
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT scheduleToken , scheduleTitle, scheduleStatus, scheduleImportance
+        connection.query(`SELECT scheduleToken , scheduleTitle, scheduleStatus, scheduleImportance,
+                          scheduleStartDate,scheduleEndDate,scheduleLocation,scheduleContent
                           FROM Schedules 
                           WHERE groupToken = ?`, [groupToken],
             (error, results, fields) => {
@@ -223,6 +224,7 @@ async function GroupSchedulePage(groupToken){
 
                 } //쿼리 결과가 없다면 그룹 토큰이 잘못 됨.
                 if (results.length > 0) {
+                    console.log(results)
                     resolve(results);
                 } else {
                     resolve(null);
@@ -235,7 +237,7 @@ async function GroupSchedulePage(groupToken){
 async function GroupNoticePage(groupToken){
 
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT noticeToken , noticeTitle, noticeStatus, noticeImportance
+        connection.query(`SELECT noticeToken , noticeTitle, noticeStatus, noticeImportance, noticeEditDate
                           FROM Notices 
                           WHERE groupToken = ?`, [groupToken],
             (error, results, fields) => {

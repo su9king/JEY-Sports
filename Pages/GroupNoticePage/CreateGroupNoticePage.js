@@ -1,5 +1,4 @@
 let noticeToken
-let originalnoticeCreatedDate
 
 //////////////////// Step0 : 회원인증, 사이드바, 뒤로가기 초기 세팅 ////////////////////
 window.onload = async function() {
@@ -33,7 +32,7 @@ window.onload = async function() {
             document.getElementById('noticeImportance').value = noticeImportance;
             document.getElementById('noticeStatus').value = noticeStatus;
             document.getElementById('noticeContent').value = noticeContent;
-            document.getElementById('noticeEndDate').value = noticeEndDate;
+            document.getElementById('noticeEndDate').value = noticeEndDate ? noticeEndDate.split('T')[0] : null;
             document.getElementById('noticeWriter').value = noticeWriter;
         } else {
             console.log('작성페이지로 접근');
@@ -83,10 +82,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const noticeStatus = document.getElementById('noticeStatus').value;
         const noticeContent = document.getElementById('noticeContent').value;
         const noticeWriter = document.getElementById('noticeWriter').value;
-        const noticeEndDate = noticeEndDateInput.value ? noticeEndDateInput.value : null; 
-        const noticeCreatedDate = new Date().toISOString().split('T')[0]; 
-        const noticeChangedDate = new Date().toISOString().split('T')[0];
-        
+        const noticeEndDate = noticeEndDateInput.value ? noticeEndDateInput.value : null;
+
+        const noticeCreatedDate = new Date().toISOString().split('T')[0];
+        const noticeEditDate = new Date().toISOString().split('T')[0];
+
         
         if (noticeTitle && noticeContent && noticeWriter &&(noticeEndDate || noEndDateCheckbox.checked)) {
             try {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         noticeWriter: noticeWriter,
                         noticeEndDate: noticeEndDate,
                         noticeCreatedDate: noticeCreatedDate,
-                        noticeChangedDate: noticeChangedDate
+                        noticeEditDate: noticeEditDate
                     })
                 });
 
