@@ -89,15 +89,14 @@ document.addEventListener('DOMContentLoaded', function() {
     userImageBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
-        const userImage = document.getElementById('userImage').files[0];
+        const userImage = document.getElementById('userImage').files[0] ? document.getElementById('userImage').files[0] : null;
         const functionType = 1; // 개인 프로필
+    
 
-        // if (userImage) {  /////////////////////////// 기본 프로필(null)로 잘 변하는지 확인 필요
-            await imageUpload(functionType, userToken, userImage)
-            sessionStorage.setItem('userImage', await imageUpload(functionType, userToken, userImage) )
-            alert("개인 프로필 사진이 수정되었습니다!");
-        // }
-
+        const newImage = await imageUpload(functionType, userToken, userImage)
+        sessionStorage.setItem('userImage', newImage )
+        alert("개인 프로필 사진이 수정되었습니다!");
+        location.reload();
     });
 
 
@@ -134,6 +133,102 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
     });
+
+
+
+    /////////////////////////////////// ID 변경 ///////////////////////////////////
+    ////// ID 작성 형태 제한 //////
+    const userIDInput = document.getElementById('userID');
+    const allowID = document.getElementById('idAlert');
+    const idCheckButton = document.getElementById('idCheckButton');
+    const userIDBtn = document.getElementById('userIDBtn');
+
+    userIDInput.addEventListener('input', async function(e) {
+        e.preventDefault();
+        allowID.style.display = 'none'
+        idCheck = false;
+
+        const engFilter = /^[a-zA-Z0-9]*$/;
+
+        if (!engFilter.test(userIDInput.value)) {
+            userIDInput.value = userIDInput.value.replace(/[^a-zA-Z0-9]/g, ''); // 한글 및 기타 문자 제거
+            alert('아이디는 영어와 숫자만 가능합니다!');
+        }
+    });
+
+
+    ////// ID 중복 확인 버튼 //////
+    idCheckButton.addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        const userID = document.getElementById('userID').value;
+        
+        allowID.style.display = 'none' // 가능한 id를 작성했다가 불가능한 id를 확인하는 경우, 가능하다는 알림을 삭제하기 위해
+
+        const functionType = 3;
+        
+        if (userID) {
+            try {
+                const response = await fetch('/ChangeNormalData', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ functionType: functionType, userID: userID, userToken: userToken  })
+                });
+
+                data = await response.json();
+
+                if (data.result == 0) {  // 사용 가능한 ID
+                    allowID.style.display = 'block';
+                    idCheck = true;
+                } else {
+                    document.getElementById('userID').value = '';
+                    alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        } else {  // 빈칸으로 제출한 경우
+            alert('원하는 ID를 작성해주세요!');
+        }
+        
+    });
+
+
+    ////// ID 버튼 ////// 
+    userIDBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+
+        const userID = document.getElementById('userID').value;
+        const functionType = 1;
+
+        if (idCheck == true) {
+            try {
+                const response = await fetch('/ChangeNormalData', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, setKey : "userID", setValue : userID })
+                });
+    
+                data = await response.json();
+    
+                if (data.result == 1) {  
+                    alert('ID가 성공적으로 수정되었습니다!');
+                } else if (data.result == 0) {
+                    alert('다시 시도해주세요!');
+                } else {
+                    alert('완전 오류!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        } else {
+            alert('ID 중복체크를 해주세요!');
+        }
+            
+    });
+
+
+
 
 
     /////////////////////////////////// 비밀 번호 변경 ///////////////////////////////////
@@ -218,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
 
         const userMail = document.getElementById('userMail').value;
-        const functionType = 3;
+        const functionType = 1;
         if (userMail != response.resources[0]['userMail']) {
             if (emailCheck == true) {
                 try {

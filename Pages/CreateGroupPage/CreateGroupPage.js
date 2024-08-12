@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
     CreateGroupForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const groupPublisher = sessionStorage.getItem('userToken');
+        const userToken = sessionStorage.getItem('userToken');
 
         const groupName = document.getElementById('groupName').value;
         const groupNumber = document.getElementById('groupNumber').value;
@@ -172,8 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 method : 'POST',
                 headers : {'Content-Type': 'application/json'},
                 body : JSON.stringify({ functionType: functionType,
-                                        userToken : groupPublisher,
-                                        groupPublisher: groupPublisher,
+                                        userToken : userToken,
                                         groupName: groupName,
                                         groupNumber: groupNumber,
                                         groupID: groupID, 
@@ -192,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const groupToken = data.resources["groupToken"];
                 const functionType = 2;
 
-                await imageUpload(functionType, groupPublisher, groupImage, groupToken );             
+                await imageUpload(functionType, userToken, groupImage, groupToken );             
                 
                 alert("조직 생성이 완료되었습니다!");
                 window.location.href = '/PrivatePage/PrivatePage.html'; 

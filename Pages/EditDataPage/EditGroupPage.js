@@ -21,7 +21,7 @@ window.onload = async function() {
         document.getElementById('groupBankAccountNumber').value = response.resources[0]['groupBankAccountNumber'];
 
         const groupImage = response.resources[0]["groupImage"];
-        document.getElementById('groupImageSample').src = groupImage == 'null' ? `/UserImages/NULL.jpg` : `/UserImages/${groupImage}`;
+        document.getElementById('groupImageSample').src = groupImage ? `/GroupImages/${groupImage}` : `/GroupImages/NULL.png`;
            
     
         // 뒤로가기
@@ -34,7 +34,8 @@ window.onload = async function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     const userToken = sessionStorage.getItem('userToken');
-    const groupToken = sessionStorage.getItem('groupToken')    
+    const groupToken = sessionStorage.getItem('groupToken');
+    const userPermission = sessionStorage.getItem('userPermission');
 
     const groupNameBtn = document.getElementById('groupNameBtn');
     const groupPWBtn = document.getElementById('groupPWBtn');
@@ -93,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const functionType = 2; // 조직 프로필
 
         if (groupImage) {
-            await imageUpload(functionType, groupToken, groupImage );
+            await imageUpload(functionType, userToken, groupImage, groupToken );
             alert("조직 프로필 사진이 수정되었습니다!");
         }
 
@@ -114,12 +115,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userPermission :userPermission ,userToken: userToken, groupToken: groupToken, setKey : "groupName", setValue : groupName })
+                    body: JSON.stringify({ functionType: functionType, userPermission: userPermission, userToken: userToken, groupToken: groupToken, setKey : "groupName", setValue : groupName })
                 });
     
                 data = await response.json();
     
-                if (data.result == 0) {
+                if (data.result == 0) {  
                     alert('다시 시도해주세요!')
                 } else {
                     alert('조직명이 성공적으로 수정되었습니다!')
@@ -161,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         
         const groupID = document.getElementById('groupID').value;
-
+        console.log(groupID);
         allowID.style.display = 'none'
 
         const functionType = 4;
@@ -172,17 +173,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupID", setValue : groupID })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userPermission: userPermission, groupToken: groupToken, groupID : groupID })
                     });
         
                     data = await response.json();
         
-                    if (data.result == 1) {  // 사용 가능한 ID
+                    if (data.result == 0) {  // 사용 가능한 ID
                         idCheck = true;
                         allowID.style.display = 'block';
                         alert('사용가능한 ID입니다!')
-                    } else {
-                        document.getElementById('groupID').value = response.resources[0]['groupID'];
+                    } else if (data.result == 1) {
                         alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
                     }
                 } catch (error) {
@@ -213,15 +213,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupID", setValue : groupID })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userPermission: userPermission, groupToken: groupToken, setKey : "groupID", setValue : groupID })
                 });
     
                 data = await response.json();
     
-                if (data.result == 0) {
-                    alert('다시 시도해주세요!')
+                if (data.result == 1) { 
+                    alert('ID가 성공적으로 수정되었습니다!');
+                } else if (data.result == 0) {
+                    alert('다시 시도해주세요!');
                 } else {
-                    alert('groupID이 성공적으로 수정되었습니다!')
+                    alert('완전 오류!');
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -264,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, setKey : "groupPW", setValue : PW1 })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userPermission: userPermission, groupToken: groupToken, setKey : "groupPW", setValue : PW1 })
                     });
         
                     data = await response.json();
@@ -313,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userToken: userToken, setKey : "groupIntro", setValue : groupIntro })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userPermission: userPermission, groupToken: groupToken, setKey : "groupIntro", setValue : groupIntro })
                 });
     
                 data = await response.json();
@@ -363,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const nameresponse = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupBankAccountName", setValue : groupBankAccountName })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userPermission: userPermission, groupToken: groupToken, setKey : "groupBankAccountName", setValue : groupBankAccountName })
                 });
     
                 namedata = await nameresponse.json();
@@ -371,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const numresponse = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, groupToken: groupToken, setKey : "groupBankAccountNumber", setValue : groupBankAccountNumber })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userPermission: userPermission, groupToken: groupToken, setKey : "groupBankAccountNumber", setValue : groupBankAccountNumber })
                 });
     
                 numdata = await numresponse.json();
@@ -405,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/DeleteGroup', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ userToken: userToken,  groupToken: groupToken })
+                    body: JSON.stringify({ userToken: userToken,  groupToken: groupToken ,userPermission : userPermission})
                 });
     
                 data = await response.json();

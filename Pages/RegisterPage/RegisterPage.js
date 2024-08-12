@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
 
-    ////// ID 중복 확인 버튼 //////
+    ////// ID 작성 형태 제한 //////
     userID.addEventListener('input', async function(e) {
         e.preventDefault();
         allowID.style.display = 'none'
@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+
+    ////// ID 중복 확인 버튼 //////
     idCheckButton.addEventListener('click', async function(e) {
         e.preventDefault();
         

@@ -1,6 +1,6 @@
 //필요한 모듈 선언
 const connection = require('../DatabaseLoad');
-
+const moment = require('moment-timezone');
 
 // 메인 실행 코드
 module.exports = {
@@ -224,7 +224,12 @@ async function GroupSchedulePage(groupToken){
 
                 } //쿼리 결과가 없다면 그룹 토큰이 잘못 됨.
                 if (results.length > 0) {
-                    console.log(results)
+                    // 날짜를 한국 시간대로 변환
+                    results.forEach(schedule => {
+                        schedule.scheduleStartDate = moment(schedule.scheduleStartDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                        schedule.scheduleEndDate = moment(schedule.scheduleEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                    });
+                    console.log(results);
                     resolve(results);
                 } else {
                     resolve(null);

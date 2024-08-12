@@ -26,7 +26,7 @@ module.exports = {
             const groupIDCheck = await CheckDuplicate(table,data2);
 
             if (groupIDCheck == 0){
-                const groupPublisher = userToken;
+                const userToken = userToken;
                 const groupName = data["groupName"];
                 const groupNumber = data["groupNumber"];
                 const groupClassification = data["groupClassification"];
@@ -35,7 +35,7 @@ module.exports = {
                 const groupImage = data["groupImage"];
                 const groupLocation = data["groupLoacation"];
 
-                const result = await CreateGroupData(groupPublisher,groupID,groupName,groupNumber,
+                const result = await CreateGroupData(userToken,groupID,groupName,groupNumber,
                     groupClassification,groupSportType,groupPW,groupImage,groupLocation
                 )
                 return result;
@@ -47,17 +47,17 @@ module.exports = {
     }
 };
 
-async function CreateGroupData(groupPublisher, groupID, groupName, groupNumber,
+async function CreateGroupData(userToken, groupID, groupName, groupNumber,
     groupClassification, groupSportType, groupPW, groupImage, groupLocation, userToken) {
     
     return new Promise((resolve, reject) => {
 
         // 첫 번째 쿼리: 조직 생성
-        connection.query(`INSERT INTO Organizations (groupPublisher, groupID, groupName,
+        connection.query(`INSERT INTO Organizations (userToken, groupID, groupName,
             groupNumber, groupClassification, groupSportType,
             groupPW, groupImage, groupLocation) 
                           VALUES(?,?,?,?,?,?,?,?,?)`, 
-                        [groupPublisher, groupID, groupName,
+                        [userToken, groupID, groupName,
                             groupNumber, groupClassification, groupSportType,
                             groupPW, groupImage, groupLocation],
             (error, results) => {
@@ -73,7 +73,7 @@ async function CreateGroupData(groupPublisher, groupID, groupName, groupNumber,
                     // 두 번째 쿼리: UsersOrganizations 테이블에 데이터 추가
                     connection.query(`INSERT INTO UsersOrganizations (userToken, groupToken, userPermission) 
                                       VALUES (?, ?, ?)`, 
-                                      [groupPublisher, groupToken, 2], (error) => {
+                                      [userToken, groupToken, 2], (error) => {
                         if (error) {
                             console.error('UsersOrganizations 데이터 추가 오류:', error);
                             return reject(error);

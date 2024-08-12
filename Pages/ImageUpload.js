@@ -28,10 +28,10 @@ async function imageUpload(functionType, userToken, imageData, extraData) {
             body: imageFormData  // formdata를 fetch 보낼 때는 content-type을 직접 명시하지 않고 전송
         });
 
-        data = await response.json();
+        const data = await response.json();
         
         if (data.result == 1) {
-            console.log('이미지 정보 되돌려주기')
+            console.log(data.resources['userImage'])
             return data.resources['userImage']
         } else {
             console.error('Image upload failed:', response.statusText);

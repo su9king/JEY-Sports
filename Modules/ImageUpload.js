@@ -22,6 +22,7 @@ module.exports = {
     ImageUpload: async (userToken,req, res) => {
         try {
             const JSONdata = JSON.parse(req.body.json); // JSON 데이터 파싱
+            
             const functionType = JSONdata["functionType"];
             let uploadDir;
             let result;
@@ -59,7 +60,9 @@ module.exports = {
 
             fs.renameSync(req.file.path, newFilePath); // 파일 이름 변경
             const resources = {userImage : `${fileName}${ext}`};
+            console.log("성공적입니다!")
             return {result : 1, resources : resources }
+            
             
         } catch (error) {
             console.error('Error in ImageUpload:', error); // 에러 로그 출력
@@ -70,7 +73,7 @@ module.exports = {
 };
 
 async function DBsave(functionType, Token , ext) {
-
+    
     const value = `${Token}${ext}`;
     let table, key, imageKey;
 
@@ -79,7 +82,7 @@ async function DBsave(functionType, Token , ext) {
         key = 'userToken';
         imageKey = 'userImage';
     } else if (functionType == 2) { // 조직 이미지 저장
-        console.log("DBSAVE 2 SIGN");
+
         table = 'Organizations';
         key = 'groupToken';
         imageKey = 'groupImage';

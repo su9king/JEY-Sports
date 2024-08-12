@@ -30,6 +30,7 @@ module.exports = {
             
 
         } else if (functionType == 3){ //유저 ID 중복 요청
+            console.log(data); 
             const userID = data["userID"];
 
             table = "Users"
@@ -38,6 +39,7 @@ module.exports = {
             return {result : result , resources : null};
 
         } else if (functionType == 4){ //조직 ID 중복 요청
+           console.log(data); 
             const groupID = data["groupID"];
 
             table = "Organizations"

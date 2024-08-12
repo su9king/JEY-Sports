@@ -227,7 +227,6 @@ app.get('/Certification' , async (req,res,next) => {
 
 
 // 이미지 업로드
-
 app.post('/ImageUpload', Modules["ImageUpload"].upload.single('Image'), async (req, res, next) => {
 
     console.log("ImageUpload sign")
@@ -236,14 +235,14 @@ app.post('/ImageUpload', Modules["ImageUpload"].upload.single('Image'), async (r
         const JSONdata = JSON.parse(req.body.json);
         const Imagedata = req.file;
         let userToken = JSONdata["userToken"];
-        
-        userToken = await checkToken(userToken, req);
 
+        userToken = await checkToken(userToken, req);
+      
         if (userToken !== 0) {
             if (!Imagedata) {
                 return res.status(400).send('파일이 업로드되지 않았습니다.');
+                
             }
-
             // ImageUpload 함수 호출
             const result = await Modules["ImageUpload"].ImageUpload(userToken,req, res);
             return res.status(200).send(result);
@@ -281,6 +280,7 @@ app.post('/CreateGroup', async(req,res,next) => {
     }
 });
 
+//데이터 변경
 app.post('/ChangeNormalData', async(req,res,next) => {
 
     console.log("ChangeNormalData sign");
@@ -327,17 +327,17 @@ app.post('/DeleteUser', async(req,res,next) => {
     
 })
 
-/// 개발중. 테스트를 위한 Default Code
+//그룹 삭제
 app.post('/DeleteGroup', async(req,res,next) => {
 
     console.log("DeleteGroup sign");
     try{
         const data = req.body;
         var userToken = data["userToken"]
-        var groupToken = 58
         userToken = await checkToken(userToken,req);
 
         if ( userToken != 0 ){
+            const groupToken = data["groupToken"];
             const result = await Modules["DeleteGroup"].DeleteGroup(userToken,groupToken);
             res.status(200).send(result);
         }else{
@@ -349,6 +349,7 @@ app.post('/DeleteGroup', async(req,res,next) => {
     
 })
 
+//그룹 공지사항 설정
 app.post('/EditGroupNotices', async(req,res,next) => {
 
     console.log("EditGroupNotices sign");
@@ -369,6 +370,7 @@ app.post('/EditGroupNotices', async(req,res,next) => {
     
 })
 
+//그룹 일정 설정
 app.post('/EditGroupSchedules', async(req,res,next) => {
 
     console.log("EditGroupSchedules sign");
@@ -389,6 +391,7 @@ app.post('/EditGroupSchedules', async(req,res,next) => {
     
 })
 
+//그룹 멤버 설정
 app.post('/EditGroupMembers', async(req,res,next) => {
 
     console.log("EditGroupMembers sign");

@@ -234,7 +234,7 @@ async function ChangeGroupPublisher(userToken,userID,groupToken) {
     return new Promise((resolve, reject) => {
         // 조직 창시자 변경
         connection.query(`UPDATE Organizations 
-                          SET groupPublisher = (SELECT userToken FROM Users WHERE userID = ?)
+                          SET userToken = (SELECT userToken FROM Users WHERE userID = ?)
                           WHERE groupToken = ?`, [userID,groupToken], 
             (error, results, fields) => {
                 if (error) {
