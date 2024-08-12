@@ -8,7 +8,7 @@ window.onload = async function() {
     userPermission = sessionStorage.getItem('userPermission');
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}`;
     
-    resources = await certification(page, data);
+    response = await certification(page, data);
 
     const urlParams = new URLSearchParams(window.location.search);
     noticeTitle = urlParams.get('noticeTitle');
@@ -20,12 +20,12 @@ window.onload = async function() {
 
 
     
-    if (resources.result == 0) {
+    if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
     } else {
-        loadSidebar(page, userPermission, resources);
-        // document.getElementById('noticeWriter').value = resources.resources[0]['userName'];
+        loadSidebar(page, userPermission, response);
+        // document.getElementById('noticeWriter').value = response.resources[0]['userName'];
             
         if (noticeTitle) {
             console.log('수정페이지로 접근');

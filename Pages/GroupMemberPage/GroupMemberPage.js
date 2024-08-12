@@ -9,19 +9,19 @@ window.onload = async function() {
 	userPermission = sessionStorage.getItem('userPermission');
 	const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}`;
 	
-	resources = await certification(page, data);
+	response = await certification(page, data);
 	
-	if (resources.result == 0) {
+	if (response.result == 0) {
 		alert('로그인 후 사용해주세요!');
 		window.location.href = '/WarningPage.html';
 		return;
 	}
 	
-	loadSidebar(page, userPermission, resources);
+	loadSidebar(page, userPermission, response);
 
 
 	// buffer에 잠깐 저장했다가 권한에 따라 리스트 따로 생성
-	resources.resources.forEach(resource => {
+	response.resources.forEach(resource => {
 		const buffer = {
 			userID: resource.userID,
 			userImage: resource.userImage,

@@ -9,15 +9,15 @@ window.onload = async function() {
     userPermission = sessionStorage.getItem('userPermission');
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}`;
     
-    resources = await certification(page, data);
+    response = await certification(page, data);
     
-    if (resources.result == 0) {
+    if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
     } else {
-        loadSidebar(page, userPermission, resources);
+        loadSidebar(page, userPermission, response);
 
-        schedules = resources.resources.map(resource => ({
+        schedules = response.resources.map(resource => ({
             scheduleToken: resource.scheduleToken,
             scheduleTitle: resource.scheduleTitle,
             scheduleStartDate: resource.scheduleStartDate,
