@@ -28,8 +28,8 @@ async function login() {
         if (data.result == 0) {  // 올바르지 않은 ID, PW 입력시 return = 0; 에러 메세지 노출
             alert("일치하는 정보가 없습니다.")    
         } else {
-            sessionStorage.setItem('userToken', data.userToken);
-            sessionStorage.setItem('userImage', data.userImage);
+            sessionStorage.setItem('userToken', data.resources.userToken);
+            sessionStorage.setItem('userImage', data.resources.userImage);
             alert("로그인 되었습니다!");
             window.location.href = 'PrivatePage/PrivatePage.html'; 
         }

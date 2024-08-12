@@ -30,7 +30,7 @@ async function imageUpload(functionType, userToken, imageData, extraData) {
 
         if (response.ok) {
             const result = await response.json();
-            console.log('Image uploaded successfully:', result);
+            console.log('Image uploaded successfully:');
         } else {
             console.error('Image upload failed:', response.statusText);
         }

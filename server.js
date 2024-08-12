@@ -245,8 +245,8 @@ app.post('/ImageUpload', Modules["ImageUpload"].upload.single('Image'), async (r
             }
 
             // ImageUpload 함수 호출
-            const result = await Modules["ImageUpload"].ImageUpload(req, res);
-            return res.status(200).send({ result: result });
+            const result = await Modules["ImageUpload"].ImageUpload(userToken,req, res);
+            return res.status(200).send(result);
         } else {
             return res.status(403).send({ result: 99, message: '인증 실패' });
         }
