@@ -6,7 +6,6 @@ const connection = require('../DatabaseLoad');
 // 메인 실행 코드
 module.exports = {
     ChangeNormalData : async(userToken,data) => {
-        console.log("기능이 존재하지 않습니다.")
         const functionType = data["functionType"];
         
         const setKey = data["setKey"];
@@ -61,7 +60,7 @@ async function editData(userToken,table,key,value) {
                     return reject(error);
 
                 } //쿼리 결과가 없다면 ID가 존재하지 않다는 뜻
-                if (results.length > 0) {
+                if (results.affectedRows > 0) {
                     resolve(1);
                 } else {
                     resolve(0);

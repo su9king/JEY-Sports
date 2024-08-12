@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setkey : "userName", setvalue : userName })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setKey : "userName", setvalue : userName })
                 });
     
                 data = await response.json();
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setkey : "userPW", setvalue : PW1 })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setKey : "userPW", setvalue : PW1 })
                     });
         
                     data = await response.json();
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const response = await fetch('/ChangeNormalData', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setkey : "userEmail", setvalue : userEmail })
+                        body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setKey : "userEmail", setvalue : userEmail })
                     });
         
                     data = await response.json();
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('/ChangeNormalData', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setkey : "userIntro", setvalue : userIntro })
+                    body: JSON.stringify({ functionType: functionType, userToken: userToken, userID: userID, setKey : "userIntro", setvalue : userIntro })
                 });
     
                 data = await response.json();

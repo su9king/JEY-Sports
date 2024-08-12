@@ -12,9 +12,9 @@ module.exports = {
 
         }else if (functionType == 2){// 공지사항 삭제
 
-            const userPermission = data["userPermission"];
+        
             if (userPermission == 2 || userPermission == 3){
-
+                console.log("작동")
                 const result = await DeleteNotice(noticeToken);
                 return {result : result , resources : null};
             }
