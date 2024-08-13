@@ -114,9 +114,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (data.result == 0) {
                     alert('다시 시도해주세요!');
-                } else {
+                } else if (data.result == 1)  {
                     alert('공지사항을 저장했습니다!');
                     window.location.href = "GroupNoticePage.html";
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);

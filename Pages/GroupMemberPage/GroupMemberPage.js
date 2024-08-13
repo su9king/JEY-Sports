@@ -155,9 +155,11 @@ async function displayMembers() {
 			
 						if (data.result == 0) {
 							alert('다시 시도해주세요!')
-						} else {
+						} else if (data.result == 1) {
 							alert(`멤버의 권한이 ${selectedText}(functionType == ${selectedValue})으로 변경되었습니다!`);
 							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -191,9 +193,11 @@ async function displayMembers() {
 			
 						if (data.result == 0) {
 							alert('다시 시도해주세요!')
-						} else {
+						} else if (data.result == 1)  {
 							alert(`삭제할 멤버의 userID: ${member.userID} 삭제 완료`);
 							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -274,8 +278,10 @@ async function displayMembers() {
 						if (data.result == 0) {
 							alert('다시 시도해주세요!')
 						} else if (data.result == 1) {
-							alert(`삭제할 멤버의 userID: ${member.userName} 삭제 완료`);
+							alert(`${member.userName} 조직 멤버에서 삭제 완료!`);
 							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -351,6 +357,8 @@ function loadnotUserMemberManageModal(notUserToken, OGuserName, OGuserPhone) {
 						} else if (data.result == 1) {
 							alert('이름이 변경되었습니다!');
 							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -392,6 +400,8 @@ function loadnotUserMemberManageModal(notUserToken, OGuserName, OGuserPhone) {
 						} else if (data.result == 1) {
 							alert(`전화번호 변경 완료!`);
 							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -506,9 +516,12 @@ function loadMemberManageModal() {
 			
 						if (data.result == 0) {
 							alert('다시 시도해주세요!')
-						} else {
+						} else if (data.result == 1)  {
 							alert(`${userID}님에게 초대 메세지를 보냈습니다!`);
 							document.getElementById("userID").value = '';
+							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -547,11 +560,13 @@ function loadMemberManageModal() {
 			
 						if (data.result == 0) {
 							alert('다시 시도해주세요!')
-						} else {
+						} else if (data.result == 1)  {
 							alert(`${userName}님을 비유저 회원으로 등록하였습니다!`);
 							document.getElementById("userName").value = '';
 							document.getElementById("userPhone").value = '';
 							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -638,9 +653,11 @@ async function displayParticipationRequests() {
 
 						if (data.result == 0) {
 							alert('다시 시도해주세요!');
-						} else {
+						} else if (data.result == 1) {
 							alert(`${request.userName}의 초대를 취소하였습니다!`);
 							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -717,9 +734,11 @@ async function displayParticipationRequests() {
 
 						if (data.result == 0) {
 							alert('다시 시도해주세요!');
-						} else {
+						} else if (data.result == 1) {
 							alert(`${request.userName}님의 참가가 승인되었습니다.`);
 							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -752,9 +771,11 @@ async function displayParticipationRequests() {
 
 						if (data.result == 0) {
 							alert('다시 시도해주세요!');
-						} else {
+						} else if (data.result == 1)  {
 							alert(`${request.userName}님의 참가가 거절되었습니다.`);
 							location.reload();
+						} else {
+							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
 						console.error('Error:', error);
@@ -841,9 +862,11 @@ async function displayParticipationRequests() {
 
 							if (data.result == 0) {
 								alert('다시 시도해주세요!')
-							} else {
+							} else if (data.result == 1)  {
 								alert(`멤버의 권한이 ${selectedText}(functionType == ${selectedValue})으로 변경되었습니다.`);
 								location.reload();
+							} else {
+								alert('관리자에게 문의해주세요')
 							}
 						} catch (error) {
 							console.error('Error:', error);
@@ -886,6 +909,8 @@ async function leaveGroup() {
 			} else if (data.result == 1) {
 				alert("조직을 탈퇴하였습니다.");
                 window.location.href = '/PrivatePage/PrivatePage.html';
+			} else {
+				alert('관리자에게 문의해주세요')
 			}
 		} catch (error) {
 			console.error('Error:', error);

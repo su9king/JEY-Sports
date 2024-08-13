@@ -15,8 +15,10 @@ async function logout() {
             sessionStorage.clear();
             alert("로그아웃 되었습니다!")
             window.location.href = '/LoginPage.html';
-        } else {
+        } else if (data.result == 0)  {
             alert('로그아웃 실패!')
+        } else {
+            alert('관리자에게 문의해주세요')
         }
     } catch (error) {
         console.error('Error:', error);

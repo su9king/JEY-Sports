@@ -122,8 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 if (data.result == 0) {  
                     alert('다시 시도해주세요!')
-                } else {
+                } else if (data.result == 1) {
                     alert('조직명이 성공적으로 수정되었습니다!')
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -184,6 +186,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         alert('사용가능한 ID입니다!')
                     } else if (data.result == 1) {
                         alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
+                    } else {
+                        alert('관리자에게 문의해주세요')
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -223,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (data.result == 0) {
                     alert('다시 시도해주세요!');
                 } else {
-                    alert('완전 오류!');
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -273,8 +277,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
                     if (data.result == 0) {  
                         alert('다시 시도해주세요!')
-                    } else {
+                    } else if (data.result == 1)  {
                         alert('userPW이 성공적으로 수정되었습니다!')
+                    } else {
+                        alert('관리자에게 문의해주세요')
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -322,8 +328,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 if (data.result == 0) {
                     alert('다시 시도해주세요!')
-                } else {
+                } else if (data.result == 1)  {
                     alert('조직소개가 성공적으로 수정되었습니다!')
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -384,6 +392,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('은행명 등록에 실패했습니다!');
                 } else if (numdata.result == 0) {
                     alert('계좌번호 등록에 실패했습니다!');
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
 
             } catch (error) {
@@ -418,6 +428,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (data.result == 1) {
                     alert('조직이 삭제 되었습니다! 그동안 이용해주셔서 감사합니다.')
                     window.location.href = '/PrivatePage/PrivatePage.html';
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);

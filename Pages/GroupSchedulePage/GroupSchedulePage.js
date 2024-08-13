@@ -136,9 +136,11 @@ async function displayScheduleDetails(scheduleToken) {
                 
                             if (data.result == 0) {
                                 alert('다시 시도해주세요!')
-                            } else {
+                            } else if (data.result == 1) {
                                 alert('일정이 삭제되었습니다!');
                                 window.location.reload(); // 삭제 후 페이지 새로고침
+                            } else {
+                                alert('관리자에게 문의해주세요')
                             }
                         } catch (error) {
                             console.error('Error:', error);
@@ -151,8 +153,10 @@ async function displayScheduleDetails(scheduleToken) {
             }
 
             modal.style.display = "block";
-        } else {
+        } else if (data.result == 0)  {
             alert('일정을 불러오지 못했습니다.');
+        } else {
+            alert('관리자에게 문의해주세요')
         }
     } catch (error) {
         console.error('Error:', error);

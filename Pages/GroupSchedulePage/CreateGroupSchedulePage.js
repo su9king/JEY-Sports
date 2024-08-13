@@ -69,14 +69,28 @@ document.addEventListener('DOMContentLoaded', function() {
     noEndDateCheckbox.addEventListener('change', function() {
         if (this.checked) {
             if (scheduleStartDateInput.value) {
-                // 체크박스가 체크 -> 종료 날짜와 시작 날짜 동일
+                // 체크박스가 체크 -> 종료 날짜와 시작 날짜 동일, 종료 날짜 비활성화
                 scheduleEndDateInput.value = scheduleStartDateInput.value;
+                scheduleEndDateInput.disabled = true;
             } else {
+                // 체크박스 체크 시 시작 날짜가 없는 경우
+                this.checked = false;
                 alert('시작 날짜를 선택해주세요!');
             }
-
+        } else {
+            // 체크박스가 언체크된 경우 -> 종료 날짜를 선택할 수 있도록 함
+            scheduleEndDateInput.disabled = false;
+            scheduleEndDateInput.value = '';
         }
     });
+
+    // 시작 날짜 변경 시 종료 날짜에 적용
+    scheduleStartDateInput.addEventListener('change', function() {
+        if (noEndDateCheckbox.checked) {
+            scheduleEndDateInput.value = this.value;
+        }
+    });
+
 
 
     // 시작 날짜가 종료 날짜보다 늦은 경우
@@ -133,9 +147,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (data.result == 0) {
                     alert('다시 시도해주세요!');
-                } else {
+                } else if (data.result == 1)  {
                     alert('일정을 저장했습니다!');
                     window.location.href = "GroupSchedulePage.html";
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);

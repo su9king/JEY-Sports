@@ -33,7 +33,7 @@ async function imageUpload(functionType, userToken, imageData, extraData) {
         if (data.result == 1) {
             console.log(data.resources['userImage'])
             return data.resources['userImage']
-        } else {
+        } else if (data.result == 0)  {
             console.error('Image upload failed:', response.statusText);
         }
     } catch (error) {

@@ -68,10 +68,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 data = await response.json();
     
-                if (data.result == 0) {
+                if (data.result == 0) {  // 사용 가능 (성공)
                     allowGroupID.style.display = 'block';
                     idCheck = true; 
-                } else {
+                } else if (data.result == 1) {
                     document.getElementById('groupID').value = '';
                     alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
                 }

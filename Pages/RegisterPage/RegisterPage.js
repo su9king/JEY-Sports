@@ -69,9 +69,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.result == 0) {  // 사용 가능한 ID
                     allowID.style.display = 'block';
                     idCheck = true;
-                } else {
+                } else if (data.result == 1)  {
                     document.getElementById('userID').value = '';
                     alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -142,6 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (data.result == 0) {
                 document.getElementById('code').value = '';
                 alert('옳지 않은 인증번호입니다. \n휴대폰 인증을 다시 시도해주세요!');
+            } else {
+                alert('관리자에게 문의해주세요')
             }
         } catch (error) {
             console.error('Error:', error);
@@ -301,8 +305,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.result == 1) {
                 alert("회원가입이 완료되었습니다!");
                 window.location.href = '/LoginPage.html'; 
-            } else {
+            } else if (data.result == 0) {
                 alert('다시 시도해주세요!');
+            } else {
+                alert('관리자에게 문의해주세요')
             }
 
         } else {

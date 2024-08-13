@@ -42,7 +42,7 @@ window.onload = async function() {
 
 }
 
-//////////////////// 로그아웃, 조직 생성 버튼 이벤트 추가 ////////////////////
+//////////////////// 조직 생성 버튼, 조직 검색 버튼 이벤트 추가 ////////////////////
 document.addEventListener('DOMContentLoaded', function() {
 
     const createGroupBtn = document.getElementById('createGroup');
@@ -52,6 +52,24 @@ document.addEventListener('DOMContentLoaded', function() {
     repuestGroupBtn.addEventListener('click', requestGroup);
 
 })
+
+// 조직 생성 버튼 함수 //
+function createGroupPage() {
+    window.location.href = '/CreateGroupPage/CreateGroupPage.html'
+}
+
+// 조직 참여 요청 버튼 함수 //
+function requestGroup() {
+    const overlay = document.getElementById('overlay');
+	const requestGroupModal = document.getElementById('requestGroupModal');
+    
+    overlay.classList.remove('hidden');
+    overlay.classList.add('visible');
+    requestGroupModal.classList.remove('hidden');
+    requestGroupModal.classList.add('visible');
+    loadRequestGroupModal();
+}
+
 
 
 //////////////////// 참여중인 그룹 참여 버튼 ////////////////////
@@ -63,6 +81,11 @@ function createGroupsButtons(groups) {
         const button = document.createElement('button');
         button.classList.add("btn");
         button.textContent = `Button ${group['groupName']}`;
+
+        if (group['userPermission'] == 2) {
+            button.style.backgroundColor = 'yellow';
+        }
+
         button.addEventListener('click', () => {
             alert(`group ${group['groupName']} selected`);
             sessionStorage.setItem('groupToken', group['groupToken'] );
@@ -74,7 +97,7 @@ function createGroupsButtons(groups) {
 }
 
 
-//////////////////// 초대 요청 그룹 표시 ////////////////////
+//////////////////// 초대 받은 그룹 표시 ////////////////////
 function createInvitedGroups(invitedGroups) {
     const invitedGroupsContainer = document.getElementById('invitedGroups-container');
     invitedGroupsContainer.innerHTML = '';
@@ -114,6 +137,8 @@ function createInvitedGroups(invitedGroups) {
                     } else if (data.result == 1) {
                         alert(`${group.groupName}에 참여하였습니다!`);
                         location.reload();
+                    } else {
+                        alert('관리자에게 문의해주세요')
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -142,6 +167,8 @@ function createInvitedGroups(invitedGroups) {
                     } else if (data.result == 1) {
                         alert(`${group.groupName}의 초대를 거절하였습니다!`);
                         location.reload();
+                    } else {
+                        alert('관리자에게 문의해주세요')
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -158,7 +185,7 @@ function createInvitedGroups(invitedGroups) {
 }
 
 
-//////////////////// 요청한 그룹 표시 ////////////////////
+//////////////////// 참여 요청한 그룹 표시 ////////////////////
 function createRequestGroups(requestGroups) {
     const requestGroupsContainer = document.getElementById('requestGroups-container');
     requestGroupsContainer.innerHTML = '';
@@ -195,9 +222,11 @@ function createRequestGroups(requestGroups) {
 
                     if (data.result == 0) {
                         alert('다시 시도해주세요!');
-                    } else {
+                    } else if (data.result == 1) {
                         alert(`${group.groupName}의 요청을 취소하였습니다.`);
                         location.reload();
+                    } else {
+                        alert('관리자에게 문의해주세요')
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -214,23 +243,8 @@ function createRequestGroups(requestGroups) {
 
 
 
-function createGroupPage() {
-    window.location.href = '/CreateGroupPage/CreateGroupPage.html'
-}
 
-function requestGroup() {
-    const overlay = document.getElementById('overlay');
-	const requestGroupModal = document.getElementById('requestGroupModal');
-    
-    overlay.classList.remove('hidden');
-    overlay.classList.add('visible');
-    requestGroupModal.classList.remove('hidden');
-    requestGroupModal.classList.add('visible');
-    loadRequestGroupModal();
-}
-
-
-////////////// 참여 요청 모달 열기 //////////////
+/////////////////////////////////// 참여 요청 모달 열기 ///////////////////////////////////
 function loadRequestGroupModal() {
 	fetch('RequestGroupModal.html') 
 		.then(response => response.text())
@@ -281,6 +295,7 @@ function loadRequestGroupModal() {
 
                         if (data.result == 0) {
                             alert('없는 ID 입니다!');
+                            groupPWSection.classList.add('hidden');
                             document.getElementById("groupID").value = '';
                         } else if (data.result == 1) {
                             groupPWSection.classList.remove('hidden');
@@ -319,6 +334,8 @@ function loadRequestGroupModal() {
                         } else if (data.result == 1) {
                             alert(`참여 요청이 완료되었습니다!`);
                             location.reload();
+                        } else {
+                            alert('관리자에게 문의해주세요')
                         }
                     } catch (error) {
                         console.error('Error:', error);

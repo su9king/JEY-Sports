@@ -124,6 +124,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('다시 시도해주세요!')
                 } else if (data.result == 1) {
                     alert('이름이 성공적으로 수정되었습니다!')
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -180,9 +182,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.result == 0) {  // 사용 가능한 ID
                     allowID.style.display = 'block';
                     idCheck = true;
-                } else {
+                } else if (data.result == 1)  {
                     document.getElementById('userID').value = '';
                     alert('이미 사용중인 ID입니다! \n다른 ID를 이용해주세요!')
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -216,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (data.result == 0) {
                     alert('다시 시도해주세요!');
                 } else {
-                    alert('완전 오류!');
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -270,8 +274,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
                     if (data.result == 0) {  
                         alert('다시 시도해주세요!')
-                    } else {
+                    } else if (data.result == 1)  {
                         alert('userPW이 성공적으로 수정되었습니다!')
+                    } else {
+                        alert('관리자에게 문의해주세요')
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -327,8 +333,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
                     if (data.result == 0) {
                         alert('다시 시도해주세요!')
-                    } else {
+                    } else if (data.result == 1)  {
                         alert('userMail이 성공적으로 수정되었습니다!')
+                    } else {
+                        alert('관리자에게 문의해주세요')
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -373,8 +381,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 if (data.result == 0) {
                     alert('다시 시도해주세요!')
-                } else {
+                } else if (data.result == 1)  {
                     alert('자기소개가 성공적으로 수정되었습니다!')
+                } else {
+                    alert('관리자에게 문의해주세요')
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -419,8 +429,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             sessionStorage.clear();
                             alert('회원 탈퇴 되었습니다! 그동안 이용해주셔서 감사합니다.')
                             window.location.href = '/LoginPage.html';
-                        } else {
+                        } else if (data.result == 0)  {
                             alert('로그아웃 실패!')
+                        } else {
+                            alert('관리자에게 문의해주세요')
                         }
                     } catch (error) {
                         console.error('Error:', error);
