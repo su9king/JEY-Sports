@@ -1,3 +1,4 @@
+//필요한 모듈 선언
 const connection = require('../DatabaseLoad');
 
 // 메인 실행 코드.

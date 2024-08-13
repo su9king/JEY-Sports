@@ -220,7 +220,13 @@
   background: #2980b9;
 }
 
+.decline-button {
+  background-color: #f44336; /* 거절 버튼 색상 */
+}
 
+.decline-button:hover {
+  background-color: #e53935;
+}
 
 
 

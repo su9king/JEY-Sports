@@ -315,7 +315,7 @@ app.post('/DeleteUser', async(req,res,next) => {
         userToken = await checkToken(userToken,req);
 
         if ( userToken != 0 ){
-            const result = await Modules["DeleteUser"].DeleteUser(userToken)
+            const result = await Modules["DeleteUser"].DeleteUser(userToken,data)
             res.status(200).send(result);
         }else{
             res.status(200).send({result : 99 , message : "로그인 바랍니다."});
@@ -404,6 +404,69 @@ app.post('/EditGroupMembers', async(req,res,next) => {
 
         if ( userToken != 0 ){
             const result = await Modules["EditGroupMembers"].EditGroupMembers(userToken,groupToken,userPermission,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//유저 조직 참가 관련 설정
+app.post('/JoinGroup', async(req,res,next) => {
+
+    console.log("JoinGroup sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["JoinGroup"].JoinGroup(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//유저 조직 참가 거부 및 취소 설정
+app.post('/RefuseMember', async(req,res,next) => {
+
+    console.log("RefuseMember sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["RefuseMember"].RefuseMember(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//조직 탈퇴하기
+app.post('/LeaveGroup', async(req,res,next) => {
+
+    console.log("RefuseMember sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["LeaveGroup"].LeaveGroup(userToken,data);
             res.status(200).send(result);
         }else{
             res.status(200).send({result : 99 , message : "로그인 바랍니다."});

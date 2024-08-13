@@ -1,3 +1,4 @@
+//필요한 모듈 선언
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -60,7 +61,6 @@ module.exports = {
 
             fs.renameSync(req.file.path, newFilePath); // 파일 이름 변경
             const resources = {userImage : `${fileName}${ext}`};
-            console.log("성공적입니다!")
             return {result : 1, resources : resources }
             
             
@@ -71,6 +71,8 @@ module.exports = {
     },
     upload // multer 미들웨어를 export
 };
+
+//==================================================함수 선언 파트
 
 async function DBsave(functionType, Token , ext) {
     

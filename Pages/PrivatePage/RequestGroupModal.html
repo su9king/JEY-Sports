@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="stylesheet" href="PrivatePage.css">
+    <script src="PrivatePage.js"></script>
+</head>
+<body>
+    <div class="modal-content">
+        <h2>조직 참가하기</h2>
+
+        <div id="register-container">
+            <label for="groupID">조직 ID: </label>
+            <input type="text" id="groupID" placeholder="조직 ID를 입력하세요"><br>
+            <button class="basicBtn" id="groupIDBtn">조직 ID 검색</button><br>
+        
+            <div id="groupPWSection" class="hidden">
+                <label for="groupPW">조직 PW: </label>
+                <input type="text" id="groupPW" placeholder="조직 PW를 입력하세요, 없다면 비우고 버튼을 눌러 주세요!"><br>
+                <button class="basicBtn" id="groupPWBtn">참여 요청 보내기</button>
+            </div>
+        </div>
+        
+
+        <br><button id="closeModalBtn">닫기</button>
+    </div>
+
+</body>
+</html>

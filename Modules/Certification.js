@@ -30,7 +30,7 @@ module.exports = {
             }else{
                 return {result : 1 , resources : data};
             }
-            
+        
 
         }else if (page == "EditUserPage"){
             
@@ -45,7 +45,8 @@ module.exports = {
         }else if (page == "GroupMemberPage"){
             const groupToken = query["groupToken"];
             const data = await GroupMemberPage(groupToken);
-            return {result : 1 , resources : data};
+            const data2 = await GroupMemberPage2(groupToken);
+            return {result : 1 , resources : [data,data2]};
 
         }else if (page == "GroupSchedulePage"){
             const groupToken = query["groupToken"];
@@ -69,7 +70,7 @@ module.exports = {
     }
 };
 
-
+//==================================================함수 선언 파트
 
 async function PrivatePage(userToken){
     return new Promise((resolve, reject) => {
@@ -187,6 +188,7 @@ async function EditGroupPage(groupToken){
 }
 
 
+//조직의 소프트웨어 유저 불러오기
 async function GroupMemberPage(groupToken){
 
     return new Promise((resolve, reject) => {
@@ -194,6 +196,28 @@ async function GroupMemberPage(groupToken){
                           FROM Users AS usr
                           JOIN UsersOrganizations AS usrorg ON usrorg.userToken = usr.userToken
                           WHERE usrorg.groupToken = ?`, [groupToken],
+            (error, results, fields) => {
+                if (error) {
+                    console.error('쿼리 실행 오류:', error);
+                    return reject(error);
+
+                } //쿼리 결과가 없다면 그룹 토큰이 잘못 됨.
+                if (results.length > 0) {
+                    resolve(results);
+                } else {
+                    resolve(null);
+                }
+            }
+        );
+    })
+}
+//조직의 소프트웨어 비유저 불러오기
+async function GroupMemberPage2(groupToken){
+
+    return new Promise((resolve, reject) => {
+        connection.query(
+            `SELECT notUserToken,userName,userPhone FROM NotUsersOrganizations
+            WHERE groupToken = ?`, [groupToken],
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);
@@ -229,7 +253,6 @@ async function GroupSchedulePage(groupToken){
                         schedule.scheduleStartDate = moment(schedule.scheduleStartDate).tz('Asia/Seoul').format('YYYY-MM-DD');
                         schedule.scheduleEndDate = moment(schedule.scheduleEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
                     });
-                    console.log(results);
                     resolve(results);
                 } else {
                     resolve(null);

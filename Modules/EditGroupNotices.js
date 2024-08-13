@@ -1,3 +1,4 @@
+//필요한 모듈 선언
 const connection = require('../DatabaseLoad');
 
 // 메인 실행 코드
@@ -107,7 +108,7 @@ async function CreateNotice(data) {
         );
     });
 }
-
+//==================================================함수 선언 파트
 async function EditNotice(data) {
     return new Promise((resolve, reject) => {
         // 일정 수정하기

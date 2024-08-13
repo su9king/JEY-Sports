@@ -62,7 +62,7 @@ module.exports = {
     }
 };
 
-//데이터 중복확인
+//==================================================함수 선언 파트
 
 //회원가입
 async function registerUser(userID,userPW,userPhone,userGender,userBirth,userMail,userAddress,

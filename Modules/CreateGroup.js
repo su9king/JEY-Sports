@@ -46,7 +46,7 @@ module.exports = {
         
     }
 };
-
+//==================================================함수 선언 파트
 async function CreateGroupData(userToken, groupID, groupName, groupNumber,
     groupClassification, groupSportType, groupPW, groupImage, groupLocation, userToken) {
     

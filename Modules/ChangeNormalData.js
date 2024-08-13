@@ -12,7 +12,7 @@ module.exports = {
         const setValue = data["setValue"];
 
         if (functionType == 1){ //일반 유저 데이터 수정
-            const result = await editData(userToken,"Users",setKey,setValue);
+            const result = await editData("userToken",userToken,"Users",setKey,setValue);
             return {result : result};
 
         } else if (functionType == 2){ //조직 데이터 수정
@@ -21,7 +21,7 @@ module.exports = {
 
             if (userPermission == 2){
 
-                const result = await editData(groupToken,"Organizations",setKey,setValue);
+                const result = await editData("groupToken",groupToken,"Organizations",setKey,setValue);
                 return {result : result , resources : null};
 
             } else{ //조직 데이터 수정 권한 없음.
@@ -30,7 +30,7 @@ module.exports = {
             
 
         } else if (functionType == 3){ //유저 ID 중복 요청
-            console.log(data); 
+          
             const userID = data["userID"];
 
             table = "Users"
@@ -39,24 +39,39 @@ module.exports = {
             return {result : result , resources : null};
 
         } else if (functionType == 4){ //조직 ID 중복 요청
-           console.log(data); 
+         
             const groupID = data["groupID"];
 
             table = "Organizations"
             data = {groupID : groupID};
             const result = await CheckDuplicate(table,data);
             return {result : result , resources : null};
+        } else if (functionType == 5){ //소프트웨어 비유저 데이터 수정
+
+            const userPermission = data["userPermission"];
+            const notUserToken = data["notUserToken"];
+
+            if (userPermission == 1 || userPermission == 2){
+                const result = await editData("notUserToken",notUserToken,"NotUsersOrganizations",setKey,setValue);
+                return {result : result , resources : null};
+            }else{
+                return {result : 0 , resources : null};
+            }
+ 
+
+        }else{// functionType 잘못됨
+            return {result : 0 , resources : null}; 
         }
 
     }
 };
-
+//==================================================함수 선언 파트
 
 //일반 데이터 수정
-async function editData(userToken,table,key,value) {
+async function editData(token,userToken,table,key,value) {
     return new Promise((resolve, reject) => {
 
-        connection.query('UPDATE ?? SET ?? = ? WHERE ?? = ?', [table,key,value,"userToken",userToken],
+        connection.query('UPDATE ?? SET ?? = ? WHERE ?? = ?', [table,key,value,token,userToken],
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);
@@ -72,4 +87,3 @@ async function editData(userToken,table,key,value) {
         );
     });
 }
-

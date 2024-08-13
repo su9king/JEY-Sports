@@ -12,10 +12,26 @@
 <body>
     <div class="content">
         <button class="btn" id="createGroup">그룹등록</button>
+        <button class="btn" id="repuestGroup">그룹참여</button>
 
         <div>
-            <li><div id="button-container"></div></li>
+            <h2>참여된 조직</h2>
+            <div id="button-container"></div></li>
         </div>
+        
+        <div>
+            <h2>참여 요청한 조직</h2>
+            <div id="requestGroups-container"></div></li>
+        </div>
+        
+        <div>
+            <h2>초대받은 조직</h2>
+            <div id="invitedGroups-container"></div></li>
+        </div>
+        
+
+        <div id="overlay" class="overlay hidden"></div>
+        <div id="requestGroupModal" class="modal hidden"></div>
 
         <div id="sidebar"></div>
         <button id="toggleButton" onclick="toggleSidebar()" >☰</button>

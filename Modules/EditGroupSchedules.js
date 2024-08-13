@@ -1,3 +1,4 @@
+//필요한 모듈 선언
 const connection = require('../DatabaseLoad');
 
 // 메인 실행 코드
@@ -60,6 +61,7 @@ async function LoadSchedule(scheduleToken) {
         );
     });
 }
+//==================================================함수 선언 파트
 
 async function DeleteSchedule(scheduleToken) {
     return new Promise((resolve, reject) => {

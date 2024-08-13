@@ -1,3 +1,4 @@
+//필요한 모듈 선언
 const connection = require('../DatabaseLoad');
 
 // 메인 실행 코드 
@@ -108,6 +109,8 @@ module.exports = {
         } 
     }
 };
+
+
 ////////////////////////////// 함수 선언 파트 
 async function KickUser(userID,groupToken) {
     return new Promise((resolve, reject) => {
@@ -155,7 +158,7 @@ async function AcceptUser(userID,groupToken) {
         );
     });
 }
-
+//==================================================함수 선언 파트
 async function InviteUser(userID,groupToken) {
     return new Promise((resolve, reject) => {
         // 유저 ID 기반으로 초대 발송
