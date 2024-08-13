@@ -524,6 +524,7 @@ function loadMemberManageModal() {
 							alert('관리자에게 문의해주세요')
 						}
 					} catch (error) {
+						alert('ID가 존재하지 않거나, 이미 초대한 멤버입니다.')
 						console.error('Error:', error);
 					}
 					
