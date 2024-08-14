@@ -459,7 +459,7 @@ app.post('/RefuseMember', async(req,res,next) => {
 //조직 탈퇴하기
 app.post('/LeaveGroup', async(req,res,next) => {
 
-    console.log("RefuseMember sign");
+    console.log("LeaveGroup sign");
     try{
         const data = req.body;
         var userToken = data["userToken"]
@@ -467,6 +467,217 @@ app.post('/LeaveGroup', async(req,res,next) => {
 
         if ( userToken != 0 ){
             const result = await Modules["LeaveGroup"].LeaveGroup(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//현재 조직상태 조회하기
+app.post('/CheckGroupStatus', async(req,res,next) => {
+
+    console.log("CheckGroupStatus sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["CheckGroupStatus"].CheckGroupStatus(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//일정-출석 데이터 생성
+app.post('/CreateAttendanceList', async(req,res,next) => {
+
+    console.log("CreateAttendanceList sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["CreateAttendanceList"].CreateAttendanceList(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+// 공지사항 타입2- 회비 데이터 생성
+app.post('/CreateDuesList', async(req,res,next) => {
+
+    console.log("CreateDuesList sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["CreateDuesList"].CreateDuesList(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+// 공지사항 타입2 or 출석일정 데이터 삭제 
+app.post('/DeleteContent', async(req,res,next) => {
+
+    console.log("DeleteContent sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["DeleteContent"].DeleteContent(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//출석 데이터 수정
+app.post('/EditAttendanceList', async(req,res,next) => {
+
+    console.log("EditAttendanceList sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["EditAttendanceList"].EditAttendanceList(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//회비 데이터 수정
+app.post('/EditDuesList', async(req,res,next) => {
+
+    console.log("EditDuesList sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["EditDuesList"].EditDuesList(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//유저 출석하기 관련 요청
+app.post('/Attend', async(req,res,next) => {
+
+    console.log("Attend sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["Attend"].Attend(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+
+//유저 회비 지출 관련 요청
+app.post('/Dues', async(req,res,next) => {
+
+    console.log("Dues sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["Dues"].Dues(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//유저 회비 돌려주기 관련 요청
+app.post('/ReturnDues', async(req,res,next) => {
+
+    console.log("ReturnDues sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["ReturnDues"].ReturnDues(userToken,data);
+            res.status(200).send(result);
+        }else{
+            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
+        }
+    }catch(error){
+        next(error);
+    }
+    
+})
+
+//알림 관련 요청
+app.post('/SendAlarm', async(req,res,next) => {
+
+    console.log("SendAlarm sign");
+    try{
+        const data = req.body;
+        var userToken = data["userToken"]
+        userToken = await checkToken(userToken,req);
+
+        if ( userToken != 0 ){
+            const result = await Modules["SendAlarm"].SendAlarm(userToken,data);
             res.status(200).send(result);
         }else{
             res.status(200).send({result : 99 , message : "로그인 바랍니다."});
