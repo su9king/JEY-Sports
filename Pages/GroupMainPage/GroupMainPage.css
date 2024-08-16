@@ -28,6 +28,62 @@ body {
     padding: 20px;
 }
 
+/* -----------------------현재 상태----------------------- */
+/* 공통 스타일 */
+.noticeBox, .scheduleBox {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notice-title, .schedule-info {
+    margin: 0;
+    font-weight: bold;
+}
+
+.notice-info, .schedule-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.pay-button, .attend-button, .absent-button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pay-button:hover, .attend-button:hover, .absent-button:hover {
+    background-color: #0056b3;
+}
+
+/* 컨테이너 제목 스타일 */
+.dues-title, .schedule-title {
+    font-size: 1.5em;
+    margin-bottom: 16px;
+}
+
+#dues-container, #current-schedule-container, #expected-schedule-container {
+    padding: 16px;
+}
+
+/* 오늘 일정 컨테이너 색상 강조 */
+#current-schedule-container {
+    background-color: #e0f7fa;
+}
+
+#expected-schedule-container {
+    background-color: #f1f8e9;
+}
+
 
 
 /* -----------------------이전 버튼----------------------- */

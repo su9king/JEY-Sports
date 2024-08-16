@@ -12,6 +12,8 @@ window.onload = async function() {
 
     const urlParams = new URLSearchParams(window.location.search);
 
+    const scheduleAttendance = urlParams.get('scheduleAttendance');
+    console.log(scheduleAttendance)
     const scheduleTitle = urlParams.get('scheduleTitle');
     const scheduleStartDate = urlParams.get('scheduleStartDate');
     const scheduleEndDate = urlParams.get('scheduleEndDate');
@@ -30,6 +32,7 @@ window.onload = async function() {
         
         if (scheduleTitle) {
             console.log('수정페이지로 접근');
+            document.getElementById('scheduleAttendance').value = scheduleAttendance;
             document.getElementById('scheduleTitle').value = scheduleTitle;
             document.getElementById('scheduleStartDate').value = scheduleStartDate;
             document.getElementById('scheduleEndDate').value = scheduleEndDate;
@@ -52,6 +55,7 @@ window.onload = async function() {
 //////////////////// Step1 : 페이지 구성 요소 생성 ////////////////////
 document.addEventListener('DOMContentLoaded', function() {
 
+    const scheduleAttendance = document.getElementById('scheduleAttendance');
     const scheduleStartDateInput = document.getElementById('scheduleStartDate');
     const scheduleEndDateInput = document.getElementById('scheduleEndDate');
     const noEndDateCheckbox = document.getElementById('noEndDate');
@@ -110,8 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
     scheduleSaveBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
-        const functionType = 3;
-
         const scheduleTitle = document.getElementById('scheduleTitle').value;
         const scheduleStartDate = document.getElementById('scheduleStartDate').value;
         const scheduleEndDate = noEndDateCheckbox.checked ? scheduleStartDateInput.value : scheduleEndDateInput.value;
@@ -132,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         userToken: userToken,
                         groupToken: groupToken,
                         scheduleToken: scheduleToken,
+                        scheduleAttendance: scheduleAttendance,
                         scheduleTitle: scheduleTitle,
                         scheduleStartDate: scheduleStartDate,
                         scheduleEndDate: scheduleEndDate,
@@ -159,5 +162,11 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             alert('모든 칸을 채워주세요!');
         }
+    });
+
+    const noticeCancleBtn = document.getElementById('noticeCancleBtn');
+    noticeCancleBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        window.location.href = "GroupSchedulePage.html";
     });
 });

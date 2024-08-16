@@ -98,6 +98,10 @@ async function displayScheduleDetails(scheduleToken) {
             const scheduleStatus = currentSchedule.scheduleStatus;
             const scheduleContent = scheduleDetails.scheduleContent;
             const scheduleLocation = scheduleDetails.scheduleLocation;
+            const scheduleAttendance = scheduleDetails.scheduleAttendance;
+            console.log(scheduleDetails.scheduleAttendance)
+            console.log(scheduleAttendance)
+
 
             const importanceText = scheduleImportance == true ? '중요' : '일반';
             const alertText = scheduleAlert == true ? '알람 예정' : '알람 없음';
@@ -120,7 +124,7 @@ async function displayScheduleDetails(scheduleToken) {
                 deleteEventButton.style.display = "inline-block";
 
                 saveButton.onclick = function() {
-                    window.location.href = `CreateGroupSchedulePage.html?scheduleTitle=${scheduleTitle}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheduleImportance=${scheduleImportance}&scheduleAlert=${scheduleAlert}&scheduleContent=${scheduleContent}&scheduleLocation=${scheduleLocation}&scheduleStatus=${scheduleStatus}&scheduleToken=${scheduleToken}`;
+                    window.location.href = `CreateGroupSchedulePage.html?scheduleTitle=${scheduleTitle}&scheduleAttendance=${scheduleAttendance}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheduleImportance=${scheduleImportance}&scheduleAlert=${scheduleAlert}&scheduleContent=${scheduleContent}&scheduleLocation=${scheduleLocation}&scheduleStatus=${scheduleStatus}&scheduleToken=${scheduleToken}`;
                 }
 
                 deleteEventButton.onclick = async function() {
@@ -129,7 +133,7 @@ async function displayScheduleDetails(scheduleToken) {
                             const response = await fetch('/EditGroupSchedules', {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
-                                body: JSON.stringify({ functionType: 2, userToken: userToken, scheduleToken: scheduleToken, groupToken: groupToken, userPermission: userPermission })
+                                body: JSON.stringify({ functionType: 2, userToken: userToken, scheduleToken: scheduleToken, groupToken: groupToken, userPermission: userPermission, scheduleAttendance: scheduleAttendance })
                             });
                 
                             const data = await response.json();
