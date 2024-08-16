@@ -2,8 +2,8 @@
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
-  host: '172.30.1.2', // 데이터베이스 호스트
-  user: 'su9king',      // 데이터베이스 사용자
+  host: '127.0.0.1', // 데이터베이스 호스트
+  user: 'root',      // 데이터베이스 사용자
   password: '123456', // 데이터베이스 비밀번호
   database: 'JEYSportDB', // 데이터베이스 이름
   port : 3306,

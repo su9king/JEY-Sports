@@ -7,6 +7,7 @@ const express = require('express');
 const session = require('express-session')
 const path = require('path');
 const fs = require('fs');
+const WebSocket = require('ws');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const DeleteGroup = require('./Modules/DeleteGroup');
@@ -113,7 +114,7 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 443;
 server.listen(PORT, () => console.log(`\n서버 작동 성공 , 현재 포트 : ${PORT} 에서 작동중입니다.`));
 httpServer.listen(80,() => console.log(`서버 작동 성공 , 현재 포트 : ${80} 에서 작동중입니다.`));
-
+const wss = new WebSocket.Server({ server });
 
 
 
@@ -624,3 +625,21 @@ app.post('/SendAlarm', async(req,res,next) => {
     }
     
 })
+
+//WebSocket 연결
+wss.on('connection', (ws) => {
+    console.log("클라이언트가 연결되었습니다.");
+
+    ws.on('message', (message) => {
+        const textMessage = message.toString();
+        console.log("받은 메시지:", textMessage);
+        // 메시지를 받은 경우 모든 클라이언트에 전송
+        wss.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                console.log("전송할 메시지:", textMessage); // 추가된 로그
+                client.send(textMessage);
+            }
+        });
+    });
+    
+});

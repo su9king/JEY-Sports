@@ -1,6 +1,15 @@
 let groups = [];
 let invitedGroups = [];
 let requestGroups = [];
+let ws = new WebSocket('ws://127.0.0.1');
+
+ws.onmessage = function(event) {
+    const messagesList = document.getElementById('messages');
+    const newMessage = document.createElement('li');
+    newMessage.textContent = event.data;
+    messagesList.appendChild(newMessage);
+};
+
 
 window.onload = async function() {
     const page = 'PrivatePage';
@@ -32,10 +41,13 @@ window.onload = async function() {
                 requestGroups.push(buffer);
             }
         });
-
+        
         createGroupsButtons(groups);
         createInvitedGroups(invitedGroups);
         createRequestGroups(requestGroups);
+        ws.send("사용자가 접속하였습니다.")
+
+        
 
     }
     
