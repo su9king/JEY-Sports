@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         scheduleImportance: scheduleImportance,
                         scheduleAlert: scheduleAlert,
                         scheduleContent: scheduleContent,
-                        scheduleLocation: scheduleLocation,
+                        scheduleLocation: scheduleLocation
                         // scheduleStatus: scheduleStatus
                     })
                 });

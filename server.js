@@ -498,69 +498,6 @@ app.post('/CheckGroupStatus', async(req,res,next) => {
     
 })
 
-//일정-출석 데이터 생성
-app.post('/CreateAttendanceList', async(req,res,next) => {
-
-    console.log("CreateAttendanceList sign");
-    try{
-        const data = req.body;
-        var userToken = data["userToken"]
-        userToken = await checkToken(userToken,req);
-
-        if ( userToken != 0 ){
-            const result = await Modules["CreateAttendanceList"].CreateAttendanceList(userToken,data);
-            res.status(200).send(result);
-        }else{
-            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
-        }
-    }catch(error){
-        next(error);
-    }
-    
-})
-
-// 공지사항 타입2- 회비 데이터 생성
-app.post('/CreateDuesList', async(req,res,next) => {
-
-    console.log("CreateDuesList sign");
-    try{
-        const data = req.body;
-        var userToken = data["userToken"]
-        userToken = await checkToken(userToken,req);
-
-        if ( userToken != 0 ){
-            const result = await Modules["CreateDuesList"].CreateDuesList(userToken,data);
-            res.status(200).send(result);
-        }else{
-            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
-        }
-    }catch(error){
-        next(error);
-    }
-    
-})
-
-// 공지사항 타입2 or 출석일정 데이터 삭제 
-app.post('/DeleteContent', async(req,res,next) => {
-
-    console.log("DeleteContent sign");
-    try{
-        const data = req.body;
-        var userToken = data["userToken"]
-        userToken = await checkToken(userToken,req);
-
-        if ( userToken != 0 ){
-            const result = await Modules["DeleteContent"].DeleteContent(userToken,data);
-            res.status(200).send(result);
-        }else{
-            res.status(200).send({result : 99 , message : "로그인 바랍니다."});
-        }
-    }catch(error){
-        next(error);
-    }
-    
-})
-
 //출석 데이터 수정
 app.post('/EditAttendanceList', async(req,res,next) => {
 
@@ -571,7 +508,7 @@ app.post('/EditAttendanceList', async(req,res,next) => {
         userToken = await checkToken(userToken,req);
 
         if ( userToken != 0 ){
-            const result = await Modules["EditAttendanceList"].EditAttendanceList(userToken,data);
+            const result = await Modules["EditAttendanceList"].EditAttendanceList(data);
             res.status(200).send(result);
         }else{
             res.status(200).send({result : 99 , message : "로그인 바랍니다."});
@@ -592,7 +529,7 @@ app.post('/EditDuesList', async(req,res,next) => {
         userToken = await checkToken(userToken,req);
 
         if ( userToken != 0 ){
-            const result = await Modules["EditDuesList"].EditDuesList(userToken,data);
+            const result = await Modules["EditDuesList"].EditDuesList(data);
             res.status(200).send(result);
         }else{
             res.status(200).send({result : 99 , message : "로그인 바랍니다."});

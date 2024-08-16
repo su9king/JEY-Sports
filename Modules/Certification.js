@@ -265,7 +265,7 @@ async function GroupSchedulePage(groupToken){
 async function GroupNoticePage(groupToken){
 
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT noticeToken , noticeTitle, noticeStatus, noticeImportance, noticeEditDate
+        connection.query(`SELECT noticeToken , noticeTitle, noticeStatus, noticeImportance, noticeEditDate , noticeType
                           FROM Notices 
                           WHERE groupToken = ?`, [groupToken],
             (error, results, fields) => {

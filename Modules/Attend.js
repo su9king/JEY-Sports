@@ -1,31 +1,70 @@
 //필요한 모듈 선언
 const connection = require('../DatabaseLoad');
 
-// 메인 실행 코드. 그냥 복사 붙여넣기 용
+// 메인 실행 코드
 module.exports = {
-    Attend : async(data) => {
-        console.log("기능이 존재하지 않습니다.")
+    Attend : async(userToken,data) => {
+        const scheduleToken = data["scheduleToken"];
+        const functionType = data["functionType"];
 
-        //복사 붙여넣기 용 
+        if (functionType == 1){
+            const result = await Attend(scheduleToken,userToken);
+            return result;
+
+        } else if (functionType == 2){
+            const absentReason = data["absentReason"];
+            const result = await Absent(scheduleToken,userToken,absentReason);
+            return result;
+
+        }else{
+            return {result : 0 , resources : null};
+        }
+        
+        
+        //출석하기 attendanceStatus = true 값으로 변경
+    
         
     }
 };
 
-// SQL 구문 그냥 복사 붙여넣기 용
-return new Promise((resolve, reject) => {
-    connection.query('?', [userToken], 
-        (error, results, fields) => {
-            if (error) {
-                console.error('쿼리 실행 오류:', error);
-                return reject(error);
-            }
+async function Attend(scheduleToken,userToken) {
+    return new Promise((resolve, reject) => {
+        connection.query(`UPDATE AttendanceUsers SET attendanceStatus = true
+            WHERE scheduleToken = ? and userToken = ?`, [scheduleToken,userToken], 
+            (error, results, fields) => {
+                if (error) {
+                    console.error('쿼리 실행 오류:', error);
+                    return reject(error);
+                }
 
-            
-            if (results.affectedRows > 0) {
-                resolve({result : 1,resources : null});  
-            } else {
-                resolve({result : 0 , resources : null});  
+                
+                if (results.affectedRows > 0) {
+                    resolve({result : 1,resources : null});  
+                } else {
+                    resolve({result : 0 , resources : null});  
+                }
             }
-        }
-    );
-});
+        );
+    });
+}
+
+async function Absent(scheduleToken,userToken,absentReason) {
+    return new Promise((resolve, reject) => {
+        connection.query(`UPDATE AttendanceUsers SET attendanceStatus = false , absentReason = ?
+            WHERE scheduleToken = ? and userToken = ?`, [absentReason,scheduleToken,userToken], 
+            (error, results, fields) => {
+                if (error) {
+                    console.error('쿼리 실행 오류:', error);
+                    return reject(error);
+                }
+
+                
+                if (results.affectedRows > 0) {
+                    resolve({result : 1,resources : null});  
+                } else {
+                    resolve({result : 0 , resources : null});  
+                }
+            }
+        );
+    });
+}

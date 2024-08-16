@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         noticeWriter: noticeWriter,
                         noticeEndDate: noticeEndDate,
                         noticeCreatedDate: noticeCreatedDate,
-                        noticeEditDate: noticeEditDate
+                        noticeEditDate: noticeEditDate,
                     })
                 });
 

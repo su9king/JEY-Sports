@@ -1,5 +1,7 @@
 //필요한 모듈 선언
 const connection = require('../DatabaseLoad');
+const { CreateDuesList } = require('./CreateDuesList.js');
+const { DeleteContent } = require('./DeleteContent.js');
 
 // 메인 실행 코드
 module.exports = {
@@ -15,17 +17,49 @@ module.exports = {
             const userPermission = data["userPermission"]
         
             if (userPermission == 1 || userPermission == 2){
-                const result = await DeleteNotice(noticeToken);
-                return {result : result , resources : null};
+                if (data["noticeType"] == 2){ // 회비 공지사항이라면
+                    var result1 = await DeleteContent(noticeToken,2);
+                    
+                }else{
+                    var result1 = 1;
+                }
+                if (result1 == 1){ //출석 데이터가 정상적으로 삭제됨. or 원래 없었음.
+                    const result2 = await DeleteNotice(noticeToken);
+                    return {result : result2 , resources : null};
+                }
             }
+
 
         }else if (functionType == 3){//공지사항 수정, 공지사항 저장
             const userPermission = data["userPermission"];
+            const noticeType = data["noticeType"];
             if (userPermission == 1 || userPermission == 2){
                 
-                if (noticeToken == null){
-                    const result = await CreateNotice(data);
-                    return {result : result , resources : null};
+                if (noticeToken == null){ // noticeToken 이 존재하지 않다면, 공지사항을 새로 생성하는 동작임.
+
+                    if (noticeType == 2){ 
+
+                        const result1 = await CreateNotice(data);
+                        const result2 = await CreateDuesList(result1,data["groupToken"]);
+
+
+                        if (result2.result == 0){//회비 데이터를 생성하지 못했다면,
+                            const result = await DeleteNotice(result1);
+                            return {result : 0 , resources : null};
+                        }else{
+                            return result2;
+                        }
+
+                    }else{// 회계타입 1,3,4 공지사항 생성
+                        const result = await CreateNotice(data);
+
+                        if (result != 0){
+                            return {result : 1 , resources : null};
+                        }else{
+                            return {result : 0 , resources : null};
+                        }
+                    }
+                    
                 }else{
                     const result = await EditNotice(data);
                     return {result : result , resources : null};
@@ -100,7 +134,7 @@ async function CreateNotice(data) {
 
                 // 추가된 행의 수 확인
                 if (results.affectedRows > 0) {
-                    resolve(1);  // 데이터가 정상적으로 추가됨
+                    resolve(results.insertId);  // 데이터가 정상적으로 추가됨
                 } else {
                     resolve(0);  //추가된 데이터가 없음
                 }
