@@ -6,8 +6,10 @@
     <title>GroupPage</title>
     <script src="GroupMainPage.js"></script>
     <link rel="stylesheet" href="GroupMainPage.css">
-    <script type="module" src="../Certification.js"></script>
-    <script src="../SideBar/SideBar.js" defer></script>
+    <script type="module" src="/Certification.js"></script>
+    <script type="module" src="/Dues.js"></script>
+    <script type="module" src="/Attend.js"></script>
+    <script src="/SideBar/SideBar.js" defer></script>
 </head>
 <body>
     <div class="content">        
@@ -20,8 +22,12 @@
         <div class="main">
             <h1>Welcome, User!</h1>
             <h1 id="groupName"></h1>
+            <button id="DuesTestBtn" onclick="dues()">납부하기 테스트 버튼</button>
         </div>
 
+        <div id="dues-container"></div>
+        <div id="current-schedule-container"></div>
+        <div id="expected-schedule-container"></div>
 
         <button id="backButton" class="back-button"></button>
         <div id="sidebar"></div>

@@ -68,6 +68,8 @@ function sidebar_createButtons(page, userPermission, response) {
             { text: '멤버페이지', onClick: () => window.location.href = '/GroupMemberPage/GroupMemberPage.html' },
             { text: '일정', onClick: () => window.location.href = '/GroupSchedulePage/GroupSchedulePage.html' },
             { text: '공지사항', onClick: () => window.location.href = '/GroupNoticePage/GroupNoticePage.html' },
+            { text: '출석', onClick: () => window.location.href = '/GroupSchedulePage/ScheduleAttendancePage.html' },
+            { text: '회비', onClick: () => window.location.href = '/GroupNoticePage/NoticeDuesPage.html' },
         );
 
         if (userPermission == 2) {  // 그룹 창시자인 경우 조직 정보 수정 가능

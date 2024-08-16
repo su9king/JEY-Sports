@@ -18,6 +18,7 @@ window.onload = async function() {
     noticeEndDate = urlParams.get('noticeEndDate');
     noticeWriter = urlParams.get('noticeWriter');
     noticeToken = urlParams.get('noticeToken');
+    noticeType = urlParams.get('noticeType');
     
     if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
@@ -34,6 +35,7 @@ window.onload = async function() {
             document.getElementById('noticeContent').value = noticeContent;
             document.getElementById('noticeEndDate').value = noticeEndDate ? noticeEndDate.split('T')[0] : null;
             document.getElementById('noticeWriter').value = noticeWriter;
+            document.getElementById('noticeType').value = noticeType;
         } else {
             console.log('작성페이지로 접근');
         }
@@ -77,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const functionType = 3;
 
+        const noticeType = document.getElementById('noticeType').value;
         const noticeTitle = document.getElementById('noticeTitle').value;
         const noticeImportance = document.getElementById('noticeImportance').value;
         const noticeStatus = document.getElementById('noticeStatus').value;
@@ -99,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         userToken: userToken,
                         groupToken: groupToken,
                         noticeToken: noticeToken,
+                        noticeType: noticeType,
                         noticeTitle: noticeTitle,
                         noticeImportance: noticeImportance,
                         noticeStatus: noticeStatus,
