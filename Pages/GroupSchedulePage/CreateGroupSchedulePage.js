@@ -13,7 +13,6 @@ window.onload = async function() {
     const urlParams = new URLSearchParams(window.location.search);
 
     const scheduleAttendance = urlParams.get('scheduleAttendance');
-    console.log(scheduleAttendance)
     const scheduleTitle = urlParams.get('scheduleTitle');
     const scheduleStartDate = urlParams.get('scheduleStartDate');
     const scheduleEndDate = urlParams.get('scheduleEndDate');

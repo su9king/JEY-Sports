@@ -72,6 +72,11 @@ function displayCalendar() {
 async function displayScheduleDetails(scheduleToken) {
     const modal = document.getElementById("eventModal");
     const eventDetails = document.getElementById("eventDetails");
+
+    const attendButton = document.getElementById("attendButton");
+    const absentButton = document.getElementById("absentButton");
+
+    const attendDetailButton = document.getElementById("attendDetailButton");
     const deleteEventButton = document.getElementById("deleteEventButton");
     const saveButton = document.getElementById("saveEventButton");
 
@@ -99,9 +104,6 @@ async function displayScheduleDetails(scheduleToken) {
             const scheduleContent = scheduleDetails.scheduleContent;
             const scheduleLocation = scheduleDetails.scheduleLocation;
             const scheduleAttendance = scheduleDetails.scheduleAttendance;
-            console.log(scheduleDetails.scheduleAttendance)
-            console.log(scheduleAttendance)
-
 
             const importanceText = scheduleImportance == true ? '중요' : '일반';
             const alertText = scheduleAlert == true ? '알람 예정' : '알람 없음';
@@ -118,7 +120,40 @@ async function displayScheduleDetails(scheduleToken) {
                 <strong>일정 내용:</strong> ${scheduleContent}<br>
             `;
 
-            // 권한에 따라 삭제, 수정 버튼 추가
+            console.log(scheduleAttendance)
+            if (scheduleAttendance == 1) {
+                //////////// 날짜 따라 참석, 결석 버튼 추가
+                const todayDate = new Date().toISOString().split('T')[0];
+
+                if (scheduleStartDate == todayDate) {
+                    attendButton.style.display = "inline-block";
+                    absentButton.style.display = "inline-block";
+
+                    attendButton.onclick = function() {
+                        attend(1, userToken, groupToken, userPermission, scheduleToken)
+                    }
+
+                    absentButton.onclick = async function() {
+                        attend(2, userToken, groupToken, userPermission, scheduleToken)
+                    }
+                } else {
+                    attendButton.style.display = "none";
+                    absentButton.style.display = "none";
+                }
+
+
+                //////////// 출석 자세히보기 버튼
+                attendDetailButton.onclick = function() {
+                    window.location.href = `DetailScheduleAttendancePage.html?scheduleTitle=${scheduleTitle}&scheduleAttendance=${scheduleAttendance}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheduleImportance=${scheduleImportance}&scheduleAlert=${scheduleAlert}&scheduleContent=${scheduleContent}&scheduleLocation=${scheduleLocation}&scheduleStatus=${scheduleStatus}&scheduleToken=${scheduleToken}`;
+                }
+            } else {
+                attendButton.style.display = "none";
+                absentButton.style.display = "none";                    attendButton.style.display = "none";
+                attendDetailButton.style.display = "none";
+            }
+            
+
+            //////////// 권한에 따라 삭제, 수정 버튼 추가
             if (userPermission == 2 || userPermission == 1) {
                 saveButton.style.display = "inline-block";
                 deleteEventButton.style.display = "inline-block";
@@ -156,7 +191,10 @@ async function displayScheduleDetails(scheduleToken) {
                 deleteEventButton.style.display = "none";
             }
 
+
             modal.style.display = "block";
+
+
         } else if (data.result == 0)  {
             alert('일정을 불러오지 못했습니다.');
         } else {

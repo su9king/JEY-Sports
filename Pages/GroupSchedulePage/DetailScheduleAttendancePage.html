@@ -1,1 +1,34 @@
-DetailScheduleAttendancePage
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DetailScheduleAttendancePage</title>
+    <script src="DetailScheduleAttendancePage.js"></script>
+    <link rel="stylesheet" href="DetailScheduleAttendancePage.css">
+    <script type="module" src="/Certification.js"></script>
+    <script type="module" src="/Attend.js"></script>
+    <script src="/SideBar/SideBar.js" defer></script>
+</head>
+<body>
+    <div class="content">
+        <div class="container">
+            <input type="text" id="searchInput" placeholder="누가 궁금한가요!">
+
+            <div id="schedule-code-container"></div>
+            
+            <div id="member-container"></div>
+            
+            <div class="pagination-controls">
+                <button id="prevPage" disabled>Previous</button>
+                <span id="currentPage">1</span> / <span id="totalPages"></span>
+                <button id="nextPage" disabled>Next</button>
+            </div>
+
+            <button id="backButton" class="back-button"></button>
+            <div id="sidebar"></div>
+            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
+        </div>
+    </div>
+</body>
+</html>
