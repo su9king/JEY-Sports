@@ -35,7 +35,7 @@ window.onload = async function() {
             if (buffer.result == 0) {
                 alert('다시 시도해주세요!')
             } else if (buffer.result == 1)  {
-
+                console.log(buffer.resources);
                 if(buffer.resources[0] !== null) {
                     statusNotice = buffer.resources[0].map(resource => ({
                         noticeToken: resource.noticeToken,

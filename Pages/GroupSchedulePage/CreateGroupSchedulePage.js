@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
     scheduleSaveBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
+        const scheduleAttendance = document.getElementById('scheduleAttendance').value;
         const scheduleTitle = document.getElementById('scheduleTitle').value;
         const scheduleStartDate = document.getElementById('scheduleStartDate').value;
         const scheduleEndDate = noEndDateCheckbox.checked ? scheduleStartDateInput.value : scheduleEndDateInput.value;
@@ -125,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (scheduleTitle && scheduleStartDate && scheduleContent && scheduleLocation && scheduleEndDate ) {
             try {
+                console.log(scheduleAttendance,scheduleAlert);
                 const response = await fetch('/EditGroupSchedules', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -141,8 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         scheduleImportance: scheduleImportance,
                         scheduleAlert: scheduleAlert,
                         scheduleContent: scheduleContent,
-                        scheduleLocation: scheduleLocation
-                        // scheduleStatus: scheduleStatus
+                        scheduleLocation: scheduleLocation,
+                        scheduleAttendanceCode : null ,
+                        scheduleStatus: null
                     })
                 });
 

@@ -68,12 +68,12 @@ app.use((err, req, res, next) => {
 
 const options = {
     //자기서명한 SSL 인증키를 통한 서버 생성
-    key: fs.readFileSync(path.join(__dirname, 'SecurityKeys/key.pem')),
-    cert: fs.readFileSync(path.join(__dirname, 'SecurityKeys/cert.pem'))
+    key: fs.readFileSync(path.join(__dirname, `SecurityKeys/key.pem`)),
+    cert: fs.readFileSync(path.join(__dirname, `SecurityKeys/cert.pem`))
 
     //메인서버 운영용 SSL 인증키
-    //key: fs.readFileSync('/etc/letsencrypt/live/jeysport.codns.com/privkey.pem'),
-    //cert: fs.readFileSync('/etc/letsencrypt/live/jeysport.codns.com/fullchain.pem')
+    //key: fs.readFileSync(`/etc/letsencrypt/live/jeysport.codns.com/privkey.pem`),
+    //cert: fs.readFileSync(`/etc/letsencrypt/live/jeysport.codns.com/fullchain.pem`)
 };
 
 const server = https.createServer(options,app);
@@ -571,7 +571,7 @@ app.post('/Dues', async(req,res,next) => {
         const data = req.body;
         var userToken = data["userToken"]
         userToken = await checkToken(userToken,req);
-
+        
         if ( userToken != 0 ){
             const result = await Modules["Dues"].Dues(userToken,data);
             res.status(200).send(result);
@@ -626,7 +626,7 @@ app.post('/SendAlarm', async(req,res,next) => {
     
 })
 
-//WebSocket 연결
+//알림을 위한 WebSocket 연결
 wss.on('connection', (ws) => {
     console.log("클라이언트가 연결되었습니다.");
 

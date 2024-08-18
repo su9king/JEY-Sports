@@ -1,7 +1,7 @@
 let groups = [];
 let invitedGroups = [];
 let requestGroups = [];
-let ws = new WebSocket('ws://127.0.0.1');
+let ws = new WebSocket('wss://jeysport.codns.com');
 
 ws.onmessage = function(event) {
     const messagesList = document.getElementById('messages');

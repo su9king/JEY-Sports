@@ -30,8 +30,6 @@ module.exports = {
             }else{
                 return {result : 1 , resources : data};
             }
-        
-
         }else if (page == "EditUserPage"){
             
             const data = await EditUserPage(userToken);
@@ -48,6 +46,7 @@ module.exports = {
             const data2 = await GroupMemberPage2(groupToken);
             return {result : 1 , resources : [data,data2]};
 
+            //// 일정 및 공지사항 회원인증 
         }else if (page == "GroupSchedulePage"){
             const groupToken = query["groupToken"];
             const data = await GroupSchedulePage(groupToken);
@@ -57,13 +56,41 @@ module.exports = {
             const groupToken = query["groupToken"];
             const data = await GroupNoticePage(groupToken);
             return {result : 1 , resources : data};
+            
+            //// 출석 및 회비 관련 회원인증
+        }else if (page == "ScheduleAttendancePage"){
+            
+            const groupToken = query["groupToken"];
+            const data = await ScheduleAttendancePage(groupToken);
+            return {result : 1 , resources : data};
 
-        }else if (page == "CreateGroupNoticePage"){
-            console.log("필요한 리소스가 존재하지 않습니다.")
-            return {result : 1 , resources : null};
-        }else if (page == "CreateGroupSchedulePage"){
-            console.log("필요한 리소스가 존재하지 않습니다.")
-            return {result : 1 , resources : null};
+        }else if (page == "DetailScheduleAttendancePage"){
+            const scheduleToken = query["scheduleToken"];
+            const data = await DetailScheduleAttendancePage(scheduleToken); //일정 데이터랑, 출석 데이터 2차원배열 이용
+
+            return {result : 1 , resources : data};
+
+        }else if (page == "TotalAttendancePage"){
+            const groupToken = query["groupToken"];
+            const data = await TotalAttendancePage(groupToken);
+            return {result : 1 , resources : data};
+
+        }else if (page == "NoticeDuesPage"){
+            const groupToken = query["groupToken"];
+            const data = await NoticeDuesPage(groupToken);
+
+            return {result : 1 , resources : data};
+
+        }else if (page == "DetailNoticeDuesPage"){
+            const noticeToken = query["noticeToken"];
+            const data = await DetailNoticeDuesPage(noticeToken); //일정 데이터랑, 출석 데이터 2차원배열 이용
+
+            return {result : 1 , resources : data};
+
+        }else if (page == "TotalDuesPage"){
+            const groupToken = query["groupToken"];
+            const data = await TotalDuesPage(groupToken);
+            return {result : 1 , resources : data};
         }
 
         
@@ -268,6 +295,309 @@ async function GroupNoticePage(groupToken){
         connection.query(`SELECT noticeToken , noticeTitle, noticeStatus, noticeImportance, noticeEditDate , noticeType
                           FROM Notices 
                           WHERE groupToken = ?`, [groupToken],
+            (error, results, fields) => {
+                if (error) {
+                    console.error('쿼리 실행 오류:', error);
+                    return reject(error);
+
+                } //쿼리 결과가 없다면 그룹 토큰이 잘못 됨.
+                if (results.length > 0) {
+                    resolve(results);
+                } else {
+                    resolve(null);
+                }
+            }
+        );
+    })
+}
+
+async function ScheduleAttendancePage(groupToken){
+
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT scheduleToken , scheduleTitle, scheduleStatus, scheduleImportance,
+                          scheduleStartDate,scheduleEndDate,scheduleLocation,scheduleContent
+                          FROM Schedules 
+                          WHERE groupToken = ? and scheduleAttendance = true`, [groupToken],
+            (error, results, fields) => {
+                if (error) {
+                    console.error('쿼리 실행 오류:', error);
+                    return reject(error);
+
+                } //쿼리 결과가 없다면 그룹 토큰이 잘못 됨.
+                if (results.length > 0) {
+                    // 날짜를 한국 시간대로 변환
+                    results.forEach(schedule => {
+                        schedule.scheduleStartDate = moment(schedule.scheduleStartDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                        schedule.scheduleEndDate = moment(schedule.scheduleEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                    });
+                    resolve(results);
+                } else {
+                    resolve(null);
+                }
+            }
+        );
+    })
+}
+
+async function NoticeDuesPage(groupToken){
+
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT noticeToken , noticeTitle, noticeStatus, noticeImportance, noticeEditDate , noticeType
+                          FROM Notices 
+                          WHERE groupToken = ? and noticeType > 1`, [groupToken],
+            (error, results, fields) => {
+                if (error) {
+                    console.error('쿼리 실행 오류:', error);
+                    return reject(error);
+
+                } //쿼리 결과가 없다면 그룹 토큰이 잘못 됨.
+                if (results.length > 0) {
+                    results.forEach(notice => {
+                        notice.noticeEditDate = moment(notice.noticeEditDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                    });
+                    resolve(results);
+                } else {
+                    resolve(null);
+                }
+            }
+        );
+    })
+}
+
+async function DetailScheduleAttendancePage(scheduleToken) {
+    return new Promise((resolve, reject) => {
+        // 일정 불러오기
+        const scheduleQuery = new Promise((resolveSchedule, rejectSchedule) => {
+            connection.query(`SELECT * FROM schedules WHERE scheduleToken = ?`, [scheduleToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('일정 쿼리 실행 오류:', error);
+                        return rejectSchedule(error);
+                    }
+                    if (results.length > 0) {
+                        // 날짜를 한국 시간대로 변환
+                        results.forEach(schedule => {
+                            schedule.scheduleStartDate = moment(schedule.scheduleStartDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                            schedule.scheduleEndDate = moment(schedule.scheduleEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                        });
+                        resolveSchedule(results);
+                    } else {
+                        resolveSchedule(null);
+                    }
+                }
+            );
+        });
+
+        // 소프트웨어 유저의 출석정보 가져오기
+        const attendanceUsersQuery = new Promise((resolveAttendanceUsers, rejectAttendanceUsers) => {
+            connection.query(`SELECT usr.userID, au.attendanceStatus, au.absentReason
+                FROM AttendanceUsers as au
+                JOIN Users AS usr ON usr.userToken = au.userToken
+                WHERE au.scheduleToken = ?`, [scheduleToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('소프트웨어 유저 출석 쿼리 실행 오류:', error);
+                        return rejectAttendanceUsers(error);
+                    }
+                    if (results.length > 0) {
+                        resolveAttendanceUsers(results);
+                    } else {
+                        resolveAttendanceUsers(null);
+                    }
+                }
+            );
+        });
+
+        // 소프트웨어 비유저의 출석정보 가져오기
+        const attendanceNonUsersQuery = new Promise((resolveNonUsers, rejectNonUsers) => {
+            connection.query(`SELECT nuo.userName, au.attendanceStatus, au.absentReason 
+                FROM AttendanceUsers as au
+                JOIN NotUsersOrganizations AS nuo ON nuo.notUserToken = au.notUserToken
+                WHERE au.scheduleToken = ?`, [scheduleToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('소프트웨어 비유저 출석 쿼리 실행 오류:', error);
+                        return rejectNonUsers(error);
+                    }
+                    if (results.length > 0) {
+                        resolveNonUsers(results);
+                    } else {
+                        resolveNonUsers(null);
+                    }
+                }
+            );
+        });
+
+        // 모든 쿼리 실행
+        Promise.all([scheduleQuery, attendanceUsersQuery, attendanceNonUsersQuery])
+            .then(results => {
+                const [data1, data2, data3] = results;
+                resolve([data1, data2, data3]);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+
+
+async function DetailNoticeDuesPage(noticeToken) {
+    return new Promise((resolve, reject) => {
+        // 공지사항 불러오기
+        const noticeQuery = new Promise((resolveNotice, rejectNotice) => {
+            connection.query(`SELECT * FROM Notices WHERE noticeToken = ?`, [noticeToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('공지사항 쿼리 실행 오류:', error);
+                        return rejectNotice(error);
+                    }
+                    if (results.length > 0) {
+                        // 날짜를 한국 시간대로 변환
+                        results.forEach(notice => {
+                            notice.noticeCreatedDate = moment(notice.noticeCreatedDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                            notice.noticeEndDate = moment(notice.noticeEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                        });
+                        resolveNotice(results);
+                    } else {
+                        resolveNotice(null);
+                    }
+                }
+            );
+        });
+
+        // 소프트웨어 유저의 회비정보 가져오기
+        const duesUsersQuery = new Promise((resolveDuesUsers, rejectDuesUsers) => {
+            connection.query(`SELECT usr.userID, du.duesStatus
+                FROM DuesUsers as du
+                JOIN Users AS usr ON usr.userToken = du.userToken
+                WHERE du.noticeToken = ?`, [noticeToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('소프트웨어 유저 쿼리 실행 오류:', error);
+                        return rejectDuesUsers(error);
+                    }
+                    if (results.length > 0) {
+                        resolveDuesUsers(results);
+                    } else {
+                        resolveDuesUsers(null);
+                    }
+                }
+            );
+        });
+
+        // 소프트웨어 비유저의 회비정보 가져오기
+        const duesNonUsersQuery = new Promise((resolveNonUsers, rejectNonUsers) => {
+            connection.query(`SELECT nuo.userName, du.duesStatus
+                FROM DuesUsers as du
+                JOIN NotUsersOrganizations AS nuo ON nuo.notUserToken = du.notUserToken
+                WHERE du.noticeToken = ?`, [noticeToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('소프트웨어 비유저 쿼리 실행 오류:', error);
+                        return rejectNonUsers(error);
+                    }
+                    if (results.length > 0) {
+                        resolveNonUsers(results);
+                    } else {
+                        resolveNonUsers(null);
+                    }
+                }
+            );
+        });
+
+        // 모든 쿼리 실행
+        Promise.all([noticeQuery, duesUsersQuery, duesNonUsersQuery])
+            .then(results => {
+                const [data1, data2, data3] = results;
+                resolve([data1, data2, data3]);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+
+async function TotalAttendancePage(groupToken){
+
+    return new Promise((resolve, reject) => {
+        // 그룹에 해당하는 모든 일정 불러오기
+        const schedulesQuery = new Promise((resolveSchedules, rejectSchedules) => {
+            connection.query(`SELECT * FROM Schedules WHERE groupToken = ?`, [groupToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('일정 쿼리 실행 오류:', error);
+                        return rejectSchedules(error);
+                    }
+                    resolveSchedules(results);
+                }
+            );
+        });
+
+        // 모든 일정에 대해 출석 정보를 가져오는 함수
+        const getAttendanceForSchedules = (schedules) => {
+            return Promise.all(schedules.map(schedule => {
+                return Promise.all([
+                    new Promise((resolveAttendanceUsers, rejectAttendanceUsers) => {
+                        connection.query(`SELECT usr.userID, au.attendanceStatus, au.absentReason
+                            FROM AttendanceUsers as au
+                            JOIN Users as usr ON usr.userToken = au.userToken
+                            WHERE au.scheduleToken = ?`, [schedule.scheduleToken],
+                            (error, attendanceResults) => {
+                                if (error) {
+                                    console.error('출석 쿼리 실행 오류 (Users):', error);
+                                    return rejectAttendanceUsers(error);
+                                }
+                                resolveAttendanceUsers(attendanceResults);
+                            }
+                        );
+                    }),
+                    new Promise((resolveAttendanceNonUsers, rejectAttendanceNonUsers) => {
+                        connection.query(`SELECT nuo.userName, au.attendanceStatus, au.absentReason 
+                            FROM AttendanceUsers as au
+                            JOIN NotUsersOrganizations AS nuo ON nuo.notUserToken = au.notUserToken
+                            WHERE au.scheduleToken = ?`, [schedule.scheduleToken],
+                            (error, nonUserAttendanceResults) => {
+                                if (error) {
+                                    console.error('출석 쿼리 실행 오류 (NotUsersOrganizations):', error);
+                                    return rejectAttendanceNonUsers(error);
+                                }
+                                resolveAttendanceNonUsers(nonUserAttendanceResults);
+                            }
+                        );
+                    })
+                ]);
+            }));
+        };
+
+        // 모든 쿼리 실행
+        schedulesQuery
+            .then(schedules => {
+                if (schedules.length === 0) {
+                    resolve(null); // 일정이 없다면 null 반환
+                    return;
+                }
+                return getAttendanceForSchedules(schedules).then(attendanceData => {
+                    // 최종 데이터 구조 만들기
+                    const finalData = schedules.map((schedule, index) => {
+                        return [schedule, attendanceData[index][0], attendanceData[index][1]];
+                    });
+                    resolve(finalData);
+                });
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+async function TotalDuesPage(groupToken){
+
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT noticeToken , noticeTitle, noticeStatus, noticeImportance, noticeEditDate , noticeDues
+                          FROM Notices 
+                          WHERE groupToken = ? and noticeType > 1`, [groupToken],
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);

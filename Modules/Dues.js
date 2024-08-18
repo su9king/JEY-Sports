@@ -3,13 +3,14 @@ const connection = require('../DatabaseLoad');
 
 // 메인 실행 코드. 그냥 복사 붙여넣기 용
 module.exports = {
-    Dues : async(data) => {
-        console.log("기능이 존재하지 않습니다.")
+    Dues : async(userToken,data) => {
 
-        
+        const noticeToken = data["noticeToken"];
+
         // SQL 구문 그냥 복사 붙여넣기 용
         return new Promise((resolve, reject) => {
-            connection.query('?', [userToken], 
+            connection.query(`UPDATE DuesUsers SET duesStatus = true
+                WHERE userToken = ? and noticeToken = ?`, [userToken,noticeToken], 
                 (error, results, fields) => {
                     if (error) {
                         console.error('쿼리 실행 오류:', error);

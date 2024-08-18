@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const functionType = 3;
 
         const noticeType = document.getElementById('noticeType').value;
+        console.log(noticeType);
         const noticeTitle = document.getElementById('noticeTitle').value;
         const noticeImportance = document.getElementById('noticeImportance').value;
         const noticeStatus = document.getElementById('noticeStatus').value;
@@ -120,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('다시 시도해주세요!');
                 } else if (data.result == 1)  {
                     alert('공지사항을 저장했습니다!');
-                    window.location.href = "GroupNoticePage.html";
+                    //window.location.href = "GroupNoticePage.html";
                 } else {
                     alert('관리자에게 문의해주세요')
                 }
