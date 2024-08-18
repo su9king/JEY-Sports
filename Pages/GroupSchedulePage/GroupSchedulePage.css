@@ -59,13 +59,43 @@
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
 }
 
-.edit-button, #saveEventButton, #deleteEventButton {
+#attendButton {
+  margin-top: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#attendButton:hover {
+  background-color: #0056b3; /* 호버 시 배경색 변화 */
+}
+
+#absentButton {
+  margin-top: 20px;
+  background-color: #ff0000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#absentButton:hover {
+  background-color: #a50000; /* 호버 시 배경색 변화 */
+}
+
+#attendDetailButton, #saveEventButton, #deleteEventButton {
   margin-top: 20px;
   background-color: #4CAF50;
   color: white;
   padding: 10px 20px;
   border: none;
   cursor: pointer;
+}
+
+#attendDetailButton:hover, #saveEventButton:hover, #deleteEventButton:hover {
+  background-color: #228225; /* 호버 시 배경색 변화 */
 }
   
   

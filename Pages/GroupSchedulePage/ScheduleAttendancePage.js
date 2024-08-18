@@ -64,6 +64,9 @@ window.onload = async function() {
     });
 }
 
+
+
+
 // 공지사항 요소 생성 함수
 function createNoticeElements() {
     const noticeContainer = document.getElementById("notice-container");
@@ -113,7 +116,7 @@ function createNoticeElements() {
         
         // 제목 클릭시 작동 - 게시글 형성
         noticeTitle.addEventListener("click", async function() {
-            window.location.href = `DetailScheduleAttendancePage.html?scheduleToken=${notice.scheduleToken}&scheduleTitle=${notice.scheduleTitle}&scheduleStartDate=${notice.scheduleStartDate}&scheduleEndDate=${notice.scheduleEndDate}&scheduleImportance=${notice.scheduleImportance}&scheduleAlert=${notice.scheduleAlert}&scheduleStatus=${notice.scheduleStatus}`;
+            window.location.href = `DetailScheduleAttendancePage.html?scheduleToken=${notice.scheduleToken}`;
         });
 
         noticeBox.appendChild(noticeTitle);

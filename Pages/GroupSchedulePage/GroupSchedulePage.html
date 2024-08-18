@@ -7,6 +7,7 @@
     <script src="GroupSchedulePage.js"></script>
     <link rel="stylesheet" href="GroupSchedulePage.css">
     <script type="module" src="/Certification.js"></script>
+    <script type="module" src="/Attend.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 </head>
@@ -27,6 +28,11 @@
                     
                     <!-- 버튼들 -->
                     <div class="modal-buttons">
+                        <button id="attendButton" class="modal-button">출석하기</button>
+                        <button id="absentButton" class="modal-button">결석하기</button>
+                    </div>
+                    <div class="modal-buttons">
+                        <button id="attendDetailButton" class="modal-button">출석 자세히보기</button>
                         <button id="saveEventButton" class="modal-button">수정</button>
                         <button id="deleteEventButton" class="modal-button">삭제</button>
                     </div>

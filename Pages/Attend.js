@@ -4,12 +4,24 @@ window.attend = attend;
 async function attend(functionType, userToken, groupToken, userPermission, scheduleToken) { 
 
     //// functionType == 1: 참석하기, functionType == 2: 결석하기
-    var absentReason = null
-    var scheduleAttendanceCode
+    var absentReason = null;
+    var scheduleAttendanceCode = null;
     if (functionType == 2) {
         var absentReason = prompt("결석 사유를 작성해주세요!", "")
-    } else if (functionType == 1) {
+        if (absentReason === null) {
+            alert("취소되었습니다!");
+            return
+        }
+    } else if (functionType == 1 && userPermission != 1 && userPermission != 2) {
         var scheduleAttendanceCode = prompt("오늘의 출석 코드를 작성해주세요!", "")
+        if (scheduleAttendanceCode === null) {
+            alert("취소되었습니다!");
+            return
+        }
+    } else if (functionType == 1 && (userPermission == 1 || userPermission == 2)) {
+        if(!confirm("출석으로 변경하시겠습니까?")) {
+            return
+        }
     }
 
     try {
@@ -39,9 +51,12 @@ async function attend(functionType, userToken, groupToken, userPermission, sched
             if (functionType == 1) {
                 alert('올바르지 않은 출석 코드입니다!');
             } else if (functionType == 2) {
-                console.error('다시 시도해주세요!');
+                alert('다시 시도해주세요!');
             }
         }
+
+        location.reload();
+
     } catch (error) {
         console.error('Error occurred:', error);
     }

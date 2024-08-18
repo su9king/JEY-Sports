@@ -900,7 +900,11 @@ async function leaveGroup() {
 			const response = await fetch('/LeaveGroup', {
 				method: 'POST',
 				headers: {'Content-Type': 'application/json'},
-				body: JSON.stringify({ userToken: userToken, groupToken: groupToken, userPermission: userPermission })
+				body: JSON.stringify({ 
+					userToken: userToken, 
+					groupToken: groupToken, 
+					userPermission: userPermission 
+				})
 			});
 
 			data = await response.json();
