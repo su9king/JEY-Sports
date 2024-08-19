@@ -40,6 +40,7 @@ async function dues(userToken, groupToken, userPermission,noticeToken,noticeDues
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ 
+                    functionType: 1,
                     userToken: userToken,
                     groupToken: groupToken,
                     userPermission: userPermission,

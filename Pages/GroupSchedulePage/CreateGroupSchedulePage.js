@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         userToken: userToken,
                         groupToken: groupToken,
                         scheduleToken: scheduleToken,
+                        
                         scheduleAttendance: scheduleAttendance,
                         scheduleTitle: scheduleTitle,
                         scheduleStartDate: scheduleStartDate,
@@ -143,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         scheduleAlert: scheduleAlert,
                         scheduleContent: scheduleContent,
                         scheduleLocation: scheduleLocation,
+
                         scheduleAttendanceCode : null ,
                         scheduleStatus: null
                     })

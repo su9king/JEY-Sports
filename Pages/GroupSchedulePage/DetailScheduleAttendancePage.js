@@ -1,9 +1,8 @@
 let members = [];
-let currentPage = 1;
-const elementPerPage = 10;
-let userToken, scheduleToken, scheduleAttendanceCode
+let notuserMembers = [];
+let userToken, groupToken, userPermission, scheduleToken, scheduleAttendanceCode;
+let myData = null;  // 나의 출석 상황 데이터를 저장할 변수
 
-//////////////////// Step0 : 회원인증, 사이드바 ///////////////////
 window.onload = async function () {
     const page = 'DetailScheduleAttendancePage';
     userToken = sessionStorage.getItem('userToken');
@@ -12,6 +11,12 @@ window.onload = async function () {
 
     const urlParams = new URLSearchParams(window.location.search);
     scheduleToken = urlParams.get('scheduleToken');
+    scheduleTitle = urlParams.get('scheduleTitle');
+    scheduleStartDate = urlParams.get('scheduleStartDate');
+    scheduleEndDate = urlParams.get('scheduleEndDate');
+    scheudleImportance = urlParams.get('scheudleImportance') == true ? '중요' : '일반';
+    scheduleAlert = urlParams.get('scheduleAlert') == true ? '알람 예정' : '없음';
+    scheduleStatus = urlParams.get('scheduleStatus') == true ? '공개' : '비공개';
 
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&scheduleToken=${scheduleToken}`;
 
@@ -23,52 +28,55 @@ window.onload = async function () {
     } else {
         loadSidebar(page, userPermission, response);
 
-        scheduleAttendanceCode = response.resources['0'];
+        scheduleAttendanceCode = response.resources[0].scheduleAttendanceCode;
+        myData = response.resources[1][0];  // 내 출석 데이터
+        members = response.resources[2];          // 멤버 출석 데이터
+        notuserMembers = response.resources[3];   // 비유저 출석 데이터
 
-        if (response.resources !== null) {
-            members = response.resources[1].map(resource => ({
-                userToken: resource.userToken,
-                userID: resource.userID,
-                userName: resource.userName,
-                attendanceStatus: resource.attendanceStatus,
-                absentReason: resource.absentReason,
-                userImage: resource.userImage, 
-                userPermission: resource.userPermission,
-            }));
-
-            console.log(members);
-            displayMembers();
-            createCodeContainer(userPermission);
-        }
+        displayAnnouncement(response.resources[0]); // 공지사항 표시
+        displayMyData();  // 내 출석 데이터 표시
+        displayMembers(); // 멤버 및 비유저 멤버 표시
+        createAdminContainer(userPermission); // 수정 버튼, 출석 코드 생성
     }
 
-    // 뒤로가기 이벤트 리스너 등록
+    // 뒤로가기 버튼
     document.getElementById('backButton').addEventListener('click', function () {
         window.history.back();
     });
 
-    // 검색 기능 이벤트 리스너 등록
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', (e) => {
-        const value = e.target.value.toLowerCase();
-        filterMembers(value);
-    });
+    // 검색 기능 설정
+    setupSearchInput();
+}
 
-    // 페이지네이션 이벤트 리스너 등록
-    document.getElementById('prevPage').addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            displayMembers();
-        }
-    });
+// 공지사항 표시 함수
+function displayAnnouncement(announcement) {
+    const announcementContainer = document.getElementById("announcement-container");
 
-    document.getElementById('nextPage').addEventListener('click', () => {
-        const totalPages = Math.ceil(members.length / elementPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            displayMembers();
-        }
-    });
+    announcementContainer.innerHTML = `
+        <h2>${scheduleTitle}</h2>
+        <p><strong>일정 날짜:</strong> ${scheduleStartDate} ~ ${scheduleEndDate}</p>
+        <p><strong>중요도:</strong> ${scheudleImportance}</p>
+        <p><strong>알람:</strong> ${scheduleAlert}</p>
+        <p><strong>공개 상태:</strong> ${scheduleStatus}</p>
+        <p><strong>일정 내용:</strong> ${announcement.scheduleContent}</p>
+        <p><strong>장소:</strong> ${announcement.scheduleLocation}</p>
+    `;
+}
+
+
+// 내 출석 현황 표시
+function displayMyData() {
+    const myDataContainer = document.getElementById('my-data-container');
+    if (myData) {
+        const myTitle = document.createElement('h2');
+        myTitle.textContent = '나의 출석 현황';
+        myDataContainer.appendChild(myTitle);
+        const myBox = createMemberBox(myData, true, false);
+        myDataContainer.appendChild(myBox);
+
+    } else {
+        myDataContainer.innerHTML = '<h2>나의 출석 현황</h2><p>출석 정보가 없습니다.</p>';
+    }
 }
 
 // 권한 순서 정의
@@ -78,60 +86,62 @@ function getPermissionRank(permission) {
     return permissionOrder.indexOf(permission);
 }
 
-// 검색된 멤버들만 표시하는 기능 추가
+// 멤버들 및 비유저 멤버 표시
 function displayMembers(filteredMembers = null) {
-    const memberContainer = document.getElementById("member-container");
-    memberContainer.innerHTML = '';
+    const userMemberContainer = document.getElementById("user-member-container");
+    userMemberContainer.innerHTML = '';
 
-    // 타이틀 추가
-    const myStatusTitle = document.createElement('h2');
-    myStatusTitle.textContent = '나의 출석 상황';
-    memberContainer.appendChild(myStatusTitle);
+    // 통합된 멤버 목록
+    const allMembers = [...members, ...notuserMembers];
+    const displayList = filteredMembers || allMembers;
 
-    // 표시할 멤버들 선택 (필터링된 멤버들 또는 전체 멤버)
-    const displayList = filteredMembers || members;
-
-    // "나의 출석상태" 추가
-    const myMember = members.find(member => member.userToken == userToken);
-    if (myMember) {
-        const myMemberBox = createMemberBox(myMember, true);
-        memberContainer.appendChild(myMemberBox);
+    // 멤버들 섹션
+    const userMembers = displayList.filter(member => member.userID);
+    if (userMembers.length > 0) {
+        const userTitle = document.createElement('h2');
+        userTitle.textContent = '멤버들';
+        userMemberContainer.appendChild(userTitle);
+        userMembers.forEach(member => {
+            if (member.userToken !== userToken) {
+                const memberBox = createMemberBox(member, false, false);
+                userMemberContainer.appendChild(memberBox);
+            }
+        });
     }
 
-    // 멤버들 타이틀 추가
-    const membersTitle = document.createElement('h2');
-    membersTitle.textContent = '멤버들';
-    memberContainer.appendChild(membersTitle);
-
-    // 권한 순서와 userName 가나다 순으로 정렬
-    displayList.sort((a, b) => {
-        const rankComparison = getPermissionRank(a.userPermission) - getPermissionRank(b.userPermission);
-        if (rankComparison !== 0) return rankComparison;
-        return a.userName.localeCompare(b.userName);
-    });
-
-    // 현재 페이지에 해당하는 멤버만 보여주기
-    const start = (currentPage - 1) * elementPerPage;
-    const end = start + elementPerPage;
-    const paginatedMembers = displayList.slice(start, end);
-
-    paginatedMembers.forEach(member => {
-        if (member.userToken !== userToken) { // "나의 출석상태" 제외
-            const memberBox = createMemberBox(member);
-            memberContainer.appendChild(memberBox);
-        }
-    });
-
-    updatePaginationControls(displayList.length);
+    // 비유저 멤버들 섹션
+    const notUserMembers = displayList.filter(member => member.notUserToken);
+    if (notUserMembers.length > 0) {
+        const notUserTitle = document.createElement('h2');
+        notUserTitle.textContent = '비유저 멤버들';
+        userMemberContainer.appendChild(notUserTitle);
+        notUserMembers.forEach(member => {
+            const memberBox = createMemberBox(member, false, true);
+            userMemberContainer.appendChild(memberBox);
+        });
+    }
 }
 
-function createMemberBox(member, isMyStatus = false) {
+// 검색 기능 설정
+function setupSearchInput() {
+    const searchInput = document.getElementById('searchInput');
+
+    searchInput.addEventListener('input', (e) => {
+        const value = e.target.value.toLowerCase();
+        const filteredMembers = [...members, ...notuserMembers].filter(member =>
+            member.userName.toLowerCase().includes(value)
+        );
+        displayMembers(filteredMembers); // 필터링된 결과 다시 표시
+    });
+}
+
+function createMemberBox(member, isMyStatus = false, isNotUser = false) {
     const memberBox = document.createElement("div");
     memberBox.classList.add("memberBox");
 
     // 프로필 사진
     const memberImage = document.createElement("img");
-    memberImage.src = member.userImage ? `/UserImages/${member.userImage}` : `/UserImages/NULL.jpg`;
+    memberImage.src = isNotUser ? `/UserImages/NULL.jpg` : (member.userImage ? `/UserImages/${member.userImage}` : `/UserImages/NULL.jpg`);
     memberImage.alt = `${member.userName}의 프로필 사진`;
     memberImage.classList.add("member-image");
 
@@ -146,45 +156,76 @@ function createMemberBox(member, isMyStatus = false) {
     const attendanceStatusContainer = document.createElement("div");
     attendanceStatusContainer.classList.add("attendance-status-container");
 
-    const statusOptions = [
-        { value: 1, text: '참석', color: '#4caf50' },
-        { value: 0, text: '결석', color: '#f44336' },
-        { value: null, text: '미확인', color: '#ccc' },
-    ];
+    if (isMyStatus) {
+        // 출석 상태 버튼들 생성 (본인 출석 상태일 때)
+        const statusOptions = [
+            { value: 1, text: '참석', color: '#4caf50' },
+            { value: 0, text: '결석', color: '#f44336' },
+            { value: null, text: '미확인', color: '#ccc' },
+        ];
 
-    statusOptions.forEach(option => {
+        const statusButtonsContainer = document.createElement("div");
+        statusButtonsContainer.classList.add("status-buttons-container");
+
+        statusOptions.forEach(option => {
+            const statusButton = document.createElement("button");
+            statusButton.textContent = option.text;
+            statusButton.classList.add("status-button");
+
+            if (member.attendanceStatus == option.value) {
+                statusButton.style.backgroundColor = option.color;
+                statusButton.style.transform = "translateY(-3px)";
+            } else {
+                statusButton.style.backgroundColor = "#e0e0e0";
+            }
+
+            // 클릭 이벤트 추가 (본인 출석 상태만 수정 가능)
+            if (option.value !== null) {
+                const functionType = option.value == 1 ? 1 : 2;
+                statusButton.addEventListener("click", () => {
+                    console.log(`${member.userName}의 출석 상태: ${option.value}`);
+                    attend(functionType, userToken, groupToken, userPermission, scheduleToken);
+                    displayMembers();
+                });
+            }
+
+            statusButtonsContainer.appendChild(statusButton);
+        });
+
+        attendanceStatusContainer.appendChild(statusButtonsContainer);
+    } else {
+        // 출석 상태 표시 (본인이 아닐 때)
+        const statusOptions = [
+            { value: 1, text: '참석', color: '#4caf50' },
+            { value: 0, text: '결석', color: '#f44336' },
+            { value: null, text: '미확인', color: '#ccc' },
+        ];
+
+        const currentStatus = statusOptions.find(option => option.value === member.attendanceStatus);
+
         const statusButton = document.createElement("button");
-        statusButton.textContent = option.text;
+        statusButton.textContent = currentStatus ? currentStatus.text : '미확인';
         statusButton.classList.add("status-button");
-
-        if (member.attendanceStatus == option.value) {
-            statusButton.style.backgroundColor = option.color;
-            statusButton.style.transform = "translateY(-3px)";
-        } else {
-            statusButton.style.backgroundColor = "#e0e0e0";
-        }
-
-        // 본인 출석상태만 수정 가능
-        if (option.value !== null && (isMyStatus || userPermission == 1 || userPermission == 2)) {
-
-            const functionType = option.value == 1 ? 1 : 2;
-            statusButton.addEventListener("click", () => {
-                console.log(`${member.userName}의 출석 상태: ${option.value}`);
-                attend(functionType, userToken, groupToken, userPermission, scheduleToken)
-                displayMembers();
-            });
-        }
+        statusButton.style.backgroundColor = currentStatus ? currentStatus.color : '#e0e0e0';
+        statusButton.disabled = true;  // 클릭 불가능
 
         attendanceStatusContainer.appendChild(statusButton);
-    });
+    }
 
     // 결석 사유 추가
-    if (member.attendanceStatus == 0 && member.absentReason) {
+    if (member.attendanceStatus == 0) {
+        let absentReasonContainer = document.createElement("div");
+        absentReasonContainer.classList.add("absent-reason-container");
         const absentReasonText = document.createElement("p");
-        absentReasonText.textContent = `결석 사유: ${member.absentReason}`;
+        absentReasonText.textContent = member.absentReason ? `결석 사유: ${member.absentReason}` : `결석 사유: 나도 궁금한데?`;
         absentReasonText.classList.add("absent-reason");
-        attendanceStatusContainer.appendChild(absentReasonText);
+        absentReasonContainer.appendChild(absentReasonText);
+
+        attendanceStatusContainer.appendChild(absentReasonContainer);
     }
+
+    document.body.appendChild(attendanceStatusContainer);
+
 
     memberBox.appendChild(memberImage);
     memberBox.appendChild(memberInfo);
@@ -193,37 +234,13 @@ function createMemberBox(member, isMyStatus = false) {
     return memberBox;
 }
 
-///////////////////////////////// 검색기능 함수 /////////////////////////////////
-function filterMembers(value) {
-    const filteredMembers = members.filter(member =>
-        member.userName.toLowerCase().includes(value)
-    );
 
-    // 현재 페이지 리셋
-    currentPage = 1;
-
-    // 필터링된 결과를 기반으로 멤버 표시
-    displayMembers(filteredMembers);
-}
-
-///////////////////////////////// 페이지네이션 함수 /////////////////////////////////
-function updatePaginationControls(totalMembers = members.length) {
-    const totalPages = Math.ceil(totalMembers / elementPerPage);
-    document.getElementById('currentPage').textContent = currentPage;
-    document.getElementById('totalPages').textContent = totalPages;
-
-    document.getElementById('prevPage').disabled = (currentPage === 1);
-    document.getElementById('nextPage').disabled = (currentPage === totalPages || totalPages === 0);
-}
-
-
-
-///////////////////////////////// 참석 코드 컨테이너 생성 함수 /////////////////////////////////
-async function createCodeContainer(userPermission) {
+async function createAdminContainer(userPermission) {
     if (userPermission == 1 || userPermission == 2) {
-        const scheduleCodeContainer = document.getElementById('schedule-code-container');
+        ///////////////// 출석 코드 생성 컨테이너 생성
+        const scheduleCodeContainer = document.getElementById('code-container');
         scheduleCodeContainer.innerHTML = '';
-    
+
         if (scheduleAttendanceCode == null) {
             const message = document.createElement('h2');
             message.textContent = "출석 코드를 생성해주세요!";
@@ -233,46 +250,56 @@ async function createCodeContainer(userPermission) {
             message.textContent = `오늘의 출석 코드 : ${scheduleAttendanceCode}`;
             scheduleCodeContainer.appendChild(message);
         }
-    
+
         const codeInput = document.createElement('input');
         codeInput.type = 'text';
         codeInput.placeholder = '출석 코드를 입력하세요';
         codeInput.id = 'attendance-code-input';
         scheduleCodeContainer.appendChild(codeInput);
-    
+
         const codeButton = document.createElement('button');
         codeButton.textContent = '출석 코드 제출';
         codeButton.id = 'attendance-code-button';
         scheduleCodeContainer.appendChild(codeButton);
-    
+
         codeButton.addEventListener('click', async () => {
             try {
                 const response = await fetch('/Attend', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ 
-                        functionType: 3, 
-                        userToken: userToken, 
-                        groupToken: groupToken, 
-                        userPermission: userPermission, 
-                        scheduleAttendanceCode: scheduleAttendanceCode,  
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        functionType: 3,
+                        userToken: userToken,
+                        groupToken: groupToken,
+                        userPermission: userPermission,
+                        scheduleAttendanceCode: scheduleAttendanceCode,
                     })
                 });
-    
-                data = await response.json();
-    
+
+                const data = await response.json();
+
                 if (data.result == 0) {
-                    alert('다시 시도해주세요!')
+                    alert('다시 시도해주세요!');
                 } else if (data.result == 1) {
-                    alert(`출석코드가 변경되었습니다!`);
+                    alert('출석코드가 변경되었습니다!');
                     location.reload();
                 } else {
-                    alert('관리자에게 문의해주세요')
+                    alert('관리자에게 문의해주세요');
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
         });
+
+        ///////////////// 수정하기 버튼 생성
+        const editButtonContainer = document.getElementById('edit-button-container');
+        editButtonContainer.innerHTML = '';
+        const editButton = document.createElement('button');
+        editButton.textContent = '수정하기';
+        editButton.id = 'edit-button';
+        editButtonContainer.appendChild(editButton);
+        editButton.addEventListener('click', () => {
+            window.location.href = `/GroupSchedulePage/EditScheduleAttendancePage.html?scheduleToken=${scheduleToken}&scheduleTitle=${scheduleTitle}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheudleImportance=${scheudleImportance}&scheduleAlert=${scheduleAlert}&scheduleStatus=${scheduleStatus}`;
+        });
     }
-    
 }
