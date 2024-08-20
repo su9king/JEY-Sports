@@ -72,11 +72,18 @@ module.exports = {
 
         }else if (page == "DetailScheduleAttendancePage"){
             const scheduleToken = query["scheduleToken"];
-            const data = await DetailScheduleAttendancePage(scheduleToken); //일정 데이터랑, 출석 데이터 2차원배열 이용
+            const data = await DetailScheduleAttendancePage(scheduleToken,userToken); //일정 데이터랑, 출석 데이터 2차원배열 이용
 
             return {result : 1 , resources : data};
 
-        }else if (page == "TotalAttendancePage"){
+        }else if (page == "EditScheduleAttendancePage"){
+            const scheduleToken = query["scheduleToken"];
+            const data = await DetailScheduleAttendancePage(scheduleToken,userToken); //일정 데이터랑, 출석 데이터 2차원배열 이용
+
+            return {result : 1 , resources : data};
+
+            //// 출석 및 회비 관련 회원인증
+        }else if (page == "test"){
             const groupToken = query["groupToken"];
             const data = await TotalAttendancePage(groupToken);
             return {result : 1 , resources : data};
@@ -89,10 +96,17 @@ module.exports = {
 
         }else if (page == "DetailNoticeDuesPage"){
             const noticeToken = query["noticeToken"];
-            const data = await DetailNoticeDuesPage(noticeToken); //일정 데이터랑, 출석 데이터 2차원배열 이용
+            const data = await DetailNoticeDuesPage(noticeToken,userToken); //공지사항, 회비 데이터 2차원배열 이용
 
             return {result : 1 , resources : data};
 
+        }else if (page == "EditNoticeDuesPage"){
+            const noticeToken = query["noticeToken"];
+            const data = await DetailNoticeDuesPage(noticeToken,userToken); //공지사항, 회비 데이터 2차원배열 이용
+
+            return {result : 1 , resources : data};
+
+            //// 출석 및 회비 관련 회원인증
         }else if (page == "TotalDuesPage"){
             const groupToken = query["groupToken"];
             const data = await TotalDuesPage(groupToken);
@@ -348,9 +362,8 @@ async function ScheduleAttendancePage(groupToken){
 async function NoticeDuesPage(groupToken){
 
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT noticeToken , noticeTitle, noticeStatus, noticeImportance, noticeEditDate , noticeType
-                          FROM Notices 
-                          WHERE groupToken = ? and noticeType > 1`, [groupToken],
+        connection.query(`SELECT * FROM Notices 
+                          WHERE groupToken = ? and noticeType = 2`, [groupToken],
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);
@@ -360,6 +373,7 @@ async function NoticeDuesPage(groupToken){
                 if (results.length > 0) {
                     results.forEach(notice => {
                         notice.noticeEditDate = moment(notice.noticeEditDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                        notice.noticeEndDate = moment(notice.noticeEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
                     });
                     resolve(results);
                 } else {
@@ -370,7 +384,7 @@ async function NoticeDuesPage(groupToken){
     })
 }
 
-async function DetailScheduleAttendancePage(scheduleToken) {
+async function DetailScheduleAttendancePage(scheduleToken,userToken) {
     return new Promise((resolve, reject) => {
         // 일정 불러오기
         const scheduleQuery = new Promise((resolveSchedule, rejectSchedule) => {
@@ -393,10 +407,29 @@ async function DetailScheduleAttendancePage(scheduleToken) {
                 }
             );
         });
+        //본인의 출석정보 가져오기
+        const MyAttendanceStatus = new Promise((resolveMyAttendance, rejectMyAttendance) => {
+            connection.query(`SELECT usr.userID, usr.userName ,au.attendanceStatus, au.absentReason
+                FROM AttendanceUsers as au
+                JOIN Users AS usr ON usr.userToken = au.userToken
+                WHERE au.scheduleToken = ? and usr.userToken = ?`, [scheduleToken,userToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('소프트웨어 유저 출석 쿼리 실행 오류:', error);
+                        return rejectMyAttendance(error);
+                    }
+                    if (results.length > 0) {
+                        resolveMyAttendance(results);
+                    } else {
+                        resolveMyAttendance(null);
+                    }
+                }
+            );
+        });
 
         // 소프트웨어 유저의 출석정보 가져오기
         const attendanceUsersQuery = new Promise((resolveAttendanceUsers, rejectAttendanceUsers) => {
-            connection.query(`SELECT usr.userID, au.attendanceStatus, au.absentReason
+            connection.query(`SELECT usr.userID, usr.userName, au.attendanceStatus, au.absentReason
                 FROM AttendanceUsers as au
                 JOIN Users AS usr ON usr.userToken = au.userToken
                 WHERE au.scheduleToken = ?`, [scheduleToken],
@@ -416,7 +449,7 @@ async function DetailScheduleAttendancePage(scheduleToken) {
 
         // 소프트웨어 비유저의 출석정보 가져오기
         const attendanceNonUsersQuery = new Promise((resolveNonUsers, rejectNonUsers) => {
-            connection.query(`SELECT nuo.userName, au.attendanceStatus, au.absentReason 
+            connection.query(`SELECT nuo.notUserToken,nuo.userName, au.attendanceStatus, au.absentReason 
                 FROM AttendanceUsers as au
                 JOIN NotUsersOrganizations AS nuo ON nuo.notUserToken = au.notUserToken
                 WHERE au.scheduleToken = ?`, [scheduleToken],
@@ -435,10 +468,10 @@ async function DetailScheduleAttendancePage(scheduleToken) {
         });
 
         // 모든 쿼리 실행
-        Promise.all([scheduleQuery, attendanceUsersQuery, attendanceNonUsersQuery])
+        Promise.all([scheduleQuery,MyAttendanceStatus ,attendanceUsersQuery, attendanceNonUsersQuery])
             .then(results => {
-                const [data1, data2, data3] = results;
-                resolve([data1, data2, data3]);
+                const [data1, data2, data3, data4] = results;
+                resolve([data1, data2, data3, data4]);
             })
             .catch(error => {
                 reject(error);
@@ -448,7 +481,7 @@ async function DetailScheduleAttendancePage(scheduleToken) {
 
 
 
-async function DetailNoticeDuesPage(noticeToken) {
+async function DetailNoticeDuesPage(noticeToken,userToken) {
     return new Promise((resolve, reject) => {
         // 공지사항 불러오기
         const noticeQuery = new Promise((resolveNotice, rejectNotice) => {
@@ -471,10 +504,28 @@ async function DetailNoticeDuesPage(noticeToken) {
                 }
             );
         });
-
+        //본인의 출석정보 가져오기
+        const MyDueStatus = new Promise((resolveMyAttendance, rejectMyAttendance) => {
+            connection.query(`SELECT usr.userName,usr.userID ,du.duesStatus
+                FROM DuesUsers as du
+                JOIN Users AS usr ON usr.userToken = du.userToken
+                WHERE du.noticeToken = ? and usr.userToken = ?`, [noticeToken,userToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('소프트웨어 유저 출석 쿼리 실행 오류:', error);
+                        return rejectMyAttendance(error);
+                    }
+                    if (results.length > 0) {
+                        resolveMyAttendance(results);
+                    } else {
+                        resolveMyAttendance(null);
+                    }
+                }
+            );
+        });
         // 소프트웨어 유저의 회비정보 가져오기
         const duesUsersQuery = new Promise((resolveDuesUsers, rejectDuesUsers) => {
-            connection.query(`SELECT usr.userID, du.duesStatus
+            connection.query(`SELECT usr.userName,usr.userID, du.duesStatus
                 FROM DuesUsers as du
                 JOIN Users AS usr ON usr.userToken = du.userToken
                 WHERE du.noticeToken = ?`, [noticeToken],
@@ -494,7 +545,7 @@ async function DetailNoticeDuesPage(noticeToken) {
 
         // 소프트웨어 비유저의 회비정보 가져오기
         const duesNonUsersQuery = new Promise((resolveNonUsers, rejectNonUsers) => {
-            connection.query(`SELECT nuo.userName, du.duesStatus
+            connection.query(`SELECT nuo.notUserToken,nuo.userName, du.duesStatus
                 FROM DuesUsers as du
                 JOIN NotUsersOrganizations AS nuo ON nuo.notUserToken = du.notUserToken
                 WHERE du.noticeToken = ?`, [noticeToken],
@@ -513,10 +564,10 @@ async function DetailNoticeDuesPage(noticeToken) {
         });
 
         // 모든 쿼리 실행
-        Promise.all([noticeQuery, duesUsersQuery, duesNonUsersQuery])
+        Promise.all([noticeQuery, MyDueStatus ,duesUsersQuery, duesNonUsersQuery])
             .then(results => {
-                const [data1, data2, data3] = results;
-                resolve([data1, data2, data3]);
+                const [data1, data2, data3, data4] = results;
+                resolve([data1, data2, data3 , data4]);
             })
             .catch(error => {
                 reject(error);
@@ -525,8 +576,7 @@ async function DetailNoticeDuesPage(noticeToken) {
 }
 
 
-async function TotalAttendancePage(groupToken){
-
+async function TotalAttendancePage(groupToken) {
     return new Promise((resolve, reject) => {
         // 그룹에 해당하는 모든 일정 불러오기
         const schedulesQuery = new Promise((resolveSchedules, rejectSchedules) => {
@@ -587,7 +637,11 @@ async function TotalAttendancePage(groupToken){
                 return getAttendanceForSchedules(schedules).then(attendanceData => {
                     // 최종 데이터 구조 만들기
                     const finalData = schedules.map((schedule, index) => {
-                        return [schedule, attendanceData[index][0], attendanceData[index][1]];
+                        return [
+                            schedule,
+                            attendanceData[index][0], // 멤버 출석 데이터
+                            attendanceData[index][1] // 비멤버 출석 데이터
+                        ];
                     });
                     resolve(finalData);
                 });
@@ -597,6 +651,7 @@ async function TotalAttendancePage(groupToken){
             });
     });
 }
+
 
 async function TotalDuesPage(groupToken){
 

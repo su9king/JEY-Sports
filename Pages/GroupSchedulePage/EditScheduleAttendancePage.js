@@ -29,8 +29,7 @@ window.onload = async function () {
         window.location.href = '/WarningPage.html';
     } else {
         loadSidebar(page, userPermission, response);
-
-        scheduleAttendanceCode = response.resources[0].scheduleAttendanceCode;
+        scheduleAttendanceCode = response.resources[0][0].scheduleAttendanceCode;
         myData = response.resources[1][0];
         members = response.resources[2];
         notuserMembers = response.resources[3];
@@ -45,8 +44,8 @@ window.onload = async function () {
             scheduleImportance,
             scheduleAlert,
             scheduleStatus,
-            scheduleContent : response.resources[0].scheduleContent,
-            scheduleLocation : response.resources[0].scheduleLocation,            
+            scheduleContent : response.resources[0][0].scheduleContent,
+            scheduleLocation : response.resources[0][0].scheduleLocation,            
         };
 
         displayAnnouncement(announcement);
@@ -204,7 +203,7 @@ function createMemberBox(member, isMyStatus = false, isNotUser = false) {
 }
 
 async function saveAttendanceStatus() {
-    const changedMembers = [];
+    const datas = [];
 
     const compareMembers = (initial, current, functionType) => {
         return initial.map((member, index) => {
@@ -228,18 +227,19 @@ async function saveAttendanceStatus() {
             2  // 비회원 멤버는 functionType == 2
         );
 
-        changedMembers.push(...changedUserMembers, ...changedNotUserMembers);
+        datas.push(...changedUserMembers, ...changedNotUserMembers);
 
-        if (changedMembers.length === 0) {
+        if (datas.length === 0) {
             alert('멤버의 출석 상태를 변경해주세요!');
             return;
         }
-
+        console.log(userPermission)
         const data = {
             userToken: userToken,
             groupToken: groupToken,
             scheduleToken: scheduleToken,
-            changedMembers: changedMembers,
+            datas: datas,
+            userPermission : userPermission
         };
 
         // 서버로 데이터 전송
@@ -293,18 +293,23 @@ function createCodeContainer(permission) {
     codeButton.textContent = '출석 코드 제출';
     codeButton.id = 'attendance-code-button';
     scheduleCodeContainer.appendChild(codeButton);
+    
+  
 
     codeButton.addEventListener('click', async () => {
+        scheduleAttendanceCode = document.getElementById('attendance-code-input').value;
+        const datas = [{functionType : 3,scheduleAttendanceCode : scheduleAttendanceCode}]
         try {
+            
             const response = await fetch('/EditAttendanceList', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    functionType: 3,
                     userToken: userToken,
                     groupToken: groupToken,
                     userPermission: userPermission,
-                    scheduleAttendanceCode: scheduleAttendanceCode,
+                    scheduleToken : scheduleToken,
+                    datas : datas
                 })
             });
 

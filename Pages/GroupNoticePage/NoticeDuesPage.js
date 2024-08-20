@@ -24,7 +24,7 @@ window.onload = async function() {
                 noticeType: resource.noticeType,
                 noticeToken: resource.noticeToken,
                 noticeTitle: resource.noticeTitle,
-                noticeChangedDate: resource.noticeChangedDate,
+                noticeEditDate: resource.noticeEditDate,
                 noticeEndDate: resource.noticeEndDate,
                 noticeImportance: resource.noticeImportance,
                 noticeStatus: resource.noticeStatus,
@@ -114,7 +114,7 @@ function createNoticeElements() {
 
         noticeInfo.innerHTML = `
         공지 유형: ${typeText} <br>
-        마지막 수정일: ${notice.noticeChangedDate} | 공지사항 종료일: ${notice.noticeEndDate} | 중요도: ${importanceText} | 공개: ${noticeStatusText}
+        마지막 수정일: ${notice.noticeEditDate} | 공지사항 종료일: ${notice.noticeEndDate} | 중요도: ${importanceText} | 공개: ${noticeStatusText}
         `;
 
 
@@ -133,7 +133,7 @@ function createNoticeElements() {
         
         // 제목 클릭시 작동 - 게시글 형성
         noticeTitle.addEventListener("click", async function() {
-            window.location.href = `DetailNoticeDuesPage.html?noticeType=${notice.noticeType}&noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeChangedDate=${notice.noticeChangedDate}&noticeEndDate=${notice.noticeEndDate}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&userDuesStatus=${notice.userDuesStatus}&noticeDues=${notice.noticeDues}`;
+            window.location.href = `DetailNoticeDuesPage.html?noticeType=${notice.noticeType}&noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeEditDate=${notice.noticeEditDate}&noticeEndDate=${notice.noticeEndDate}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&userDuesStatus=${notice.userDuesStatus}&noticeDues=${notice.noticeDues}`;
         });
 
         noticeBox.appendChild(noticeTitle);

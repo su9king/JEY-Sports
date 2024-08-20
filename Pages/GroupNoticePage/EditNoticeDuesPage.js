@@ -21,18 +21,17 @@ window.onload = async function () {
     const noticeDues = urlParams.get('noticeDues');
     const noticeContent = urlParams.get('noticeContent');
     const noticeWriter = urlParams.get('noticeWriter');
-
-    const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}`;
-
+    
+    const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&noticeToken=${noticeToken}`;
     const response = await certification(page, data);
-
+    
     if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
         window.location.href = '/WarningPage.html';
     } else {
         loadSidebar(page, userPermission, response);
 
-        myData = response.resources[1];
+        myData = response.resources[1][0];
         members = response.resources[2]; // 멤버 리스트
         notuserMembers = response.resources[3]; // 비회원 멤버 리스트
 
@@ -78,7 +77,7 @@ function displayAnnouncement(announcement) {
     saveButton.textContent = '공지사항 수정';
     saveButton.addEventListener('click', async function () {
     
-        const response = await fetch('/EditGroupSchedules', {
+        const response = await fetch('/EditGroupNotices', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -181,7 +180,7 @@ function createMemberBox(member, isMyStatus = false, isNotUser = false) {
         statusButton.textContent = option.text;
         statusButton.classList.add("status-button");
 
-        if (member.userDuesStatus == option.value) {
+        if (member.duesStatus == option.value) {
             statusButton.style.backgroundColor = option.color;
             statusButton.style.transform = "translateY(-3px)";
         } else {
@@ -189,7 +188,7 @@ function createMemberBox(member, isMyStatus = false, isNotUser = false) {
         }
 
         statusButton.addEventListener("click", () => {
-            member.userDuesStatus = option.value;
+            member.duesStatus = option.value;
             displayMemberDues();
         });
 
@@ -204,11 +203,11 @@ function createMemberBox(member, isMyStatus = false, isNotUser = false) {
 }
 
 async function saveDuesSatus() {
-    const changedMembers = [];
+    const datas = [];
 
     const compareMembers = (initial, current, functionType) => {
         return initial.map((member, index) => {
-            if (member.userDuesStatus !== current[index].userDuesStatus) {
+            if (member.duesStatus !== current[index].duesStatus) {
                 return { ...current[index], functionType };
             }
             return null;
@@ -228,9 +227,9 @@ async function saveDuesSatus() {
             2  // 비회원 멤버는 functionType == 2
         );
 
-        changedMembers.push(...changedUserMembers, ...changedNotUserMembers);
+        datas.push(...changedUserMembers, ...changedNotUserMembers);
 
-        if (changedMembers.length == 0) {
+        if (datas.length == 0) {
             alert('회비 납부 상태를 변경해주세요!');
             return;
         }
@@ -239,9 +238,10 @@ async function saveDuesSatus() {
             userToken: userToken,
             groupToken: groupToken,
             noticeToken: noticeToken,
-            changedMembers: changedMembers,
+            userPermission : userPermission,
+            datas: datas
         };
-
+        console.log(data);
         const response = await fetch('/EditDuesList', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

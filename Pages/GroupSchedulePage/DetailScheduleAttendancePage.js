@@ -21,6 +21,7 @@ window.onload = async function () {
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&scheduleToken=${scheduleToken}`;
 
     const response = await certification(page, data);
+    console.log(response.resources)
 
     if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
@@ -28,12 +29,12 @@ window.onload = async function () {
     } else {
         loadSidebar(page, userPermission, response);
 
-        scheduleAttendanceCode = response.resources[0].scheduleAttendanceCode;
+        scheduleAttendanceCode = response.resources[0][0].scheduleAttendanceCode;
         myData = response.resources[1][0];  // 내 출석 데이터
         members = response.resources[2];          // 멤버 출석 데이터
         notuserMembers = response.resources[3];   // 비유저 출석 데이터
 
-        displayAnnouncement(response.resources[0]); // 공지사항 표시
+        displayAnnouncement(response.resources[0][0]); // 공지사항 표시
         displayMyData();  // 내 출석 데이터 표시
         displayMembers(); // 멤버 및 비유저 멤버 표시
         createAdminContainer(userPermission); // 수정 버튼, 출석 코드 생성
@@ -262,17 +263,22 @@ async function createAdminContainer(userPermission) {
         codeButton.id = 'attendance-code-button';
         scheduleCodeContainer.appendChild(codeButton);
 
+    
+        
+        
         codeButton.addEventListener('click', async () => {
+            scheduleAttendanceCode = document.getElementById('attendance-code-input').value;
+            const datas = [{functionType : 3,scheduleAttendanceCode : scheduleAttendanceCode}]
             try {
-                const response = await fetch('/Attend', {
+                const response = await fetch('/EditAttendanceList', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        functionType: 3,
                         userToken: userToken,
                         groupToken: groupToken,
                         userPermission: userPermission,
-                        scheduleAttendanceCode: scheduleAttendanceCode,
+                        scheduleToken : scheduleToken,
+                        datas : datas
                     })
                 });
 
