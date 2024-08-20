@@ -30,6 +30,7 @@ module.exports = {
             }else{
                 return {result : 1 , resources : data};
             }
+            
         }else if (page == "EditUserPage"){
             
             const data = await EditUserPage(userToken);
@@ -57,6 +58,11 @@ module.exports = {
             const data = await GroupNoticePage(groupToken);
             return {result : 1 , resources : data};
             
+        }else if (page == "CreateGroupNoticePage"){
+            return {result : 1 , resources : null};
+        }else if (page == "CreateGroupSchedulePage"){
+            return {result : 1 , resources : null};
+
             //// 출석 및 회비 관련 회원인증
         }else if (page == "ScheduleAttendancePage"){
             

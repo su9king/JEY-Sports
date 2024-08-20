@@ -21,6 +21,7 @@ async function certification(page, data) {
         }
     } catch (error) {
         console.error('Error:', error);
+        window.location.href = '/WarningPage.html'; 
     }
 }
 

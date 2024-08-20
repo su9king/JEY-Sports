@@ -145,8 +145,9 @@ async function alertStatusSchedule(statusSchedule) {
     let hasExpectedSchedule = false;
 
     statusSchedule.forEach(schedule => {
+        //isToday 변수는 예정 일정인지, 현재 진행중인 일정인지 구분점. isToday true 이면 현재 진행중인 일정임.
         if (schedule.attendanceStatus !== 0) {
-            const isToday = schedule.scheduleStartDate == todayDate;
+            const isToday = schedule.scheduleStartDate <= todayDate ? true : false
             const container = isToday ? currentScheduleContainer : expectedScheduleContainer;
             
     

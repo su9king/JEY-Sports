@@ -1,5 +1,6 @@
 //필요한 모듈 선언
 const connection = require('../DatabaseLoad');
+const moment = require('moment-timezone');
 
 // 메인 실행 코드. 그냥 복사 붙여넣기 용
 module.exports = {
@@ -29,16 +30,21 @@ async function GetFutureSchedules(userToken,groupToken,todayDate) {
         connection.query(`SELECT sc.scheduleToken, sc.scheduleTitle, ac.attendanceStatus ,sc.scheduleStartDate ,sc.scheduleEndDate
             FROM Schedules AS sc 
             JOIN AttendanceUsers AS ac ON sc.scheduleToken = ac.scheduleToken
-            WHERE scheduleStartDate BETWEEN ? AND DATE_ADD(?, INTERVAL 2 WEEK)
+            WHERE (? BETWEEN scheduleStartDate AND scheduleEndDate 
+            or scheduleStartDate BETWEEN ? AND DATE_ADD(?, INTERVAL 2 WEEK))
             AND sc.groupToken = ?
             AND ac.userToken = ?
-            AND sc.scheduleAttendance = true`, [todayDate,todayDate,groupToken,userToken], 
+            AND sc.scheduleAttendance = true`, [todayDate,todayDate,todayDate,groupToken,userToken], 
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);
                     return reject(error);
                 }
                 if (results.length > 0) {
+                    results.forEach(schedule => {
+                        schedule.scheduleStartDate = moment(schedule.scheduleStartDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                        schedule.scheduleEndDate = moment(schedule.scheduleEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                    });
                     resolve(results);  
                 } else {
                     resolve(null);  

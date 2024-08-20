@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const noticeContent = document.getElementById('noticeContent').value;
         const noticeWriter = document.getElementById('noticeWriter').value;
         const noticeEndDate = noticeEndDateInput.value ? noticeEndDateInput.value : null;
-
         const noticeCreatedDate = new Date().toISOString().split('T')[0];
         const noticeEditDate = new Date().toISOString().split('T')[0];
+        const noticeDues = 20000; //데이터 받는 인터페이스 필요
 
         
         if (noticeTitle && noticeContent && noticeWriter &&(noticeEndDate || noEndDateCheckbox.checked)) {
@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         noticeEndDate: noticeEndDate,
                         noticeCreatedDate: noticeCreatedDate,
                         noticeEditDate: noticeEditDate,
+                        noticeDues : noticeDues
                     })
                 });
 
@@ -121,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('다시 시도해주세요!');
                 } else if (data.result == 1)  {
                     alert('공지사항을 저장했습니다!');
-                    //window.location.href = "GroupNoticePage.html";
+                    window.location.href = "GroupNoticePage.html";
                 } else {
                     alert('관리자에게 문의해주세요')
                 }

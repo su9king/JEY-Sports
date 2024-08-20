@@ -119,13 +119,13 @@ async function CreateNotice(data) {
         // 공지사항 추가하기
         connection.query(`INSERT INTO Notices 
                           (groupToken,noticeTitle,noticeContent,noticeWriter,noticeCreatedDate,
-                          noticeEditDate,noticeImportance,noticeStatus,noticeEndDate,noticeType)
-                          VALUES(?,?,?,?,?,?,?,?,?) `, 
+                          noticeEditDate,noticeImportance,noticeStatus,noticeEndDate,noticeType,noticeDues)
+                          VALUES(?,?,?,?,?,?,?,?,?,?,?) `, 
                           [data["groupToken"],data["noticeTitle"],
                            data["noticeContent"],data["noticeWriter"],
                            data["noticeCreatedDate"],data["noticeEditDate"],
                            data["noticeImportance"],data["noticeStatus"],
-                           data["noticeEndDate"],data["noticeType"]], 
+                           data["noticeEndDate"],data["noticeType"],data["noticeDues"]], 
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);

@@ -5,12 +5,6 @@ window.onload = async function() {
 
     const resources = await certification(page, data);
 
-    if (resources.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
-    } else {
-        console.log('회원 인증 성공');
-    }
 }
 
 

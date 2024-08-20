@@ -4,7 +4,7 @@ const connection = require('../DatabaseLoad');
 
 // 메인 실행 코드. 그냥 복사 붙여넣기 용
 module.exports = {
-    EditAttendanceList : async(data) => {
+    c : async(data) => {
         try {
             const datas = data["datas"]
             const userPermission = data["userPermission"];
