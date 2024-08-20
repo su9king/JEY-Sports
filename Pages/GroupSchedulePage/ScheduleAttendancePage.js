@@ -116,7 +116,7 @@ function createNoticeElements() {
         
         // 제목 클릭시 작동 - 게시글 형성
         noticeTitle.addEventListener("click", async function() {
-            window.location.href = `DetailScheduleAttendancePage.html?scheduleToken=${notice.scheduleToken}`;
+            window.location.href = `DetailScheduleAttendancePage.html?scheduleToken=${notice.scheduleToken}&scheduleTitle=${notice.scheduleTitle}&scheduleStartDate=${notice.scheduleStartDate}&scheduleEndDate=${notice.scheduleEndDate}&scheudleImportance=${notice.scheudleImportance}&scheduleAlert=${notice.scheduleAlert}&scheduleStatus=${notice.scheduleStatus}`;
         });
 
         noticeBox.appendChild(noticeTitle);

@@ -1,3 +1,14 @@
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+
 /* 멤버 박스 스타일 */
 .memberBox {
     display: flex;
@@ -25,8 +36,24 @@
     flex: 1;
   }
   
-  
-  
+  /* 멤버 컨테이너에 스크롤 추가 */
+.member-container {
+  /*max-height: 600px;  원하는 높이 설정 */
+  /*overflow-y: auto;  세로 스크롤 추가 */
+  border: 1px solid #ddd; /* 테두리 추가 */
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+#announcement-container, #my-data-container, #user-member-container, #code-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 800px;
+}
   
   
   
@@ -41,7 +68,7 @@
   }
   
   /* 권한 변경 버튼 스타일 */
-  .change-permission-button {
+  #edit-button {
     margin-right: 10px;
     width: 100px;
     height: 30px;
@@ -52,171 +79,41 @@
     cursor: pointer;
   }
   
-  /* 삭제 버튼 스타일 */
-  .delete-button {
-    width: 80px;
-    height: 30px;
-    background-color: #f44336; /* 빨간색 */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
   
-  .basicBtn {
-    font-size: 14px;
-    margin-left: 10px;
-  }
-  
-  
-  /* --------------권한 변경 컨테이너-------------- */
-  .permission-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  
-  /* 드롭다운 메뉴 스타일 */
-  .permission-select {
-    padding: 5px;
-    margin-right: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  
-  
-  
-  .change-permission-button:hover {
-    background-color: #0056b3;
-  }
-  .delete-button:hover {
-    background-color: #d32f2f;
-  }
-    
-  /* -----------------------모달----------------------- */
-  
-  /* 모달 기본 스타일 */
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    transition: opacity 0.3s ease;
-    opacity: 0;
-    visibility: hidden;
-  }
-  
-  .modal.visible {
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  .modal-content {
-    background: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    width: 90%;
-    max-width: 800px;
-    max-height: 80vh; /* 최대 높이를 지정 */
-    overflow-y: auto;  /* 높이를 초과하면 스크롤 생기도록 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
-  }
-  
-  
-  /* 모달 닫기 버튼 스타일 */
-  #closeModalBtn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #e74c3c;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  #closeModalBtn:hover {
-    background: #c0392b;
-  }
-  
-  /* 멤버 요청 박스 스타일 */
-  .requestBox {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 600px;
-    background: #f9f9f9;
-  }
-  
-  /* 요청 이미지 스타일 */
-  .request-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 15px;
-  }
-  
-  /* 요청 정보 스타일 */
-  .request-info {
-    flex: 1;
-  }
-  
-  /* 요청 수락 버튼 스타일 */
-  .accept-button {
-    background: #2ecc71;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  .accept-button:hover {
-    background: #27ae60;
-  }
-  
-  /* 초대하기 및 등록 섹션 스타일 */
-  #invite-container, #register-container {
-    margin-top: 20px;
-  }
-  
-  #invite-container label, #register-container label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  #invite-container input, #register-container input {
-    width: 30%;
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .status-button{
-    padding: 10px 20px;
-    background: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+  /* 출석 상태 버튼을 포함하는 컨테이너 스타일 */
+.attendance-status-container {
+  display: flex; /* 전체 컨테이너는 기본적으로 수직 정렬 */
+  flex-direction: column; /* 버튼과 결석 사유를 수직으로 배치 */
+  gap: 10px; /* 버튼과 결석 사유 간의 간격 */
+}
 
-  
+/* 본인의 출석 상태일 때 버튼들이 들어가는 컨테이너 */
+.status-buttons-container {
+  display: flex; /* 버튼들을 수평으로 배치 */
+  gap: 10px; /* 버튼 간의 간격 */
+}
+
+/* 출석 상태 버튼 스타일 */
+.status-button {
+  padding: 10px 20px;
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 결석 사유를 포함하는 컨테이너 스타일 */
+.absent-reason-container {
+  display: flex;
+  flex-direction: column; /* 결석 사유를 수직으로 배치 */
+}
+
+/* 결석 사유 스타일 */
+.absent-reason {
+  margin: 0; /* 불필요한 마진 제거 */
+}
+
   
   
     

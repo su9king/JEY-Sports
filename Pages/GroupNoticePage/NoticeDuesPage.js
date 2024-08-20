@@ -1,6 +1,7 @@
 let notices = [];
 let currentPage = 1;
 const noticesPerPage = 10;
+let userToken, groupToken, userPermission
 
 //////////////////// Step0 : 회원인증, 사이드바 ///////////////////
 window.onload = async function() {
@@ -27,7 +28,7 @@ window.onload = async function() {
                 noticeEndDate: resource.noticeEndDate,
                 noticeImportance: resource.noticeImportance,
                 noticeStatus: resource.noticeStatus,
-                DuesStatus: resource.DuesStatus,
+                userDuesStatus: resource.userDuesStatus,
                 noticeDues: resource.noticeDues,
             }));
             createNoticeElements();
@@ -76,8 +77,8 @@ function createNoticeElements() {
             return;
         }
 
-        // 일반 공지사항은 제외
-        if (notice.noticeType == 1) {
+        // noticeType == 2번 회비 공지사항만 노출
+        if (notice.noticeType != 2) {
             return;
         }
 
@@ -118,13 +119,12 @@ function createNoticeElements() {
 
 
         //// 납부하기 버튼 생성
-        if (notice.DuesStatus == 0) {
+        if (notice.userDuesStatus == 0) {
             const payBtn = document.createElement("button");
             payBtn.classList.add("pay-button");
             payBtn.textContent = "납부하기";
             payBtn.addEventListener("click", async function () {
-                // dues();
-                alert("Dues() 만들어주세요!")
+                dues(userToken, groupToken, userPermission, notice.noticeToken, notice.noticeDues);
             })
 
             noticeBox.appendChild(payBtn);
@@ -133,7 +133,7 @@ function createNoticeElements() {
         
         // 제목 클릭시 작동 - 게시글 형성
         noticeTitle.addEventListener("click", async function() {
-            window.location.href = `DetailNoticeDuesPage.html?noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeChangedDate=${notice.noticeChangedDate}&scheduleEndDate=${notice.scheduleEndDate}&scheduleImportance=${notice.scheduleImportance}&scheduleAlert=${notice.scheduleAlert}&noticeStatus=${notice.noticeStatus}`;
+            window.location.href = `DetailNoticeDuesPage.html?noticeType=${notice.noticeType}&noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeChangedDate=${notice.noticeChangedDate}&noticeEndDate=${notice.noticeEndDate}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&userDuesStatus=${notice.userDuesStatus}&noticeDues=${notice.noticeDues}`;
         });
 
         noticeBox.appendChild(noticeTitle);

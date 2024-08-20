@@ -28,7 +28,7 @@ async function dues(userToken, groupToken, userPermission, noticeToken, noticeDu
                 });
         
                 const data = await response.json();
-
+                
                 if (data.result == 1) {
                     alert('납부 완료!');
                 } else if (data.result == 0)  {
