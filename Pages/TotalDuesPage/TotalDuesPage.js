@@ -61,7 +61,8 @@ function generateTable(getData) {
     const tbody = table.createTBody();
 
     // 각 공지에 대한 행 추가
-    getData[0].forEach((notice, noticeIndex) => {
+    getData.forEach((data, noticeIndex) => {
+        const notice = data[0]; // 공지 정보를 가져옴
         const noticeRow = tbody.insertRow();
 
         // 첫 번째 셀: noticeType에 따라 다른 색상의 텍스트로 표시
@@ -97,42 +98,40 @@ function generateTable(getData) {
             window.location.href = `/GroupNoticePage/DetailNoticeDuesPage.html?noticeType=${notice.noticeType}&noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeChangedDate=${notice.noticeChangedDate}&noticeEndDate=${notice.noticeEndDate}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&userDuesStatus=${notice.userDuesStatus}&noticeDues=${notice.noticeDues}`;
         });
 
-
-        ////////////////////////////////////////////////////////////////////여기부터 수정
         // 금액 셀  
         const noticeDuesCell = noticeRow.insertCell();
-        if(notice.noticeType == 2) {
-            let totalDuesMember = 0;
-            /////////////////////////// 여기서 회비 대상자 총 멤버 코드 추가
-    
-            let dues = notice.noticeDues * totalDuesMember;
+        if (notice.noticeType == 2) {
+            // 회비 대상자 총 멤버 수 계산
+            const softwareUsers = data[1]; // 소프트웨어 유저 정보
+            let totalDuesMember = softwareUsers.length;
+            let totalDuesNotUsers = data[2].length;
+            let dues = notice.noticeDues * (totalDuesMember + totalDuesNotUsers);
+            
             totalDues += dues;  // 맨 아래에 가계부 컨테이너에 들어갈 준비
             noticeDuesCell.textContent = `${dues}원`;  // 해당 공지사항에서 받아야할 총 회비 금액
         } else {
             noticeDuesCell.textContent = `${notice.noticeDues}원`; 
         }
 
-
         // 납부된 회비 금액 셀 
         const paidDuesCell = noticeRow.insertCell();
-        if(notice.noticeType == 2) {
-            let totalPaidDuesMember = 0;
-            /////////////////////////// 여기서 회비 납부자 멤버 수 코드 추가
-            
+        if (notice.noticeType == 2) {
+            // 회비 납부자 멤버 수 계산
+            const softwareUsers = data[1]; // 소프트웨어 유저 정보
+            let totalPaidDuesMember = softwareUsers.filter(user => user.userDuesStatus == 1).length;
+
             let paidDues = notice.noticeDues * totalPaidDuesMember;
-            totalDuesPaid += paidDues  // 맨 아래에 가계부 컨테이너에 들어갈 준비
+            totalDuesPaid += paidDues;  // 맨 아래에 가계부 컨테이너에 들어갈 준비
             paidDuesCell.textContent = `${paidDues}원`;  // 해당 공지사항에서 받은 회비 금액
         } else {
-            noticeDuesCell.textContent = ``;
+            paidDuesCell.textContent = ``;
         }
 
-
-
-        // 납부 여부 셀
+        // 납부 여부 셀 -- 아직 미개발
         const duesStatusCell = noticeRow.insertCell();
-        const duesStatus = getData[1][noticeIndex].duesStatus;
-        if(notice.noticeType == 2) {
-            if (duesStatus === 1) {
+        const duesStatus = getData[1][noticeIndex]?.duesStatus; // 유효한 인덱스 확인
+        if (notice.noticeType == 2) {
+            if (duesStatus == 1) {
                 duesStatusCell.style.color = 'blue';
                 duesStatusCell.textContent = '완료';
             } else {
@@ -144,6 +143,7 @@ function generateTable(getData) {
 
     return table;
 }
+
 
 // 검색 기능 초기화 (지출 내역을 대상으로 검색)
 function initSearchFunctionality() {
@@ -170,10 +170,11 @@ function createLedgerContainer() {
     let totalExpenditure = 0;
     let totalIncome = 0;
 
-    getData[0].forEach(notice => {
-        if (notice.noticeType === 4) {  // 지출 내역
+    getData.forEach(data => {
+        const notice = data[0]
+        if (notice.noticeType == 4) {  // 지출 내역
             totalExpenditure += parseInt(notice.noticeDues);
-        } else if (notice.noticeType === 3) {  // 입금 내역
+        } else if (notice.noticeType == 3) {  // 입금 내역
             totalIncome += parseInt(notice.noticeDues);
         }
     });

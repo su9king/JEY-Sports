@@ -55,9 +55,12 @@ function generateTable(getData) {
     headerRow.appendChild(personalParticipationHeader);
 
     // 각 일정에 대한 헤더 추가
-    getData[0].forEach(schedule => {
+    getData.forEach(scheduleData => {
+        const schedule = scheduleData[0]; // 각 행의 첫 번째 요소에 접근
+        console.log("테스트용 콘솔 : ", schedule);
         const th = document.createElement("th");
-        if (schedule.scheduleStartDate == schedule.scheduleEndDate) {
+        
+        if (schedule.scheduleStartDate === schedule.scheduleEndDate) {
             th.textContent = `${schedule.scheduleStartDate}`;
         } else {
             th.textContent = `${schedule.scheduleStartDate} ~ ${schedule.scheduleEndDate}`;
@@ -82,116 +85,136 @@ function generateTable(getData) {
     const emptyCell = orgParticipationRow.insertCell();
 
     // 각 일정에 대한 조직 참여율 계산 및 셀 추가
-    getData[1].forEach((schedule, scheduleIndex) => {
-        // getData[1]과 getData[2]의 유저들을 모두 합쳐서 하나의 배열로 만듦
-        const combinedUsers = schedule.concat(getData[2][scheduleIndex]);
-    
-        // attendanceStatus가 1인 유저의 수 계산
+    getData.forEach((scheduleData) => {
+        const combinedUsers = scheduleData[1].concat(scheduleData[2]); // 유저 데이터 합치기
+
         const attendanceCount = combinedUsers.filter(user => user.attendanceStatus === 1).length;
-        
-        // attendanceStatus가 0 또는 1인 유저의 수 계산 (null 제외)
         const validCount = combinedUsers.filter(user => user.attendanceStatus !== null).length;
-    
-        // 조직 참여율 계산
+
         const orgParticipationRate = validCount > 0 ? (attendanceCount / validCount) * 100 : 0;
-    
-        // 조직 참여율을 셀에 추가
+
         const orgParticipationRateCell = orgParticipationRow.insertCell();
         orgParticipationRateCell.appendChild(createGauge(orgParticipationRate));
     });
+
+    // 각 사용자의 행 추가 (소프트웨어 유저)
+    getData.forEach((scheduleData) => {
+        scheduleData[1].forEach((user) => {
+            // 사용자가 이미 추가된 경우 중복 추가 방지
+            if (!tbody.querySelector(`tr[data-userid="${user.userID}"]`)) {
+                const userRow = tbody.insertRow();
+                userRow.setAttribute('data-userid', user.userID); // 사용자 ID를 데이터 속성으로 추가
+                const userNameCell = userRow.insertCell();
+                userNameCell.textContent = user.userName;
+    
+                // 개인 참여율 계산
+                let attendedCount = 0;
+                let totalCount = 0;
+    
+                getData.forEach(data => {
+                    const userAttendance = data[1].find(u => u.userID == user.userID);
+                    if (userAttendance) {
+                        const attendanceStatus = userAttendance.attendanceStatus;
+                        if (attendanceStatus !== null) {
+                            totalCount++;
+                            if (attendanceStatus === 1) {
+                                attendedCount++;
+                            }
+                        }
+                    }
+                });
+    
+                const personalParticipationRate = totalCount > 0 ? (attendedCount / totalCount) * 100 : 0;
+    
+                const personalParticipationCell = userRow.insertCell();
+                personalParticipationCell.appendChild(createGauge(personalParticipationRate));
+    
+                // 각 일정에 대한 참석 여부 데이터 셀 추가
+                getData.forEach(data => {
+                    const attendanceCell = userRow.insertCell();
+                    const userAttendance = data[1].find(u => u.userID == user.userID);
+    
+                    if (userAttendance) {
+                        const attendanceStatus = userAttendance.attendanceStatus;
+                        if (attendanceStatus === 1) {
+                            attendanceCell.textContent = '참석';
+                        } else if (attendanceStatus === 0) {
+                            attendanceCell.textContent = '불참';
+                        } else {
+                            attendanceCell.textContent = '비회원';
+                        }
+                    } else {
+                        attendanceCell.textContent = '비회원';
+                    }
+                });
+            }
+        });
+    });
+    
     
 
-    // 각 사용자의 행 추가
-    getData[1][0].forEach((user, userIndex) => {
-        const userRow = tbody.insertRow();
+    // 비유저 멤버들 추가
+    const notUserRowHeader = tbody.insertRow();
+    const notUserHeaderCell = notUserRowHeader.insertCell();
+    notUserHeaderCell.textContent = '비유저 멤버들';
 
-        // 유저 이름 셀 추가
-        const userNameCell = userRow.insertCell();
-        userNameCell.textContent = user.userName;
-
-        // 개인 참여율 계산
-        let attendedCount = 0;
-        let totalCount = 0;
-
-        getData[1].forEach(schedule => {
-            const attendanceStatus = schedule[userIndex].attendanceStatus;
-            if (attendanceStatus !== null) {
-                totalCount++;
-                if (attendanceStatus === 1) {
-                    attendedCount++;
-                }
-            }
-        });
-
-        const personalParticipationRate = totalCount > 0 ? (attendedCount / totalCount) * 100 : 0;
-
-        // 개인 참여율 셀 추가
-        const personalParticipationCell = userRow.insertCell();
-        personalParticipationCell.appendChild(createGauge(personalParticipationRate));
-
-        // 각 일정에 대한 참석 여부 데이터 셀 추가
-        getData[1].forEach((schedule, scheduleIndex) => {
-            const attendanceCell = userRow.insertCell();
-            const attendanceStatus = schedule[userIndex].attendanceStatus;
-
-            if (attendanceStatus === 1) {
-                attendanceCell.textContent = '참석';
-            } else if (attendanceStatus === 0) {
-                attendanceCell.textContent = '불참';
-            } else if (attendanceStatus === null) {
-                attendanceCell.textContent = '비회원';
-            }
-        });
-    });
-
-    const border = tbody.insertRow();
-    const borderline = border.insertCell();
-    borderline.textContent = '비유저 멤버들';
-
-    getData[2][0].forEach((user, userIndex) => {
-        const userRow = tbody.insertRow();
-
-        // 유저 이름 셀 추가
-        const userNameCell = userRow.insertCell();
-        userNameCell.textContent = user.userName;
-
-        // 개인 참여율 계산
-        let notUserAttendedCount = 0;
-        let notUserTotalCount = 0;
-
-        getData[2].forEach(schedule => {
-            const attendanceStatus = schedule[userIndex].attendanceStatus;
-            if (attendanceStatus !== null) {
-                notUserTotalCount++;
-                if (attendanceStatus === 1) {
-                    notUserAttendedCount++;
-                }
-            }
-        });
-
-        const personalParticipationRate = notUserTotalCount > 0 ? (notUserAttendedCount / notUserTotalCount) * 100 : 0;
-
-        // 개인 참여율 셀 추가
-        const personalParticipationCell = userRow.insertCell();
-        personalParticipationCell.appendChild(createGauge(personalParticipationRate));
-
-        // 각 일정에 대한 참석 여부 데이터 셀 추가
-        getData[2].forEach((schedule, scheduleIndex) => {
-            const attendanceCell = userRow.insertCell();
-            const attendanceStatus = schedule[userIndex].attendanceStatus;
-
-            if (attendanceStatus === 1) {
-                attendanceCell.textContent = '참석';
-            } else if (attendanceStatus === 0) {
-                attendanceCell.textContent = '불참';
-            } else if (attendanceStatus === null) {
-                attendanceCell.textContent = '비회원';
+    getData.forEach((scheduleData) => {
+        scheduleData[2].forEach((user) => {
+            // 사용자가 이미 추가된 경우 중복 추가 방지
+            if (!tbody.querySelector(`tr[data-notusertoken="${user.notUserToken}"]`)) {
+                const userRow = tbody.insertRow();
+                userRow.setAttribute('data-notusertoken', user.notUserToken); // 비유저 토큰을 데이터 속성으로 추가
+                const userNameCell = userRow.insertCell();
+                userNameCell.textContent = user.userName;
+    
+                // 개인 참여율 계산
+                let notUserAttendedCount = 0;
+                let notUserTotalCount = 0;
+    
+                getData.forEach(data => {
+                    const userAttendance = data[2].find(u => u.notUserToken == user.notUserToken);
+                    if (userAttendance) {
+                        const attendanceStatus = userAttendance.attendanceStatus;
+                        if (attendanceStatus !== null) {
+                            notUserTotalCount++;
+                            if (attendanceStatus === 1) {
+                                notUserAttendedCount++;
+                            }
+                        }
+                    }
+                });
+    
+                const personalParticipationRate = notUserTotalCount > 0 ? (notUserAttendedCount / notUserTotalCount) * 100 : 0;
+    
+                const personalParticipationCell = userRow.insertCell();
+                personalParticipationCell.appendChild(createGauge(personalParticipationRate));
+    
+                // 각 일정에 대한 참석 여부 데이터 셀 추가
+                getData.forEach(data => {
+                    const attendanceCell = userRow.insertCell();
+                    const userAttendance = data[2].find(u => u.notUserToken == user.notUserToken);
+    
+                    if (userAttendance) {
+                        const attendanceStatus = userAttendance.attendanceStatus;
+                        if (attendanceStatus === 1) {
+                            attendanceCell.textContent = '참석';
+                        } else if (attendanceStatus === 0) {
+                            attendanceCell.textContent = '불참';
+                        } else {
+                            attendanceCell.textContent = '비회원';
+                        }
+                    } else {
+                        attendanceCell.textContent = '비회원';
+                    }
+                });
             }
         });
     });
-
+    
     return table;
+    
 }
+
 
 // 게이지 바를 만드는 함수
 function createGauge(percentage) {

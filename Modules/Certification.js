@@ -83,7 +83,7 @@ module.exports = {
             return {result : 1 , resources : data};
 
             //// 출석 및 회비 관련 회원인증
-        }else if (page == "test"){
+        }else if (page == "TotalAttentionPage"){
             const groupToken = query["groupToken"];
             const data = await TotalAttendancePage(groupToken);
             return {result : 1 , resources : data};
@@ -586,6 +586,10 @@ async function TotalAttendancePage(groupToken) {
                         console.error('일정 쿼리 실행 오류:', error);
                         return rejectSchedules(error);
                     }
+                    results.forEach(schedule => {
+                        schedule.scheduleStartDate = moment(schedule.scheduleStartDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                        schedule.scheduleEndDate = moment(schedule.scheduleEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                    });
                     resolveSchedules(results);
                 }
             );
@@ -596,7 +600,7 @@ async function TotalAttendancePage(groupToken) {
             return Promise.all(schedules.map(schedule => {
                 return Promise.all([
                     new Promise((resolveAttendanceUsers, rejectAttendanceUsers) => {
-                        connection.query(`SELECT usr.userID, au.attendanceStatus, au.absentReason
+                        connection.query(`SELECT usr.userName,usr.userID, au.attendanceStatus, au.absentReason
                             FROM AttendanceUsers as au
                             JOIN Users as usr ON usr.userToken = au.userToken
                             WHERE au.scheduleToken = ?`, [schedule.scheduleToken],
@@ -610,7 +614,7 @@ async function TotalAttendancePage(groupToken) {
                         );
                     }),
                     new Promise((resolveAttendanceNonUsers, rejectAttendanceNonUsers) => {
-                        connection.query(`SELECT nuo.userName, au.attendanceStatus, au.absentReason 
+                        connection.query(`SELECT nuo.notUserToken, nuo.userName, au.attendanceStatus, au.absentReason 
                             FROM AttendanceUsers as au
                             JOIN NotUsersOrganizations AS nuo ON nuo.notUserToken = au.notUserToken
                             WHERE au.scheduleToken = ?`, [schedule.scheduleToken],
@@ -656,21 +660,80 @@ async function TotalAttendancePage(groupToken) {
 async function TotalDuesPage(groupToken){
 
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT noticeToken , noticeTitle, noticeStatus, noticeImportance, noticeEditDate , noticeDues
-                          FROM Notices 
-                          WHERE groupToken = ? and noticeType > 1`, [groupToken],
-            (error, results, fields) => {
-                if (error) {
-                    console.error('쿼리 실행 오류:', error);
-                    return reject(error);
-
-                } //쿼리 결과가 없다면 그룹 토큰이 잘못 됨.
-                if (results.length > 0) {
-                    resolve(results);
-                } else {
-                    resolve(null);
+        // 그룹에 해당하는 모든 공지사항 불러오기
+        const noticeQuery = new Promise((resolveNotices, rejectNotices) => {
+            connection.query(`SELECT * FROM Notices WHERE groupToken = ? and noticeType > 1`, [groupToken],
+                (error, results) => {
+                    if (error) {
+                        console.error('일정 쿼리 실행 오류:', error);
+                        return rejectNotices(error);
+                    }
+                    results.forEach(notice => {
+                        notice.noticeEditDate = moment(notice.noticeEditDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                        notice.noticeEndDate = moment(notice.noticeEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                    });
+                    resolveNotices(results);
                 }
-            }
-        );
-    })
+            );
+        });
+
+        // 공지사항에 대해 회비 정보를 가져오는 함수
+        const getDuesFromNotices = (notices) => {
+            return Promise.all(notices.map(notice => {
+                return Promise.all([
+                    new Promise((resolveDuesUsers, rejectDuesUsers) => {
+                        connection.query(`SELECT usr.userName,usr.userID, du.duesStatus
+                            FROM DuesUsers as du
+                            JOIN Users as usr ON usr.userToken = du.userToken
+                            WHERE du.noticeToken = ?`, [notice.noticeToken],
+                            (error, duesResult) => {
+                                if (error) {
+                                    console.error('출석 쿼리 실행 오류 (Users):', error);
+                                    return rejectDuesUsers(error);
+                                }
+                                resolveDuesUsers(duesResult);
+                            }
+                        );
+                    }),
+                    new Promise((resolveAttendanceNonUsers, rejectAttendanceNonUsers) => {
+                        connection.query(`SELECT nuo.notUserToken, nuo.userName, du.duesStatus
+                            FROM DuesUsers as du
+                            JOIN NotUsersOrganizations AS nuo ON nuo.notUserToken = du.notUserToken
+                            WHERE du.noticeToken = ?`, [notice.noticeToken],
+                            (error, nonUserDuesResult) => {
+                                if (error) {
+                                    console.error('출석 쿼리 실행 오류 (NotUsersOrganizations):', error);
+                                    return rejectAttendanceNonUsers(error);
+                                }
+                                resolveAttendanceNonUsers(nonUserDuesResult);
+                            }
+                        );
+                    })
+                ]);
+            }));
+        };
+
+        // 모든 쿼리 실행
+        noticeQuery
+            .then(notices => {
+                if (notices.length === 0) {
+                    resolve(null); // 일정이 없다면 null 반환
+                    return;
+                }
+                return getDuesFromNotices(notices).then(duesDatas => {
+                    // 최종 데이터 구조 만들기
+                    const finalData = notices.map((notice, index) => {
+                        return [
+                            notice,
+                            duesDatas[index][0], // 멤버 출석 데이터
+                            duesDatas[index][1] // 비멤버 출석 데이터
+                        ];
+                    });
+                    resolve(finalData);
+                });
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
 }
