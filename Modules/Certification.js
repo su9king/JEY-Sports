@@ -402,7 +402,7 @@ async function DetailScheduleAttendancePage(scheduleToken,userToken) {
                         });
                         resolveSchedule(results);
                     } else {
-                        resolveSchedule(null);
+                        resolveSchedule([]);
                     }
                 }
             );
@@ -421,7 +421,7 @@ async function DetailScheduleAttendancePage(scheduleToken,userToken) {
                     if (results.length > 0) {
                         resolveMyAttendance(results);
                     } else {
-                        resolveMyAttendance(null);
+                        resolveMyAttendance([]);
                     }
                 }
             );
@@ -441,7 +441,7 @@ async function DetailScheduleAttendancePage(scheduleToken,userToken) {
                     if (results.length > 0) {
                         resolveAttendanceUsers(results);
                     } else {
-                        resolveAttendanceUsers(null);
+                        resolveAttendanceUsers([]);
                     }
                 }
             );
@@ -461,7 +461,7 @@ async function DetailScheduleAttendancePage(scheduleToken,userToken) {
                     if (results.length > 0) {
                         resolveNonUsers(results);
                     } else {
-                        resolveNonUsers(null);
+                        resolveNonUsers([]);
                     }
                 }
             );
@@ -499,7 +499,7 @@ async function DetailNoticeDuesPage(noticeToken,userToken) {
                         });
                         resolveNotice(results);
                     } else {
-                        resolveNotice(null);
+                        resolveNotice([]);
                     }
                 }
             );
@@ -518,7 +518,7 @@ async function DetailNoticeDuesPage(noticeToken,userToken) {
                     if (results.length > 0) {
                         resolveMyAttendance(results);
                     } else {
-                        resolveMyAttendance(null);
+                        resolveMyAttendance([]);
                     }
                 }
             );
@@ -537,7 +537,7 @@ async function DetailNoticeDuesPage(noticeToken,userToken) {
                     if (results.length > 0) {
                         resolveDuesUsers(results);
                     } else {
-                        resolveDuesUsers(null);
+                        resolveDuesUsers([]);
                     }
                 }
             );
@@ -557,7 +557,7 @@ async function DetailNoticeDuesPage(noticeToken,userToken) {
                     if (results.length > 0) {
                         resolveNonUsers(results);
                     } else {
-                        resolveNonUsers(null);
+                        resolveNonUsers([]);
                     }
                 }
             );

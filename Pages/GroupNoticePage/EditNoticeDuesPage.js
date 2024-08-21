@@ -33,7 +33,7 @@ window.onload = async function () {
 
         myData = response.resources[1][0];
         members = response.resources[2]; // 멤버 리스트
-        notuserMembers = response.resources[3] ? response.resources[3] : ''; // 비유저 회비 데이터
+        notuserMembers = response.resources[3]; // 비유저 회비 데이터
 
         // 초기 멤버 상태 저장
         if (notuserMembers){
