@@ -31,10 +31,13 @@ window.onload = async function () {
         scheduleAttendanceCode = response.resources[0][0].scheduleAttendanceCode;
         myData = response.resources[1][0];
         members = response.resources[2];
-        notuserMembers = response.resources[3];
+        notuserMembers = response.resources[3] ? response.resources[3] : '';   // 비유저 출석 데이터
 
-        // 초기 멤버 상태 저장
-        initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
+        if (notuserMembers){
+            initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
+        }else{
+            initialMembersState = [...members.map(member => ({ ...member }))];
+        }
 
         const announcement = {
             scheduleTitle,

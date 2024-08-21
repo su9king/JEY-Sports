@@ -31,8 +31,7 @@ window.onload = async function () {
 
         myFeeData = response.resources[1][0];  // 내 회비 납부 데이터
         members = response.resources[2];    // 멤버 회비 데이터
-        notuserMembers = response.resources[3]; // 비유저 회비 데이터
-
+        notuserMembers = response.resources[3] ? response.resources[3] : ''; // 비유저 회비 데이터
         const announcement = {
             noticeType,
             noticeToken,
@@ -47,9 +46,9 @@ window.onload = async function () {
             duesStatus : response.resources[1][0].duesStatus == true ? '납부 완료' : '아직!!!!' , 
         };
         
-        if (announcement != null) {displayAnnouncement();}
+        if (announcement != null) {displayAnnouncement(announcement);}
         displayMyFeeData(announcement);  // 내 회비 납부 데이터 표시
-        if (notuserMembers != null) {displayMembers();} // 멤버 및 비유저 멤버 표시
+        displayMembers();// 멤버 및 비유저 멤버 표시
         createAdminContainer(userPermission, announcement); // 수정 버튼, 출석 코드 생성
     }
 

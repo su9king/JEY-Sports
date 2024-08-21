@@ -122,10 +122,10 @@ function generateTable(getData) {
         if (notice.noticeType == 2) {
             // 회비 납부자 멤버 수 계산
             const softwareUsers = data[2]; // 소프트웨어 유저 정보
-            let totalPaidDuesMember = softwareUsers.filter(user => user.userDuesStatus == 1).length;
+            let totalPaidDuesMember = softwareUsers.filter(user => user.duesStatus == 1).length;
 
             const notSoftwareUsers = data[3]; // 소프트웨어 비유저 정보
-            let totalPaidDuesNotUserMember = notSoftwareUsers.filter(user => user.userDuesStatus == 1).length;
+            let totalPaidDuesNotUserMember = notSoftwareUsers.filter(user => user.duesStatus == 1).length;
 
             const totalPaidMembers = totalPaidDuesMember + totalPaidDuesNotUserMember
 
@@ -136,9 +136,9 @@ function generateTable(getData) {
             paidDuesCell.textContent = ``;
         }
 
-        // 납부 여부 셀
+        // 납부 여부 셀 -- 아직 미개발
         const duesStatusCell = noticeRow.insertCell();
-        const duesStatus = getData[noticeIndex][1]?.duesStatus; // 유효한 인덱스 확인
+        const duesStatus = getData[noticeIndex][1][0]?.duesStatus; // 유효한 인덱스 확인
         if (notice.noticeType == 2) {
             if (duesStatus == 1) {
                 duesStatusCell.style.color = 'blue';
@@ -148,6 +148,7 @@ function generateTable(getData) {
                 duesStatusCell.textContent = '미납';
             }
         }
+
     });
 
     return table;

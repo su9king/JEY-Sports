@@ -27,7 +27,7 @@ module.exports = {
 //2주일 이내의 일정들 모두 불러오기
 async function GetFutureSchedules(userToken,groupToken,todayDate) {
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT sc.scheduleToken, sc.scheduleTitle, ac.attendanceStatus ,sc.scheduleStartDate ,sc.scheduleEndDate
+        connection.query(`SELECT sc.scheduleToken, sc.scheduleTitle, ac.attendanceStatus ,sc.scheduleStartDate ,sc.scheduleEndDate , ac.absentReason
             FROM Schedules AS sc 
             JOIN AttendanceUsers AS ac ON sc.scheduleToken = ac.scheduleToken
             WHERE (? BETWEEN scheduleStartDate AND scheduleEndDate 
