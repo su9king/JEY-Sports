@@ -54,7 +54,6 @@ window.onload = async function() {
 //////////////////// Step1 : 페이지 구성 요소 생성 ////////////////////
 document.addEventListener('DOMContentLoaded', function() {
 
-    const scheduleAttendance = document.getElementById('scheduleAttendance');
     const scheduleStartDateInput = document.getElementById('scheduleStartDate');
     const scheduleEndDateInput = document.getElementById('scheduleEndDate');
     const noEndDateCheckbox = document.getElementById('noEndDate');
@@ -67,6 +66,17 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault(); // 클릭 이벤트 기본 동작 방지
         });
     });
+
+    const scheduleTypeInput = document.getElementById('scheduleAttendance');
+    const codeContainer = document.getElementById('code-container');
+    scheduleTypeInput.addEventListener('change', function() {
+        if (scheduleTypeInput.value == 0) {
+            codeContainer.style.display = 'none'
+        } else {
+            codeContainer.style.display = 'block'
+        }
+    });
+    
 
     // 종료날짜 없음 체크박스
     noEndDateCheckbox.addEventListener('change', function() {
@@ -121,9 +131,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const scheduleAlert = document.getElementById('scheduleAlert').value;
         const scheduleContent = document.getElementById('scheduleContent').value;
         const scheduleLocation = document.getElementById('scheduleLocation').value;
-        // const scheduleStatus = document.getElementById('scheduleStatus').value;
+        const scheduleAttendanceCode = document.getElementById('scheduleAttendanceCode').value;
 
-        if (scheduleTitle && scheduleStartDate && scheduleContent && scheduleLocation && scheduleEndDate ) {
+        if ((scheduleAttendanceCode || scheduleAttendance == 0) && scheduleTitle && scheduleStartDate && scheduleContent && scheduleLocation && scheduleEndDate ) {
             try {
                 console.log(scheduleAttendance,scheduleAlert);
                 const response = await fetch('/EditGroupSchedules', {

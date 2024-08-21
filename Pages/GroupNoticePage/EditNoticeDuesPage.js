@@ -14,7 +14,6 @@ window.onload = async function () {
     noticeToken = urlParams.get('noticeToken');
 
     const noticeTitle = urlParams.get('noticeTitle');
-    const noticeChangedDate = urlParams.get('noticeChangedDate');
     const noticeEndDate = urlParams.get('noticeEndDate');
     const noticeImportance = urlParams.get('noticeImportance') == "중요" ? 1 : 0;
     const noticeStatus = urlParams.get('noticeStatus') == "공개" ? 1 : 0;
@@ -31,20 +30,15 @@ window.onload = async function () {
     } else {
         loadSidebar(page, userPermission, response);
 
-        myData = response.resources[1][0];
+        myData = response.resources[1][0];  // 내 회비 납부 데이터
         members = response.resources[2]; // 멤버 리스트
-        notuserMembers = response.resources[3] ? response.resources[3] : ''; // 비유저 회비 데이터
+        notuserMembers = response.resources[3]; // 비유저 회비 데이터
 
         // 초기 멤버 상태 저장
-        if (notuserMembers){
-            initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
-        }else{
-            initialMembersState = [...members.map(member => ({ ...member }))];
-        }
+        initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
 
         const announcement = {
             noticeTitle,
-            noticeChangedDate,
             noticeEndDate,
             noticeImportance,
             noticeStatus,
@@ -69,13 +63,34 @@ window.onload = async function () {
 
 function displayAnnouncement(announcement) {
     document.getElementById('noticeTitle').value = announcement.noticeTitle;
-    document.getElementById('noticeChangedDate').value = announcement.noticeChangedDate;
     document.getElementById('noticeEndDate').value = announcement.noticeEndDate;
     document.getElementById('noticeImportance').value = announcement.noticeImportance;
     document.getElementById('noticeStatus').value = announcement.noticeStatus;
     document.getElementById('noticeDues').value = announcement.noticeDues;
     document.getElementById('noticeContent').value = announcement.noticeContent;
     document.getElementById('noticeWriter').value = announcement.noticeWriter;
+
+    document.getElementById('noticeDues').disabled = 'true';
+
+    // 공지사항 종료 날짜 설정
+    const noticeEndDateInput = document.getElementById('noticeEndDate');
+    const noEndDateCheckbox = document.getElementById('noEndDate');
+
+    // 종료날짜 없음 체크박스
+    noEndDateCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            // 체크박스가 체크 -> 종료 날짜를 null, 날짜 선택 금지
+            noticeEndDateInput.value = null;
+            noticeEndDateInput.disabled = true;
+        } else {
+            noticeEndDateInput.disabled = false;
+        }
+    });
+
+    const noticeEndDate = noticeEndDateInput.value ? noticeEndDateInput.value : null;
+
+
+
     
     const saveButton = document.getElementById('saveNoticeButton');
     saveButton.textContent = '공지사항 수정';
@@ -92,8 +107,7 @@ function displayAnnouncement(announcement) {
                 noticeToken: noticeToken,
     
                 noticeTitle: document.getElementById('noticeTitle').value,
-                noticeChangedDate: document.getElementById('noticeChangedDate').value,
-                noticeEndDate: document.getElementById('noticeEndDate').value,
+                noticeEndDate: noticeEndDate,
                 noticeImportance: document.getElementById('noticeImportance').value,
                 noticeStatus: document.getElementById('noticeStatus').value,
                 noticeDues: document.getElementById('noticeDues').value,
@@ -112,6 +126,19 @@ function displayAnnouncement(announcement) {
     
 
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const noEndDateCheckbox = document.getElementById('noEndDate');
+
+    // 모든 label 요소에 클릭 이벤트를 방지하는 핸들러 추가
+    const labels = document.querySelectorAll('label');
+    labels.forEach(label => {
+        label.addEventListener('click', function(e) {
+            e.preventDefault(); // 클릭 이벤트 기본 동작 방지
+        });
+    });
+});
+
 
 function displayMemberDues(filteredMembers = null) {
     const memberList = document.getElementById('user-member-container');

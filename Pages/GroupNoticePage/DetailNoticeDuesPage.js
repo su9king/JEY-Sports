@@ -30,8 +30,8 @@ window.onload = async function () {
         loadSidebar(page, userPermission, response);
 
         myFeeData = response.resources[1][0];  // 내 회비 납부 데이터
-        members = response.resources[2];    // 멤버 회비 데이터
-        notuserMembers = response.resources[3] ? response.resources[3] : ''; // 비유저 회비 데이터
+        members = response.resources[2];  // 멤버 회비 데이터
+        notuserMembers = response.resources[3]; // 비유저 회비 데이터
         const announcement = {
             noticeType,
             noticeToken,

@@ -34,13 +34,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="noticeChangedDate">수정 일자:</label>
-                    <input type="date" id="noticeChangedDate">
-                </div>
-
-                <div class="form-group">
                     <label for="noticeEndDate">종료 일자:</label>
                     <input type="date" id="noticeEndDate">
+
+                    <!-- '없음' 체크박스 -->
+                    <label for="noEndDate">없음</label>
+                    <input type="checkbox" id="noEndDate" name="noEndDate">
                 </div>
 
                 <div class="form-group">
@@ -53,7 +52,7 @@
                 
                 <div class="form-group">
                     <label for="noticeDues">회비 금액:</label>
-                    <input type="number" id="noticeDues" step="0.01">
+                    <input type="number" id="noticeDues" step="1000">
                 </div>
 
                 <div class="form-group">

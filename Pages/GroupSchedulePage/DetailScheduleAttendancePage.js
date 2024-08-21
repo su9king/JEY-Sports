@@ -32,9 +32,9 @@ window.onload = async function () {
         scheduleAttendanceCode = response.resources[0][0].scheduleAttendanceCode;
         myData = response.resources[1][0];  // 내 출석 데이터
         members = response.resources[2];          // 멤버 출석 데이터
-        notuserMembers = response.resources[3] ? response.resources[3] : '';   // 비유저 출석 데이터
+        notuserMembers = response.resources[3];   // 비유저 출석 데이터
 
-        if (response.resources[0][0] != null) {displayAnnouncement(response.resources[0][0]);} // 공지사항 표시
+        displayAnnouncement(response.resources[0][0]); // 공지사항 표시
         displayMyData();  // 내 출석 데이터 표시
         displayMembers();// 멤버 및 비유저 멤버 표시
         createAdminContainer(userPermission); // 수정 버튼, 출석 코드 생성

@@ -31,13 +31,9 @@ window.onload = async function () {
         scheduleAttendanceCode = response.resources[0][0].scheduleAttendanceCode;
         myData = response.resources[1][0];
         members = response.resources[2];
-        notuserMembers = response.resources[3] ? response.resources[3] : '';   // 비유저 출석 데이터
+        notuserMembers = response.resources[3];   // 비유저 출석 데이터
 
-        if (notuserMembers){
-            initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
-        }else{
-            initialMembersState = [...members.map(member => ({ ...member }))];
-        }
+        initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
 
         const announcement = {
             scheduleTitle,
@@ -64,6 +60,16 @@ window.onload = async function () {
     setupSearchInput();
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    // 모든 label 요소에 클릭 이벤트를 방지하는 핸들러 추가
+    const labels = document.querySelectorAll('label');
+    labels.forEach(label => {
+        label.addEventListener('click', function(e) {
+            e.preventDefault(); // 클릭 이벤트 기본 동작 방지
+        });
+    });
+});
+
 function displayAnnouncement(announcement) {
     document.getElementById('scheduleTitle').value = announcement.scheduleTitle;
     document.getElementById('scheduleStartDate').value = announcement.scheduleStartDate;
@@ -72,6 +78,52 @@ function displayAnnouncement(announcement) {
     document.getElementById('scheduleAlert').value = announcement.scheduleAlert;
     document.getElementById('scheduleContent').value = announcement.scheduleContent;
     document.getElementById('scheduleLocation').value = announcement.scheduleLocation;
+
+
+    const scheduleStartDateInput = document.getElementById('scheduleStartDate');
+    const scheduleEndDateInput = document.getElementById('scheduleEndDate');
+    const noEndDateCheckbox = document.getElementById('noEndDate');
+    const scheduleEndDate = document.getElementById('scheduleEndDate');
+
+    // 종료날짜 없음 체크박스
+    noEndDateCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            if (scheduleStartDateInput.value) {
+                // 체크박스가 체크 -> 종료 날짜와 시작 날짜 동일, 종료 날짜 비활성화
+                scheduleEndDateInput.value = scheduleStartDateInput.value;
+                scheduleEndDateInput.disabled = true;
+            } else {
+                // 체크박스 체크 시 시작 날짜가 없는 경우
+                this.checked = false;
+                alert('시작 날짜를 선택해주세요!');
+            }
+        } else {
+            // 체크박스가 언체크된 경우 -> 종료 날짜를 선택할 수 있도록 함
+            scheduleEndDateInput.disabled = false;
+            scheduleEndDateInput.value = '';
+        }
+    });
+
+    // 시작 날짜 변경 시 종료 날짜에 적용
+    scheduleStartDateInput.addEventListener('change', function() {
+        if (noEndDateCheckbox.checked) {
+            scheduleEndDateInput.value = this.value;
+        }
+    });
+
+
+
+    // 시작 날짜가 종료 날짜보다 늦은 경우
+    scheduleEndDate.addEventListener('change', function() {
+        const startDate = new Date(document.getElementById('scheduleStartDate').value);
+        const endDate = new Date(document.getElementById('scheduleEndDate').value);
+
+        if (startDate > endDate) {
+            // 경고 메시지를 띄웁니다.
+            alert('시작 날짜는 종료 날짜보다 앞서야 합니다.');
+            document.getElementById('scheduleEndDate').value = '';
+        }
+    });
 
     const saveButton = document.getElementById('saveAnnouncementButton');
     saveButton.textContent = '공지사항 수정';
