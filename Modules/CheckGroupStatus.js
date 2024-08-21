@@ -53,6 +53,7 @@ async function GetFutureSchedules(userToken,groupToken,todayDate) {
         );
     });
 }
+
 async function GetNotices(userToken,groupToken,todayDate) {
     return new Promise((resolve, reject) => {
         connection.query(`SELECT nc.noticeToken, nc.noticeTitle, du.duesStatus , nc.noticeDues
@@ -61,7 +62,8 @@ async function GetNotices(userToken,groupToken,todayDate) {
             WHERE ? BETWEEN nc.noticeCreatedDate AND COALESCE(nc.noticeEndDate, '2099-12-31')
             AND nc.groupToken = ?
             AND du.userToken = ?
-            AND nc.noticeType  = 2`, [todayDate,groupToken,userToken], 
+            AND nc.noticeType  = 2
+            AND du.duesStatus = 0`, [todayDate,groupToken,userToken], 
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);

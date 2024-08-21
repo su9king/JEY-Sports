@@ -128,17 +128,17 @@ function generateTable(getData) {
         }
 
         // 납부 여부 셀 -- 아직 미개발
-        const duesStatusCell = noticeRow.insertCell();
-        const duesStatus = getData[1][noticeIndex]?.duesStatus; // 유효한 인덱스 확인
-        if (notice.noticeType == 2) {
-            if (duesStatus == 1) {
-                duesStatusCell.style.color = 'blue';
-                duesStatusCell.textContent = '완료';
-            } else {
-                duesStatusCell.style.color = 'red';
-                duesStatusCell.textContent = '미납';
-            }
-        }
+        // const duesStatusCell = noticeRow.insertCell();
+        // const duesStatus = getData[1][noticeIndex]?.duesStatus; // 유효한 인덱스 확인
+        // if (notice.noticeType == 2) {
+        //     if (duesStatus == 1) {
+        //         duesStatusCell.style.color = 'blue';
+        //         duesStatusCell.textContent = '완료';
+        //     } else {
+        //         duesStatusCell.style.color = 'red';
+        //         duesStatusCell.textContent = '미납';
+        //     }
+        // }
     });
 
     return table;

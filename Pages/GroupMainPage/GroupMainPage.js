@@ -31,7 +31,7 @@ window.onload = async function() {
             });
 
             const buffer = await response.json();
-
+            console.log(buffer.resources);
             if (buffer.result == 0) {
                 alert('다시 시도해주세요!')
             } else if (buffer.result == 1)  {

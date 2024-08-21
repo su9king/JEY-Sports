@@ -8,8 +8,22 @@ module.exports = {
         const functionType = data["functionType"];
 
         if (functionType == 1){
-            const result = await Attend(scheduleToken,userToken);
-            return result;
+            const userPermission = data["userPermission"];
+            const scheduleAttendanceCode = data["scheduleAttendanceCode"];
+            var result1 = 0
+
+            if (userPermission == 1 || userPermission == 2){
+                result1 = 1;
+            }else{
+                result1 = await CheckScheduleAttendanceCode(scheduleToken,scheduleAttendanceCode)
+            }
+
+            if (result1 == 1){
+                const result2 = await Attend(scheduleToken,userToken);
+                return result2;
+            }else{
+                return {result : 0 , resources : null}
+            }
 
         } else if (functionType == 2){
             const absentReason = data["absentReason"];
@@ -63,6 +77,28 @@ async function Absent(scheduleToken,userToken,absentReason) {
                     resolve({result : 1,resources : null});  
                 } else {
                     resolve({result : 0 , resources : null});  
+                }
+            }
+        );
+    });
+}
+
+async function CheckScheduleAttendanceCode(scheduleToken,scheduleAttendanceCode) {
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT scheduleAttendanceCode FROM schedules
+            WHERE scheduleToken = ?
+            AND scheduleAttendanceCode = ? `, [scheduleToken,scheduleAttendanceCode], 
+            (error, results, fields) => {
+                if (error) {
+                    console.error('쿼리 실행 오류:', error);
+                    return reject(error);
+                }
+
+                
+                if (results.length > 0) {
+                    resolve(1);  
+                } else {
+                    resolve(0);  
                 }
             }
         );

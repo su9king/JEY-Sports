@@ -9,7 +9,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
             //userID,userPW 기반으로 userToken,userImage 탐색
-            connection.query('SELECT userToken,userImage FROM users WHERE userID = ? AND userPW = ?', [userID, userPW],
+            connection.query('SELECT userToken,userImage FROM users WHERE BINARY userID = ? AND userPW = ?', [userID, userPW],
 
                 (error, results, fields) => {
 

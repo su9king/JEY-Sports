@@ -109,7 +109,7 @@ module.exports = {
             //// 출석 및 회비 관련 회원인증
         }else if (page == "TotalDuesPage"){
             const groupToken = query["groupToken"];
-            const data = await TotalDuesPage(groupToken);
+            const data = await TotalDuesPage(groupToken,userToken);
             return {result : 1 , resources : data};
         }
 
@@ -657,7 +657,7 @@ async function TotalAttendancePage(groupToken) {
 }
 
 
-async function TotalDuesPage(groupToken){
+async function TotalDuesPage(groupToken,userToken){
 
     return new Promise((resolve, reject) => {
         // 그룹에 해당하는 모든 공지사항 불러오기
@@ -708,6 +708,21 @@ async function TotalDuesPage(groupToken){
                                 resolveAttendanceNonUsers(nonUserDuesResult);
                             }
                         );
+                    }),
+                    new Promise((resolveMyDues, rejectMyDues) => {
+                        connection.query(`SELECT usr.userName,usr.userID, du.duesStatus
+                            FROM DuesUsers as du
+                            JOIN Users as usr ON usr.userToken = du.userToken
+                            WHERE du.noticeToken = ?
+                            AND usr.userToken = ?`, [notice.noticeToken,userToken],
+                            (error, myDuesResult) => {
+                                if (error) {
+                                    console.error('출석 쿼리 실행 오류 (SelfUsers):', error);
+                                    return rejectMyDues(error);
+                                }
+                                resolveMyDues(myDuesResult);
+                            }
+                        );
                     })
                 ]);
             }));
@@ -717,7 +732,7 @@ async function TotalDuesPage(groupToken){
         noticeQuery
             .then(notices => {
                 if (notices.length === 0) {
-                    resolve(null); // 일정이 없다면 null 반환
+                    resolve(null); // 회비 공지사항이 없다면 null 반환
                     return;
                 }
                 return getDuesFromNotices(notices).then(duesDatas => {
@@ -725,8 +740,9 @@ async function TotalDuesPage(groupToken){
                     const finalData = notices.map((notice, index) => {
                         return [
                             notice,
-                            duesDatas[index][0], // 멤버 출석 데이터
-                            duesDatas[index][1] // 비멤버 출석 데이터
+                            duesDatas[index][2],
+                            duesDatas[index][0], // 멤버 회비 데이터
+                            duesDatas[index][1] // 비멤버 회비 데이터
                         ];
                     });
                     resolve(finalData);
