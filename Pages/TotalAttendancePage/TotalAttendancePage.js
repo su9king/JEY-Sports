@@ -2,7 +2,7 @@ let noticeToken, getData;
 
 //////////////////// Step0 : 회원인증, 사이드바, 뒤로가기 초기 세팅 ////////////////////
 window.onload = async function() {
-    const page = 'TotalAttentionPage';
+    const page = 'TotalAttendancePage';
     userToken = sessionStorage.getItem('userToken');
     groupToken = sessionStorage.getItem('groupToken');
     userPermission = sessionStorage.getItem('userPermission');

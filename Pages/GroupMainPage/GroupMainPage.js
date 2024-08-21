@@ -52,6 +52,7 @@ window.onload = async function() {
                         attendanceStatus : resource.attendanceStatus ,
                         scheduleStartDate: resource.scheduleStartDate,
                         scheduleEndDate: resource.scheduleEndDate,
+                        absentReason: resource.absentReason,
                     }));
                 }
 
@@ -146,56 +147,76 @@ async function alertStatusSchedule(statusSchedule) {
 
     statusSchedule.forEach(schedule => {
         //isToday 변수는 예정 일정인지, 현재 진행중인 일정인지 구분점. isToday true 이면 현재 진행중인 일정임.
-        if (schedule.attendanceStatus !== 0) {
-            const isToday = schedule.scheduleStartDate <= todayDate ? true : false
-            const container = isToday ? currentScheduleContainer : expectedScheduleContainer;
-            
     
-            if (isToday) {
-                hasTodaySchedule = true;
-            } else {
-                hasExpectedSchedule = true;
-            }
-    
-            const scheduleBox = document.createElement("div");
-            scheduleBox.classList.add("scheduleBox");
-    
-            // 일정 정보 표시
-            const scheduleInfo = document.createElement("div");
-            scheduleInfo.classList.add("schedule-info");
-            scheduleInfo.innerHTML = `
-                [ ${schedule.scheduleStartDate} ~ ${schedule.scheduleEndDate} ] : ${schedule.scheduleTitle}
-            `;
-    
-            // 버튼 생성
-            const attendButton = document.createElement("button");
-            attendButton.classList.add("attend-button");
-            attendButton.textContent = "출석하기";
-    
-            const absentButton = document.createElement("button");
-            absentButton.classList.add("absent-button");
-            absentButton.textContent = "결석하기";
-    
-            // 출석하기 버튼 클릭 이벤트
-            attendButton.addEventListener("click", function() {
-                attend(1, userToken, groupToken, userPermission, schedule.scheduleToken);
-            });
-    
-            // 결석하기 버튼 클릭 이벤트
-            absentButton.addEventListener("click", function() {
-                attend(2, userToken, groupToken, userPermission, schedule.scheduleToken);
-            });
-    
-            // 오늘 일정인지 아닌지에 따라 버튼 추가
-            if (isToday) {
-                scheduleInfo.appendChild(attendButton);
-            }
-            scheduleInfo.appendChild(absentButton);
-    
-            scheduleBox.appendChild(scheduleInfo);
-            container.appendChild(scheduleBox);
-        }
+        const isToday = schedule.scheduleStartDate <= todayDate ? true : false
+        const container = isToday ? currentScheduleContainer : expectedScheduleContainer;
         
+
+        if (isToday) {
+            hasTodaySchedule = true;
+        } else {
+            hasExpectedSchedule = true;
+        }
+
+        const scheduleBox = document.createElement("div");
+        scheduleBox.classList.add("scheduleBox");
+
+        // 일정 정보 표시
+        const scheduleInfo = document.createElement("div");
+        scheduleInfo.classList.add("schedule-info");
+        scheduleInfo.innerHTML = `
+            [ ${schedule.scheduleStartDate} ~ ${schedule.scheduleEndDate} ] : ${schedule.scheduleTitle}
+        `;
+
+        // 버튼 생성
+        const attendButton = document.createElement("button");
+        attendButton.classList.add("attend-button");
+        attendButton.textContent = "출석하기";
+
+        const absentButton = document.createElement("button");
+        absentButton.classList.add("absent-button");
+        absentButton.textContent = "결석하기";
+
+        // 출석하기 버튼 클릭 이벤트
+        attendButton.addEventListener("click", function() {
+            attend(1, userToken, groupToken, userPermission, schedule.scheduleToken);
+        });
+
+        // 결석하기 버튼 클릭 이벤트
+        absentButton.addEventListener("click", function() {
+            attend(2, userToken, groupToken, userPermission, schedule.scheduleToken);
+        });
+
+        // 오늘 일정인지 아닌지에 따라 버튼 추가
+        if (isToday) {
+            if (schedule.attendanceStatus == 1) {
+                const attendCheckedButton = document.createElement("p");
+                attendCheckedButton.classList.add("attend-checked-button");
+                attendCheckedButton.innerText = "참석 완료!";
+                attendCheckedButton.disabled = true;
+                scheduleInfo.appendChild(attendCheckedButton);
+            } else if (schedule.attendanceStatus == 0) {
+                const absentCheckedButton = document.createElement("p");
+                absentCheckedButton.classList.add("absent-checked-button");
+                absentCheckedButton.innerText = "불참 예정 ㅠㅠ";
+
+                const absentReason = document.createElement("p");
+                absentReason.classList.add("absent-reason");
+                absentReason.innerText = `사유: ${schedule.absentReason}`;
+
+                scheduleInfo.appendChild(absentCheckedButton);
+                scheduleInfo.appendChild(absentReason);
+            } else {
+                console.log(schedule.attendanceStatus)
+            }
+            scheduleInfo.appendChild(attendButton);
+        }
+        scheduleInfo.appendChild(absentButton);
+
+        scheduleBox.appendChild(scheduleInfo);
+        container.appendChild(scheduleBox);
+    
+    
     });
 
     // "오늘의 일정" 제목 생성

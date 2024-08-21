@@ -47,9 +47,9 @@ window.onload = async function () {
             duesStatus : response.resources[1][0].duesStatus == true ? '납부 완료' : '아직!!!!' , 
         };
         
-        displayAnnouncement(announcement);
+        if (announcement != null) {displayAnnouncement();}
         displayMyFeeData(announcement);  // 내 회비 납부 데이터 표시
-        displayMembers(); // 멤버 및 비유저 멤버 표시
+        if (notuserMembers != null) {displayMembers();} // 멤버 및 비유저 멤버 표시
         createAdminContainer(userPermission, announcement); // 수정 버튼, 출석 코드 생성
     }
 

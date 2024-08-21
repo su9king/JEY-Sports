@@ -83,7 +83,7 @@ module.exports = {
             return {result : 1 , resources : data};
 
             //// 출석 및 회비 관련 회원인증
-        }else if (page == "TotalAttentionPage"){
+        }else if (page == "TotalAttendancePage"){
             const groupToken = query["groupToken"];
             const data = await TotalAttendancePage(groupToken);
             return {result : 1 , resources : data};
