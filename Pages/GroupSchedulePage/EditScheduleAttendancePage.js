@@ -18,7 +18,6 @@ window.onload = async function () {
     const scheduleEndDate = urlParams.get('scheduleEndDate');
     const scheduleImportance = urlParams.get('scheduleImportance') == "일반" ? 0 : 1;
     const scheduleAlert = urlParams.get('scheduleAlert') == "없음" ? 0 : 1;
-    const scheduleStatus = urlParams.get('scheduleStatus') == "비공개" ? 0 : 1;
 
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&scheduleToken=${scheduleToken}`;
 
@@ -43,7 +42,6 @@ window.onload = async function () {
             scheduleEndDate,
             scheduleImportance,
             scheduleAlert,
-            scheduleStatus,
             scheduleContent : response.resources[0][0].scheduleContent,
             scheduleLocation : response.resources[0][0].scheduleLocation,            
         };
@@ -69,7 +67,6 @@ function displayAnnouncement(announcement) {
     document.getElementById('scheduleEndDate').value = announcement.scheduleEndDate;
     document.getElementById('scheduleImportance').value = announcement.scheduleImportance;
     document.getElementById('scheduleAlert').value = announcement.scheduleAlert;
-    document.getElementById('scheduleStatus').value = announcement.scheduleStatus;
     document.getElementById('scheduleContent').value = announcement.scheduleContent;
     document.getElementById('scheduleLocation').value = announcement.scheduleLocation;
 
@@ -94,7 +91,6 @@ function displayAnnouncement(announcement) {
                 scheduleAlert: document.getElementById('scheduleAlert').value,
                 scheduleContent: document.getElementById('scheduleContent').value,
                 scheduleLocation: document.getElementById('scheduleLocation').value,
-                scheduleStatus: document.getElementById('scheduleStatus').value,
 
             })
         });

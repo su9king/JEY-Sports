@@ -66,6 +66,7 @@ function sidebar_createButtons(page, userPermission, response) {
     if (page !== 'PrivatePage' && page !== 'EditUserPage') {  
         buttons.push(
             { text: '멤버페이지', onClick: () => window.location.href = '/GroupMemberPage/GroupMemberPage.html' },
+            { text: '조직페이지', onClick: () => window.location.href = '/GroupMainPage/GroupMainPage.html' },
             { text: '일정', onClick: () => window.location.href = '/GroupSchedulePage/GroupSchedulePage.html' },
             { text: '공지사항', onClick: () => window.location.href = '/GroupNoticePage/GroupNoticePage.html' },
             { text: '출석', onClick: () => window.location.href = '/GroupSchedulePage/ScheduleAttendancePage.html' },

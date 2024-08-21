@@ -19,6 +19,7 @@ window.onload = async function() {
     noticeWriter = urlParams.get('noticeWriter');
     noticeToken = urlParams.get('noticeToken');
     noticeType = urlParams.get('noticeType');
+    noticeDues = urlParams.get('noticeDues');
     
     if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
@@ -29,6 +30,14 @@ window.onload = async function() {
             
         if (noticeTitle) {
             console.log('수정페이지로 접근');
+            if (noticeType != 1) {
+                document.getElementById('noticeDuesContainer').style.display = 'block'
+                document.getElementById('noticeDues').value = noticeDues;
+                if (noticeType == 2) {
+                    document.getElementById('noticeDues').disabled = 'true'
+                }
+            }
+            document.getElementById('noticeType').disabled = 'true';
             document.getElementById('noticeTitle').value = noticeTitle;
             document.getElementById('noticeImportance').value = noticeImportance;
             document.getElementById('noticeStatus').value = noticeStatus;
@@ -50,6 +59,8 @@ window.onload = async function() {
 //////////////////// Step1 : 페이지 구성 요소 생성 ////////////////////
 document.addEventListener('DOMContentLoaded', function() {
 
+    const noticeTypeInput = document.getElementById('noticeType');
+    const noticeDuesContainer = document.getElementById('noticeDuesContainer');
     const noticeEndDateInput = document.getElementById('noticeEndDate');
     const noEndDateCheckbox = document.getElementById('noEndDate');
 
@@ -61,6 +72,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // noticeType에 따라 noticeDues 작성 칸 생성
+    noticeTypeInput.addEventListener('change', function() {
+        if (noticeTypeInput.value == 1) {
+            noticeDuesContainer.style.display = 'none'
+        } else {
+            noticeDuesContainer.style.display = 'block'
+        }
+    });
+
     // 종료날짜 없음 체크박스
     noEndDateCheckbox.addEventListener('change', function() {
         if (this.checked) {
@@ -80,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const functionType = 3;
 
         const noticeType = document.getElementById('noticeType').value;
-        console.log(noticeType);
+        const noticeDues = document.getElementById('noticeDues').value;
         const noticeTitle = document.getElementById('noticeTitle').value;
         const noticeImportance = document.getElementById('noticeImportance').value;
         const noticeStatus = document.getElementById('noticeStatus').value;
@@ -89,10 +109,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const noticeEndDate = noticeEndDateInput.value ? noticeEndDateInput.value : null;
         const noticeCreatedDate = new Date().toISOString().split('T')[0];
         const noticeEditDate = new Date().toISOString().split('T')[0];
-        const noticeDues = 20000; //데이터 받는 인터페이스 필요
 
         
-        if (noticeTitle && noticeContent && noticeWriter &&(noticeEndDate || noEndDateCheckbox.checked)) {
+        if ((noticeDues || noticeType == 1) && noticeTitle && noticeContent && noticeWriter &&(noticeEndDate || noEndDateCheckbox.checked)) {
             try {
                 const response = await fetch('/EditGroupNotices', {
                     method: 'POST',

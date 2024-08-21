@@ -180,7 +180,7 @@ function createNoticeElements() {
                         const noticeDetails = noticeContents.find(n => n.noticeToken === notice.noticeToken);
 
                         if (noticeDetails) {
-                            window.location.href = `CreateGroupNoticePage.html?noticeTitle=${notice.noticeTitle}&noticeType=${notice.noticeType}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&noticeContent=${noticeDetails.noticeContent}&noticeEndDate=${noticeDetails.noticeEndDate}&noticeWriter=${noticeDetails.noticeWriter}&noticeToken=${noticeDetails.noticeToken}`;
+                            window.location.href = `CreateGroupNoticePage.html?noticeTitle=${notice.noticeTitle}&noticeType=${notice.noticeType}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&noticeDues=${noticeDetails.noticeDues}&noticeContent=${noticeDetails.noticeContent}&noticeEndDate=${noticeDetails.noticeEndDate}&noticeWriter=${noticeDetails.noticeWriter}&noticeToken=${noticeDetails.noticeToken}`;
                         } else {
                             alert('공지사항 내용을 불러오지 못했습니다. 제목을 클릭해 주세요.');
                         }
@@ -283,7 +283,7 @@ async function displayNoticeContent(noticeToken, noticeContentElement) {
                 userToken: userToken, 
                 groupToken: groupToken, 
                 noticeToken: noticeToken, 
-                userPermission: userPermission 
+                userPermission: userPermission
             })
         });
 
@@ -296,16 +296,31 @@ async function displayNoticeContent(noticeToken, noticeContentElement) {
                     noticeContent: resource.noticeContent,
                     noticeWriter: resource.noticeWriter,
                     noticeCreatedDate: resource.noticeCreatedDate ? resource.noticeCreatedDate.split('T')[0] : null,
-                    noticeEndDate: resource.noticeEndDate ? resource.noticeEndDate.split('T')[0] : null,       
+                    noticeEndDate: resource.noticeEndDate ? resource.noticeEndDate.split('T')[0] : null, 
+                    noticeDues: resource.noticeDues ? resource.noticeDues : null      
                 });
             });
-
+            
             // noticeContents 찾기
             const notice = noticeContents.find(n => n.noticeToken === noticeToken);
 
             const endDateText = notice.noticeEndDate ? notice.noticeEndDate : '없음';
 
-            noticeContentElement.innerHTML = `
+            if (notice.noticeDues) {
+                noticeContentElement.innerHTML = `
+                <div class="notice-info">
+                    작성자: ${notice.noticeWriter} <br>
+                    금액: ${notice.noticeDues}원
+                </div>
+                <div class="notice-dates">
+                    작성일: ${notice.noticeCreatedDate} | 종료일: ${endDateText}
+                </div>
+                <div class="notice-textContent">
+                    ${notice.noticeContent}
+                </div>
+            `;
+            } else {
+                noticeContentElement.innerHTML = `
                 <div class="notice-info">
                     작성자: ${notice.noticeWriter}
                 </div>
@@ -316,6 +331,8 @@ async function displayNoticeContent(noticeToken, noticeContentElement) {
                     ${notice.noticeContent}
                 </div>
             `;
+            }
+
 
         } else if (contentData.result == 0)  {
             alert('공지사항을 불러오지 못했습니다.');

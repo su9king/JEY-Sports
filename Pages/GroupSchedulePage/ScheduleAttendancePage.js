@@ -204,7 +204,7 @@ function addCreateNoticeButton(userPermission) {
         createButton.textContent = "전체 출석 확인하기";
         createButton.classList.add("create-button");
         createButton.addEventListener("click", function() {
-            window.location.href = '/TotalAttentionPage/TotalAttentionPage.html';
+            window.location.href = '/TotalAttendancePage/TotalAttendancePage.html';
         });
 
         createButtonContainer.appendChild(createButton);

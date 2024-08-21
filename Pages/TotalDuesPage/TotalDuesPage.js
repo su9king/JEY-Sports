@@ -95,16 +95,20 @@ function generateTable(getData) {
         noticeTitleCell.style.cursor = 'pointer';
 
         noticeTitleCell.addEventListener("click", () => {
-            window.location.href = `/GroupNoticePage/DetailNoticeDuesPage.html?noticeType=${notice.noticeType}&noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeChangedDate=${notice.noticeChangedDate}&noticeEndDate=${notice.noticeEndDate}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&userDuesStatus=${notice.userDuesStatus}&noticeDues=${notice.noticeDues}`;
+            if (notice.noticeType == 2) {
+                window.location.href = `/GroupNoticePage/DetailNoticeDuesPage.html?noticeType=${notice.noticeType}&noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeChangedDate=${notice.noticeChangedDate}&noticeEndDate=${notice.noticeEndDate}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&userDuesStatus=${notice.userDuesStatus}&noticeDues=${notice.noticeDues}`;
+            } else {
+                loadNoticeDeailModal(notice);
+            }
         });
 
         // 금액 셀  
         const noticeDuesCell = noticeRow.insertCell();
         if (notice.noticeType == 2) {
             // 회비 대상자 총 멤버 수 계산
-            const softwareUsers = data[1]; // 소프트웨어 유저 정보
+            const softwareUsers = data[2]; // 소프트웨어 유저 정보
             let totalDuesMember = softwareUsers.length;
-            let totalDuesNotUsers = data[2].length;
+            let totalDuesNotUsers = data[3].length;
             let dues = notice.noticeDues * (totalDuesMember + totalDuesNotUsers);
             
             totalDues += dues;  // 맨 아래에 가계부 컨테이너에 들어갈 준비
@@ -117,10 +121,15 @@ function generateTable(getData) {
         const paidDuesCell = noticeRow.insertCell();
         if (notice.noticeType == 2) {
             // 회비 납부자 멤버 수 계산
-            const softwareUsers = data[1]; // 소프트웨어 유저 정보
+            const softwareUsers = data[2]; // 소프트웨어 유저 정보
             let totalPaidDuesMember = softwareUsers.filter(user => user.userDuesStatus == 1).length;
 
-            let paidDues = notice.noticeDues * totalPaidDuesMember;
+            const notSoftwareUsers = data[3]; // 소프트웨어 비유저 정보
+            let totalPaidDuesNotUserMember = notSoftwareUsers.filter(user => user.userDuesStatus == 1).length;
+
+            const totalPaidMembers = totalPaidDuesMember + totalPaidDuesNotUserMember
+
+            let paidDues = notice.noticeDues * totalPaidMembers;
             totalDuesPaid += paidDues;  // 맨 아래에 가계부 컨테이너에 들어갈 준비
             paidDuesCell.textContent = `${paidDues}원`;  // 해당 공지사항에서 받은 회비 금액
         } else {
@@ -129,7 +138,7 @@ function generateTable(getData) {
 
         // 납부 여부 셀 -- 아직 미개발
         const duesStatusCell = noticeRow.insertCell();
-        const duesStatus = getData[1][noticeIndex]?.duesStatus; // 유효한 인덱스 확인
+        const duesStatus = getData[noticeIndex][1]?.duesStatus; // 유효한 인덱스 확인
         if (notice.noticeType == 2) {
             if (duesStatus == 1) {
                 duesStatusCell.style.color = 'blue';
@@ -204,4 +213,55 @@ function createLedgerContainer() {
     ledgerContainer.appendChild(duesRequestedElement);
     ledgerContainer.appendChild(duesIncomeElement);
     ledgerContainer.appendChild(currentFundsElement);
+}
+
+
+function loadNoticeDeailModal(notice) {
+    const overlay = document.getElementById('overlay');
+    const noticeDetailModal = document.getElementById('noticeDetailModal');
+
+    overlay.classList.remove('hidden');
+    overlay.classList.add('visible');
+    noticeDetailModal.classList.remove('hidden');
+    noticeDetailModal.classList.add('visible');
+
+    fetch('DuesNoticeDetailModal.html') 
+		.then(response => response.text())
+		.then(data => {
+			const noticeDetailModal = document.getElementById('noticeDetailModal');
+			noticeDetailModal.innerHTML = data;
+
+			// 모달 닫기 버튼 이벤트 추가
+			const closeModalBtn = noticeDetailModal.querySelector('#closeModalBtn');
+			if (closeModalBtn) {
+				closeModalBtn.addEventListener('click', function() {
+					const overlay = document.getElementById('overlay');
+					overlay.classList.remove('visible');
+					overlay.classList.add('hidden');
+					noticeDetailModal.classList.remove('visible');
+					noticeDetailModal.classList.add('hidden');
+				});
+			}
+
+			const noticeContainer = document.getElementById('notice-container');
+            const endDateText = notice.noticeEndDate ? notice.noticeEndDate : '없음';
+
+            noticeContainer.innerHTML = `
+            <div class="notice-info">
+                <h1> ${notice.noticeTitle} </h1>
+                금액: ${notice.noticeDues}원
+            </div>
+            <div class="notice-dates">
+                마지막 수정일: ${notice.noticeEditDate} | 종료일: ${endDateText}
+            </div>
+            <h2 class="notice-textContent">
+                ${notice.noticeContent}
+            </h2>
+        `;
+
+		})
+
+		.catch(error => console.error('Error loading template:', error));
+
+
 }
