@@ -69,7 +69,7 @@ function displayAnnouncement(announcement) {
     document.getElementById('noticeDues').value = announcement.noticeDues;
     document.getElementById('noticeContent').value = announcement.noticeContent;
     document.getElementById('noticeWriter').value = announcement.noticeWriter;
-
+    
     document.getElementById('noticeDues').disabled = 'true';
 
     // 공지사항 종료 날짜 설정
@@ -90,8 +90,9 @@ function displayAnnouncement(announcement) {
     const noticeEndDate = noticeEndDateInput.value ? noticeEndDateInput.value : null;
 
 
+    //수정한 날짜 변수 설정
+    const noticeEditDate = new Date().toISOString().split('T')[0];
 
-    
     const saveButton = document.getElementById('saveNoticeButton');
     saveButton.textContent = '공지사항 수정';
     saveButton.addEventListener('click', async function () {
@@ -105,7 +106,7 @@ function displayAnnouncement(announcement) {
                 userToken: userToken,
                 groupToken: groupToken,
                 noticeToken: noticeToken,
-    
+                noticeEditDate : noticeEditDate,
                 noticeTitle: document.getElementById('noticeTitle').value,
                 noticeEndDate: noticeEndDate,
                 noticeImportance: document.getElementById('noticeImportance').value,
@@ -119,6 +120,7 @@ function displayAnnouncement(announcement) {
         const data = await response.json();
         if (data.result == 1) {
             alert('공지사항이 수정되었습니다!');
+            window.location.href = `DetailNoticeDuesPage.html?noticeType=${2}&noticeContent=${announcement.noticeContent}&noticeToken=${noticeToken}&noticeTitle=${announcement.noticeTitle}&noticeEditDate=${noticeEditDate}&noticeEndDate=${announcement.noticeEndDate}&noticeImportance=${announcement.noticeImportance}&noticeStatus=${announcement.noticeStatus}&duesStatus=${announcement.duesStatus}&noticeDues=${announcement.noticeDues}`;
         } else {
             alert('수정에 실패했습니다. 다시 시도해주세요.');
         }

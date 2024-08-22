@@ -153,7 +153,7 @@ function displayAnnouncement(announcement) {
         const data = await response.json();
         if (data.result == 1) {
             alert('공지사항이 수정되었습니다!');
-            location.reload();
+            window.location.href = `DetailScheduleAttendancePage.html?scheduleToken=${scheduleToken}&scheduleTitle=${announcement.scheduleTitle}&scheduleStartDate=${announcement.scheduleStartDate}&scheduleEndDate=${announcement.scheduleEndDate}&scheudleImportance=${announcement.scheudleImportance}&scheduleAlert=${announcement.scheduleAlert}&scheduleStatus=${announcement.scheduleStatus}`;
         } else {
             alert('수정에 실패했습니다. 다시 시도해주세요.');
         }
