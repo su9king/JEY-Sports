@@ -9,11 +9,17 @@
     <script type="module" src="/Certification.js"></script>
     <script type="module" src="/Attend.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 </head>
 <body>
     <div class="content">
         <div class="container">
+            
+            <div id="menubar"></div>
+            <div id="sidebar"></div>
+            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
+            
             <!-- 캘린더 -->
             <div id='calendar'></div>
 
@@ -38,14 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="button-container"></div>
-            
-            <!-- 뒤로가기 버튼 -->
-            <button id="backButton" class="back-button"></button>
 
-            <!-- 사이드바 -->
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
         </div>
     </div>
 </body>

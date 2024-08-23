@@ -1,0 +1,112 @@
+/* 공통 스타일 */
+body {
+    margin: 0;
+    background-color: #F6F6F6;
+}
+
+/* 상단 메뉴바 스타일 */
+.menu {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 메뉴 스타일 */
+.menuInner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.menuInner li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.left-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.left-buttons button,
+.left-buttons a {
+    margin-right: -4px;
+}
+
+.left-buttons a#mainButton {
+    position: absolute;
+    top: 5px;    
+}
+
+/* 마지막 항목을 중앙 정렬 */
+.menuInner li:last-child {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.menuInner a#goToGroupMain {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px; /* 글꼴 크기 조정 */
+    font-weight: bold; /* 글꼴 두께 조정 */
+    color: #000000; /* 글꼴 색상 */
+    text-decoration: none; /* 텍스트 장식 제거 */
+}
+
+.menuInner a#goToGroupMain:hover {
+    color: #007bff;
+}
+
+
+/* -----------------------이전 버튼----------------------- */
+.back-button {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.back-button::before {
+    content: "";
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-left: 5px solid #007bff;
+    border-top: 5px solid #007bff;
+    transform: rotate(-45deg);
+    position: absolute;
+    top: 23px;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.back-button:hover::before {
+    border-left-color: #0056b3;
+    border-top-color: #0056b3;
+}
+
+.back-button:active::before {
+    border-left-color: #003366;
+    border-top-color: #003366;
+}
+
+/* -----------------------메인 버튼----------------------- */
+.main-button-image {
+    width: 60px;
+    height: 40px;
+    object-fit: contain; /* 이미지가 요소 안에 맞도록 비율을 유지하며 크기를 조정 */
+    object-position: center; /* 이미지가 요소 내에서 중앙에 위치하도록 설정 */
+}

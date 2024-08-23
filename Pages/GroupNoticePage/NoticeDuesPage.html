@@ -9,9 +9,16 @@
     <script type="module" src="/Certification.js"></script>
     <script type="module" src="/Dues.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
 </head>
 <body>
     <div class="content">
+
+        <div id="menubar"></div>
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
+        
         <div class="container">
 
             <div id="button-container" class="button-container"></div>
@@ -26,9 +33,6 @@
                 <button id="nextPage" disabled>Next</button>
             </div>
 
-            <button id="backButton" class="back-button"></button>
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
         </div>
     </div>
 </body>

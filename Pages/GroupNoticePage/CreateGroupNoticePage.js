@@ -21,39 +21,30 @@ window.onload = async function() {
     noticeType = urlParams.get('noticeType');
     noticeDues = urlParams.get('noticeDues');
     
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
-    } else {
-        loadSidebar(page, userPermission, response);
-        // document.getElementById('noticeWriter').value = response.resources[0]['userName'];
-            
-        if (noticeTitle) {
-            console.log('수정페이지로 접근');
-            if (noticeType != 1) {
-                document.getElementById('noticeDuesContainer').style.display = 'block'
-                document.getElementById('noticeDues').value = noticeDues;
-                if (noticeType == 2) {
-                    document.getElementById('noticeDues').disabled = 'true'
-                }
+    loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
+        
+    if (noticeTitle) {
+        console.log('수정페이지로 접근');
+        if (noticeType != 1) {
+            document.getElementById('noticeDuesContainer').style.display = 'block'
+            document.getElementById('noticeDues').value = noticeDues;
+            if (noticeType == 2) {
+                document.getElementById('noticeDues').disabled = 'true'
             }
-            document.getElementById('noticeType').disabled = 'true';
-            document.getElementById('noticeTitle').value = noticeTitle;
-            document.getElementById('noticeImportance').value = noticeImportance;
-            document.getElementById('noticeStatus').value = noticeStatus;
-            document.getElementById('noticeContent').value = noticeContent;
-            document.getElementById('noticeEndDate').value = noticeEndDate ? noticeEndDate.split('T')[0] : null;
-            document.getElementById('noticeWriter').value = noticeWriter;
-            document.getElementById('noticeType').value = noticeType;
-        } else {
-            console.log('작성페이지로 접근');
         }
-    }   
+        document.getElementById('noticeType').disabled = 'true';
+        document.getElementById('noticeTitle').value = noticeTitle;
+        document.getElementById('noticeImportance').value = noticeImportance;
+        document.getElementById('noticeStatus').value = noticeStatus;
+        document.getElementById('noticeContent').value = noticeContent;
+        document.getElementById('noticeEndDate').value = noticeEndDate ? noticeEndDate.split('T')[0] : null;
+        document.getElementById('noticeWriter').value = noticeWriter;
+        document.getElementById('noticeType').value = noticeType;
+    } else {
+        console.log('작성페이지로 접근');
+    }
 
-    // 뒤로가기
-    document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
-    });
 }
 
 //////////////////// Step1 : 페이지 구성 요소 생성 ////////////////////
@@ -100,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const functionType = 3;
 
         const noticeType = document.getElementById('noticeType').value;
-        const noticeDues = document.getElementById('noticeDues').value;
+        const noticeDues = document.getElementById('noticeDues').value ? document.getElementById('noticeDues').value : null;
         const noticeTitle = document.getElementById('noticeTitle').value;
         const noticeImportance = document.getElementById('noticeImportance').value;
         const noticeStatus = document.getElementById('noticeStatus').value;

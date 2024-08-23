@@ -13,35 +13,28 @@ window.onload = async function() {
     
     const response = await certification(page, data);
     
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
+    loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
+
+    if (response.resources.length !== 0) {
+        notices = response.resources.map(resource => ({
+            noticeType: resource.noticeType,
+            noticeToken: resource.noticeToken,
+            noticeTitle: resource.noticeTitle,
+            noticeEditDate: resource.noticeEditDate,
+            noticeEndDate: resource.noticeEndDate,
+            noticeImportance: resource.noticeImportance,
+            noticeStatus: resource.noticeStatus,
+            duesStatus: resource.duesStatus,
+            noticeDues: resource.noticeDues,
+        }));
+        createNoticeElements();
+        displayNotices();
     } else {
-        loadSidebar(page, userPermission, response);
-
-        if (response.resources !== null) {
-            notices = response.resources.map(resource => ({
-                noticeType: resource.noticeType,
-                noticeToken: resource.noticeToken,
-                noticeTitle: resource.noticeTitle,
-                noticeEditDate: resource.noticeEditDate,
-                noticeEndDate: resource.noticeEndDate,
-                noticeImportance: resource.noticeImportance,
-                noticeStatus: resource.noticeStatus,
-                userDuesStatus: resource.userDuesStatus,
-                noticeDues: resource.noticeDues,
-            }));
-            createNoticeElements();
-            displayNotices();
-        }
-        
-        addCreateNoticeButton(userPermission);
-    }   
-
-    // 뒤로가기 이벤트 리스너 등록
-    document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
-    });
+        noNotice();
+    }
+    
+    addCreateNoticeButton(userPermission);
 
     // 검색 기능 이벤트 리스너 등록
     const searchInput = document.getElementById('searchInput');
@@ -119,7 +112,7 @@ function createNoticeElements() {
 
 
         //// 납부하기 버튼 생성
-        if (notice.userDuesStatus == 0) {
+        if (notice.duesStatus == 0) {
             const payBtn = document.createElement("button");
             payBtn.classList.add("pay-button");
             payBtn.textContent = "납부하기";
@@ -133,7 +126,7 @@ function createNoticeElements() {
         
         // 제목 클릭시 작동 - 게시글 형성
         noticeTitle.addEventListener("click", async function() {
-            window.location.href = `DetailNoticeDuesPage.html?noticeType=${notice.noticeType}&noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeEditDate=${notice.noticeEditDate}&noticeEndDate=${notice.noticeEndDate}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&userDuesStatus=${notice.userDuesStatus}&noticeDues=${notice.noticeDues}`;
+            window.location.href = `DetailNoticeDuesPage.html?noticeToken=${notice.noticeToken}`;
         });
 
         noticeBox.appendChild(noticeTitle);
@@ -247,4 +240,21 @@ function updatePaginationControls(totalNotices = notices.length) {
 
     document.getElementById('prevPage').disabled = (currentPage === 1);
     document.getElementById('nextPage').disabled = (currentPage === totalPages || totalPages === 0);
+}
+
+
+// 공지사항이 하나도 없는 경우
+function noNotice() {
+    const noticeContainer = document.getElementById("notice-container");
+    
+    const noNoticeBox = document.createElement("div");
+    noNoticeBox.classList.add("noticeBox");
+
+    // 게시글 제목 생성
+    const noNoticeTitle = document.createElement("h2");
+    noNoticeTitle.classList.add("notice-title");
+    noNoticeTitle.textContent = '작성된 회비 공지사항이 없습니다!!';
+
+    noNoticeBox.appendChild(noNoticeTitle)
+    noticeContainer.appendChild(noNoticeBox)
 }

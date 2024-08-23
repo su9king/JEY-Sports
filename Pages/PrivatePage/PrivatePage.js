@@ -88,6 +88,16 @@ function requestGroup() {
 function createGroupsButtons(groups) {
     const buttonContainer = document.getElementById('button-container');
     buttonContainer.innerHTML = '';
+
+    console.log(groups.length)
+    if (groups.length === 0) {
+        
+        const noGroups = document.createElement('div');
+        noGroups.innerHTML = `
+        <h1>참여중인 조직이 없습니다!</h1>
+        `
+        buttonContainer.appendChild(noGroups)
+    }
     
     groups.forEach((group, index) => {
         const button = document.createElement('button');
@@ -102,6 +112,7 @@ function createGroupsButtons(groups) {
             alert(`group ${group['groupName']} selected`);
             sessionStorage.setItem('groupToken', group['groupToken'] );
             sessionStorage.setItem('userPermission', group['userPermission'] );
+            sessionStorage.setItem('groupName', group['groupName'] );
             window.location.href = '/GroupMainPage/GroupMainPage.html'; 
         });
         buttonContainer.appendChild(button);

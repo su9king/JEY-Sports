@@ -67,7 +67,7 @@ function generateTable(getData) {
         }
 
         th.addEventListener("click", () => {
-            window.location.href = `/GroupSchedulePage/DetailScheduleAttendancePage.html?scheduleToken=${schedule.scheduleToken}&scheduleTitle=${schedule.scheduleTitle}&scheduleStartDate=${schedule.scheduleStartDate}&scheduleEndDate=${schedule.scheduleEndDate}&scheudleImportance=${schedule.scheudleImportance}&scheduleAlert=${schedule.scheduleAlert}&scheduleStatus=${schedule.scheduleStatus}`;
+            window.location.href = `/GroupSchedulePage/DetailScheduleAttendancePage.html?scheduleToken=${schedule.scheduleToken}&scheduleTitle=${schedule.scheduleTitle}&scheduleStartDate=${schedule.scheduleStartDate}&scheduleEndDate=${schedule.scheduleEndDate}&scheudleImportance=${schedule.scheudleImportance}&scheduleAlert=${schedule.scheduleAlert}`;
         });
 
         headerRow.appendChild(th);

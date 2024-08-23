@@ -1,7 +1,7 @@
-let members = [];
-let notuserMembers = [];
-let userToken, groupToken, userPermission;
-let myFeeData = null;  // 나의 회비 납부 데이터를 저장할 변수
+let myData = null;        // 내 출석 데이터
+let members = [];         // 멤버 출석 데이터
+let notuserMembers = [];  // 비유저 출석 데이터
+let userToken, groupToken, userPermission, noticeToken;
 
 window.onload = async function () {
     const page = 'DetailNoticeDuesPage';
@@ -9,53 +9,26 @@ window.onload = async function () {
     groupToken = sessionStorage.getItem('groupToken');
     userPermission = sessionStorage.getItem('userPermission');
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const noticeType = urlParams.get('noticeType');
-    const noticeToken = urlParams.get('noticeToken');
-    const noticeTitle = urlParams.get('noticeTitle');
-    const noticeEditDate = urlParams.get('noticeEditDate');
-    const noticeEndDate = urlParams.get('noticeEndDate');
-    const noticeImportance = urlParams.get('noticeImportance') == 1 ? '중요' : '일반';
-    const noticeStatus = urlParams.get('noticeStatus') == 1 ? '공개' : '비공개';
-    const noticeDues = urlParams.get('noticeDues');
+    noticeToken = new URLSearchParams(window.location.search).get('noticeToken');
 
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&noticeToken=${noticeToken}`;
 
     const response = await certification(page, data);
     console.log(response.resources);
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
-    } else {
-        loadSidebar(page, userPermission, response);
 
-        myFeeData = response.resources[1][0];  // 내 회비 납부 데이터
-        members = response.resources[2];  // 멤버 회비 데이터
-        notuserMembers = response.resources[3]; // 비유저 회비 데이터
-        const announcement = {
-            noticeType,
-            noticeToken,
-            noticeTitle,
-            noticeImportance,
-            noticeEditDate,
-            noticeEndDate,
-            noticeStatus,
-            noticeDues,
-            noticeContent : response.resources[0][0].noticeContent,
-            noticeWriter : response.resources[0][0].noticeWriter,    
-            duesStatus : response.resources[1][0].duesStatus == true ? '납부 완료' : '아직!!!!' , 
-        };
-        
-        if (announcement != null) {displayAnnouncement(announcement);}
-        displayMyFeeData(announcement);  // 내 회비 납부 데이터 표시
-        displayMembers();// 멤버 및 비유저 멤버 표시
-        createAdminContainer(userPermission, announcement); // 수정 버튼, 출석 코드 생성
-    }
 
-    // 뒤로가기 버튼
-    document.getElementById('backButton').addEventListener('click', function () {
-        window.history.back();
-    });
+    loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
+
+
+    myData = response.resources[1][0];      // 내 회비 납부 데이터
+    members = response.resources[2];        // 멤버 회비 데이터
+    notuserMembers = response.resources[3]; // 비유저 회비 데이터
+    
+    displayAnnouncement(response.resources[0][0]);
+    displayMyData(response.resources[0][0]);  // 내 회비 납부 데이터 표시
+    displayMembers();  // 멤버 및 비유저 멤버 표시
+    createAdminContainer(userPermission); // 수정 버튼, 출석 코드 생성
 
     // 검색 기능 설정
     setupSearchInput();
@@ -64,12 +37,14 @@ window.onload = async function () {
 
 function displayAnnouncement(announcement) {
 
+    const duesStatusText = myData.duesStatus == true ? '납부 완료' : '아직!!!!';
+
     document.getElementById('noticeTitle').innerText = `공지사항 제목: ${announcement.noticeTitle}`;
     document.getElementById('scheduleImportance').innerText = `중요도: ${announcement.noticeImportance}`;
     document.getElementById('noticeEditDate').innerText = `마지막 수정일: ${announcement.noticeEditDate}`;
     document.getElementById('noticeEndDate').innerText = `기한 날짜: ${announcement.noticeEndDate}`;
     document.getElementById('noticeStatus').innerText = `상태: ${announcement.noticeStatus}`;
-    document.getElementById('duesStatus').innerText = `내 회비 납부 상태: ${announcement.duesStatus}`;
+    document.getElementById('duesStatus').innerText = `내 회비 납부 상태: ${duesStatusText}`;
     document.getElementById('noticeDues').innerText = `회비 금액: ${announcement.noticeDues}원`;
     document.getElementById('noticeContent').innerText = `세부 공지사항 내용: ${announcement.noticeContent}`;
     document.getElementById('noticeWriter').innerText = `작성자: ${announcement.noticeWriter}`;
@@ -79,27 +54,27 @@ function displayAnnouncement(announcement) {
 
 
 // 나의 회비 납부 현황 표시
-function displayMyFeeData(announcement) {
+function displayMyData(announcement) {
     const myDataContainer = document.getElementById('my-data-container');
-    if (myFeeData) {
+    if (myData) {
         const myTitle = document.createElement('h2');
         myTitle.textContent = '나의 회비 납부 현황';
         myDataContainer.appendChild(myTitle);
-        const myBox = createMemberBox(myFeeData, true, false);
+        const myBox = createMemberBox(myData, true, false);
         myDataContainer.appendChild(myBox);
     } else {
         myDataContainer.innerHTML = '<h2>나의 회비 납부 현황</h2><p>회비 납부 정보가 없습니다.</p>';
     }
 
 
-    if (announcement.duesStatus == '아직!!!!') {
+    if (myData.duesStatus == false) {
         const payButton = document.createElement("button");
         payButton.classList.add("pay-button");
         payButton.textContent = "납부하기";
 
         // 납부하기 버튼 클릭 이벤트
         payButton.addEventListener("click", function() {
-            dues(userToken, groupToken, userPermission, announcement.noticeToken, announcement.noticeDues);
+            dues(userToken, groupToken, userPermission, noticeToken, announcement.noticeDues);
         });
 
         myDataContainer.appendChild(payButton);
@@ -198,7 +173,7 @@ function createMemberBox(member, isMyStatus = false, isNotUser = false) {
 
 
 
-async function createAdminContainer(userPermission, notice) {
+async function createAdminContainer(userPermission) {
     if (userPermission == 1 || userPermission == 2) {
         
         ///////////////// 수정하기 버튼 생성
@@ -209,7 +184,7 @@ async function createAdminContainer(userPermission, notice) {
         editButton.id = 'edit-button';
         editButtonContainer.appendChild(editButton);
         editButton.addEventListener('click', () => {
-            window.location.href = `/GroupNoticePage/EditNoticeDuesPage.html?noticeType=${notice.noticeType}&noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeImportance=${notice.noticeImportance}&noticeEditDate=${notice.noticeEditDate}&noticeEndDate=${notice.noticeEndDate}&noticeStatus=${notice.noticeStatus}&duesStatus=${notice.duesStatus}&noticeDues=${notice.noticeDues}&noticeContent=${notice.noticeContent}&noticeWriter=${notice.noticeWriter}`;
+            window.location.href = `/GroupNoticePage/EditNoticeDuesPage.html?noticeToken=${noticeToken}`;
         });
     }
 }

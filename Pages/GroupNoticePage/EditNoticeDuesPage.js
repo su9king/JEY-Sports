@@ -1,7 +1,7 @@
+let myData = null;
 let members = [];
 let notuserMembers = [];
 let userToken, groupToken, userPermission, noticeToken;
-let myData = null;
 let initialMembersState = [];
 
 window.onload = async function () {
@@ -10,51 +10,28 @@ window.onload = async function () {
     groupToken = sessionStorage.getItem('groupToken');
     userPermission = sessionStorage.getItem('userPermission');
 
-    const urlParams = new URLSearchParams(window.location.search);
-    noticeToken = urlParams.get('noticeToken');
-
-    const noticeTitle = urlParams.get('noticeTitle');
-    const noticeEndDate = urlParams.get('noticeEndDate');
-    const noticeImportance = urlParams.get('noticeImportance') == "중요" ? 1 : 0;
-    const noticeStatus = urlParams.get('noticeStatus') == "공개" ? 1 : 0;
-    const noticeDues = urlParams.get('noticeDues');
-    const noticeContent = urlParams.get('noticeContent');
-    const noticeWriter = urlParams.get('noticeWriter');
+    noticeToken = new URLSearchParams(window.location.search).get('noticeToken');
     
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&noticeToken=${noticeToken}`;
-    const response = await certification(page, data);
     
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
-    } else {
-        loadSidebar(page, userPermission, response);
+    const response = await certification(page, data);
+    console.log(response.resources);
+    
 
-        myData = response.resources[1][0];  // 내 회비 납부 데이터
-        members = response.resources[2]; // 멤버 리스트
-        notuserMembers = response.resources[3]; // 비유저 회비 데이터
+    loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
 
-        // 초기 멤버 상태 저장
-        initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
+    
+    myData = response.resources[1][0];       // 내 회비 납부 데이터
+    members = response.resources[2];         // 멤버 리스트
+    notuserMembers = response.resources[3];  // 비유저 회비 데이터
 
-        const announcement = {
-            noticeTitle,
-            noticeEndDate,
-            noticeImportance,
-            noticeStatus,
-            noticeDues,
-            noticeContent,
-            noticeWriter
-        };
+    // 초기 멤버 상태 저장
+    initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
 
-        displayAnnouncement(announcement);
-        displayMemberDues();
-        displayMyData();
-    }
-
-    document.getElementById('backButton').addEventListener('click', function () {
-        window.history.back();
-    });
+    displayAnnouncement(response.resources[0][0]);
+    displayMemberDues();
+    displayMyData();
 
     document.getElementById('saveButton').addEventListener('click', saveDuesSatus);
 
@@ -62,10 +39,11 @@ window.onload = async function () {
 }
 
 function displayAnnouncement(announcement) {
+    
     document.getElementById('noticeTitle').value = announcement.noticeTitle;
     document.getElementById('noticeEndDate').value = announcement.noticeEndDate;
-    document.getElementById('noticeImportance').value = announcement.noticeImportance;
-    document.getElementById('noticeStatus').value = announcement.noticeStatus;
+    document.getElementById('noticeImportance').value = announcement.noticeImportance == "중요" ? 1 : 0;
+    document.getElementById('noticeStatus').value = announcement.noticeStatus == "공개" ? 1 : 0;
     document.getElementById('noticeDues').value = announcement.noticeDues;
     document.getElementById('noticeContent').value = announcement.noticeContent;
     document.getElementById('noticeWriter').value = announcement.noticeWriter;
@@ -120,7 +98,7 @@ function displayAnnouncement(announcement) {
         const data = await response.json();
         if (data.result == 1) {
             alert('공지사항이 수정되었습니다!');
-            window.location.href = `DetailNoticeDuesPage.html?noticeType=${2}&noticeContent=${announcement.noticeContent}&noticeToken=${noticeToken}&noticeTitle=${announcement.noticeTitle}&noticeEditDate=${noticeEditDate}&noticeEndDate=${announcement.noticeEndDate}&noticeImportance=${announcement.noticeImportance}&noticeStatus=${announcement.noticeStatus}&duesStatus=${announcement.duesStatus}&noticeDues=${announcement.noticeDues}`;
+            window.location.href = `DetailNoticeDuesPage.html?noticeToken=${noticeToken}`;
         } else {
             alert('수정에 실패했습니다. 다시 시도해주세요.');
         }

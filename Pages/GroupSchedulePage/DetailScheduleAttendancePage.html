@@ -9,9 +9,16 @@
     <script type="module" src="/Certification.js"></script>
     <script type="module" src="/Attend.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
 </head>
 <body>
     <div class="content">
+
+        <div id="menubar"></div>
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
+
         <div class="container">
 
             <!-- 수정하기 버튼 생성 -->
@@ -32,9 +39,6 @@
             <!-- 멤버 출석 상태 섹션 -->
             <div id="user-member-container" class="member-container"></div>
 
-            <button id="backButton" class="back-button"></button>
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
         </div>
     </div>
 </body>

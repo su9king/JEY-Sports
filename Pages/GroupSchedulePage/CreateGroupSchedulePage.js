@@ -21,34 +21,24 @@ window.onload = async function() {
     const scheduleContent = urlParams.get('scheduleContent');
     const scheduleLocation = urlParams.get('scheduleLocation');
     scheduleToken = urlParams.get('scheduleToken');
-    const scheduleStatus = urlParams.get('scheduleStatus');
 
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
+    loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
+    
+    if (scheduleTitle) {
+        console.log('수정페이지로 접근');
+        document.getElementById('scheduleAttendance').value = scheduleAttendance;
+        document.getElementById('scheduleTitle').value = scheduleTitle;
+        document.getElementById('scheduleStartDate').value = scheduleStartDate;
+        document.getElementById('scheduleEndDate').value = scheduleEndDate;
+        document.getElementById('scheduleImportance').value = scheduleImportance;
+        document.getElementById('scheduleAlert').value = scheduleAlert;
+        document.getElementById('scheduleContent').value = scheduleContent;
+        document.getElementById('scheduleLocation').value = scheduleLocation;
     } else {
-        loadSidebar(page, userPermission, response);
-        
-        if (scheduleTitle) {
-            console.log('수정페이지로 접근');
-            document.getElementById('scheduleAttendance').value = scheduleAttendance;
-            document.getElementById('scheduleTitle').value = scheduleTitle;
-            document.getElementById('scheduleStartDate').value = scheduleStartDate;
-            document.getElementById('scheduleEndDate').value = scheduleEndDate;
-            document.getElementById('scheduleImportance').value = scheduleImportance;
-            document.getElementById('scheduleAlert').value = scheduleAlert;
-            document.getElementById('scheduleContent').value = scheduleContent;
-            document.getElementById('scheduleLocation').value = scheduleLocation;
-            // document.getElementById('scheduleStatus').value = scheduleStatus;
-        } else {
-            console.log('작성페이지로 접근');
-        }
-    }   
+        console.log('작성페이지로 접근');
+    }
 
-    // 뒤로가기
-    document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
-    });
 }
 
 //////////////////// Step1 : 페이지 구성 요소 생성 ////////////////////
@@ -131,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const scheduleAlert = document.getElementById('scheduleAlert').value;
         const scheduleContent = document.getElementById('scheduleContent').value;
         const scheduleLocation = document.getElementById('scheduleLocation').value;
-        const scheduleAttendanceCode = document.getElementById('scheduleAttendanceCode').value;
+        const scheduleAttendanceCode = document.getElementById('scheduleAttendanceCode').value ? document.getElementById('scheduleAttendanceCode').value : null;
 
         if ((scheduleAttendanceCode || scheduleAttendance == 0) && scheduleTitle && scheduleStartDate && scheduleContent && scheduleLocation && scheduleEndDate ) {
             try {
@@ -155,8 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         scheduleContent: scheduleContent,
                         scheduleLocation: scheduleLocation,
 
-                        scheduleAttendanceCode : null ,
-                        scheduleStatus: null
+                        scheduleAttendanceCode : scheduleAttendanceCode ,
                     })
                 });
 

@@ -8,9 +8,16 @@
     <link rel="stylesheet" href="CreateGroupSchedulePage.css">
     <script type="module" src="/Certification.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
 </head>
 <body>
     <div class="content">
+
+        <div id="menubar"></div>
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
+
         <div class="container">
             <form id="createScheduleForm">
 
@@ -88,13 +95,6 @@
                 <!-- 저장 취소 버튼 -->
                 <button class="btn" type="button" id="noticeCancleBtn">일정 수정 취소</button>
             </form>
-
-            <!-- 뒤로가기 버튼 -->
-            <button id="backButton" class="back-button"></button>
-
-            <!-- 사이드바 및 토글 버튼 -->
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
         </div>
     </div>
 </body>

@@ -8,13 +8,22 @@
     <link rel="stylesheet" href="GroupNoticePage.css">
     <script type="module" src="/Certification.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
 </head>
 <body>
     <div class="content">
+
+        <div id="menubar"></div>
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
+
         <div class="container">
+            <br>
             <input type="text" id="searchInput" placeholder="어떤 공지가 궁금한가요!">
             
             <div id="notice-container"></div>
+            <div id="button-container"></div>
             
             <div class="pagination-controls">
                 <button id="prevPage" disabled>Previous</button>
@@ -22,9 +31,6 @@
                 <button id="nextPage" disabled>Next</button>
             </div>
 
-            <button id="backButton" class="back-button"></button>
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
         </div>
     </div>
 </body>

@@ -4,10 +4,11 @@
     position: fixed;
     top: 0;
     right: -250px; /* Hide sidebar off-screen */
-    background-color: #333;
+    background-color: #ffffff;
     overflow-x: hidden;
     transition: right 0.5s; /* Smooth transition effect */
     z-index: 1000; /* Ensure sidebar is above other elements */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar ul {
@@ -22,7 +23,7 @@
 
 .sidebar ul li a {
     display: block;
-    color: white;
+    color: rgb(255, 0, 0);
     text-align: center;
     padding: 14px;
     text-decoration: none;
@@ -39,19 +40,22 @@
 
 .sidebar-button, .sidebar ul li button {
     width: 100%;
-    padding: 14px;
+    padding: 13px;
     margin: 5px 0;
-    background-color: #444;
-    color: white;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
     border: none;
     cursor: pointer;
     text-align: center;
     font-size: 16px;
     transition: background-color 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
 }
 
 .sidebar-button:hover, .sidebar ul li button:hover {
-    background-color: #575757;
+    background-color: #007bff;
+    color: rgb(255, 255, 255);
 }
 
 
@@ -65,11 +69,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1); /* 약간의 그림자 추가 */
-  }
-  
-  .sidebar-profile-image {
+    box-shadow: 0 0 5px #000000; /* 약간의 그림자 추가 */
+    border: 3px solid #000000;
+}
+
+.sidebar-profile-image {
     width: 100%; /* 컨테이너 크기에 맞게 조정 */
     height: auto;
     display: block;
-  }
+}
+
+
+#toggleButton {
+    position: fixed;
+    top: 7px;
+    right: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+}
