@@ -12,14 +12,8 @@ window.onload = async function() {
 	
 	response = await certification(page, data);
 	
-	if (response.result == 0) {
-		alert('로그인 후 사용해주세요!');
-		window.location.href = '/WarningPage.html';
-		return;
-	}
-	
 	loadSidebar(page, userPermission, response);
-
+	loadMenubar(sessionStorage.getItem('groupName'));
 
 	// buffer에 잠깐 저장했다가 권한에 따라 리스트 따로 생성
 	response.resources[0].forEach(resource => {
@@ -28,7 +22,7 @@ window.onload = async function() {
 			userImage: resource.userImage,
 			userName: resource.userName,
 			userPermission: resource.userPermission,
-			userAttentionRate: resource.userAttentionRate,
+			personalParticipationRate: resource.personalParticipationRate,
 			userPhone: resource.userPhone,
 		};
 	
@@ -56,10 +50,6 @@ window.onload = async function() {
 	
 	displayMembers();  //// 멤버 리스트 생성 함수 ////
 
-	// 뒤로가기 버튼에 이벤트 추가
-	document.getElementById('backButton').addEventListener('click', function() {
-		window.history.back();
-	});
 }
 
 // 권한 레이블 정의
@@ -107,7 +97,7 @@ async function displayMembers() {
 		memberInfo.innerHTML = `
 			<h2 class="member-name">${member.userName}</h2>
 			<p class="member-Permission">등급: ${getPermissionLabel(member.userPermission)}</p>
-			<p class="member-AttentionRate">참석률: ${member.userAttentionRate}%</p>
+			<p class="member-AttentionRate">참석률: ${member.personalParticipationRate}%</p>
 			<p class="member-Phone">휴대폰 번호: ${member.userPhone}</p>
 		`;
 

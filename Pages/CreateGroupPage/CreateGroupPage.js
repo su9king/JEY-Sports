@@ -4,13 +4,15 @@ window.onload = async function() {
     const data = `userToken=${userToken}`
 
     const resources = await certification(page, data);
-
+    document.getElementById('groupImageSample').src =  `/GroupImages/NULL.png`;
+    
 }
 
 
 document.addEventListener('DOMContentLoaded', function() {
     const CreateGroupForm = document.getElementById('CreateGroupForm');
 
+    const groupName = document.getElementById('groupName');
     const groupID = document.getElementById('groupID');
     const groupIDBtn = document.getElementById('groupIDBtn');
     const allowGroupID = document.getElementById('groupIDAlert');
@@ -28,6 +30,17 @@ document.addEventListener('DOMContentLoaded', function() {
         label.addEventListener('click', function(e) {
             e.preventDefault(); // 클릭 이벤트 기본 동작 방지
         });
+    });
+
+    ////// GroupName 글자수 제한 //////
+    groupName.addEventListener('input', function () {
+        const maxLength = 10;
+        const groupNameInput = this;
+
+        if (groupNameInput.value.length > maxLength) {
+            alert('조직 이름은 최대 10글자까지 입력할 수 있습니다!');
+            groupNameInput.value = groupNameInput.value.slice(0, maxLength);
+        }
     });
 
     ////// GroupID 중복 확인 버튼 //////
@@ -107,22 +120,31 @@ document.addEventListener('DOMContentLoaded', function() {
     ////// 이미지 저장 ////// 
     const groupImage = document.getElementById('groupImage');
 
-    groupImage.addEventListener('change', function() {  
-        const file = groupImage.files[0];
+    groupImage.addEventListener('change', function(event) {  
+        const file = event.target.files[0];
 
-        if (file) {
+        if (file) {  // 파일 확장자, 용량 제한
             const allowedTypes = ['image/jpeg', 'image/png'];
-            if (!allowedTypes.includes(file.type)) {
+            if (!allowedTypes.includes(file.type)) {  // 파일 확장자, 용량 제한
                 alert('JPG와 PNG 파일만 업로드 가능합니다!');
-                groupImage.value = ''; // Clear the input
+                groupImage.value = '';
                 return;
             }
 
-            if (file.size > 5 * 1024 * 1024) { // 5MB
+            if (file.size > 5 * 1024 * 1024) { // 5MB // 파일 확장자, 용량 제한
                 alert('5MB 이하의 파일만 가능합니다!');
-                groupImage.value = ''; // Clear the input
+                groupImage.value = '';
                 return;
             } 
+            
+            // 첨부 이미지 미리보기
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('groupImageSample').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('groupImageSample').src =  `/GroupImages/NULL.png`;
         }
     });
 
@@ -142,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let groupClassification = document.getElementById('groupClassification').value;
         let groupSportType = document.getElementById('groupSportType').value;
 
-        let groupImage = document.getElementById('groupImage').files[0];
+        let groupImage = document.getElementById('groupImage').files[0] ? document.getElementById('groupImage').files[0] : null;
 
         // null값 허용
         groupPW = allowNull(groupPW);
@@ -151,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('groupImage', groupImage);
         
-        if ( groupClassification == 'empty') {
+        if ( groupClassification == 'empty') { 
             alert('조직 분류를 선택해 주세요!');
             return
         } else if (groupSportType == 'empty') {
@@ -159,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
 
-        if (groupName && groupNumber && groupID && idCheck == true && groupLocation && groupImage ) {
+        if (groupName && groupNumber && groupID && idCheck == true && groupLocation ) {
             const functionType = 1;
 
             const response = await fetch('/CreateGroup', {

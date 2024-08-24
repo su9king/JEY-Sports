@@ -104,6 +104,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     /////////////////////////////////// 조직 이름 변경 ///////////////////////////////////
+    document.getElementById('groupName').addEventListener('input', function () {
+        const maxLength = 10;
+        const groupNameInput = this;
+
+        if (groupNameInput.value.length > maxLength) {
+            alert('조직 이름은 최대 10글자까지 입력할 수 있습니다!');
+            groupNameInput.value = groupNameInput.value.slice(0, maxLength);
+        }
+    });
+
     groupNameBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 

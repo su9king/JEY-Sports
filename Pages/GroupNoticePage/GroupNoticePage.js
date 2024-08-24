@@ -13,32 +13,27 @@ window.onload = async function() {
     
     const response = await certification(page, data);
     
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
+
+    loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
+
+    if (response.resources.length !== 0) {
+        notices = response.resources.map(resource => ({
+            noticeToken: resource.noticeToken,
+            noticeType: resource.noticeType,
+            noticeTitle: resource.noticeTitle,
+            noticeImportance: resource.noticeImportance,
+            noticeStatus: resource.noticeStatus,
+            noticeEditDate: resource.noticeEditDate.split('T')[0],
+        }));
+        createNoticeElements();
+        displayNotices();
     } else {
-        loadSidebar(page, userPermission, response);
+        noNotice();
+    }
+    
+    addCreateNoticeButton(userPermission);
 
-        if (response.resources !== null) {
-            notices = response.resources.map(resource => ({
-                noticeToken: resource.noticeToken,
-                noticeType: resource.noticeType,
-                noticeTitle: resource.noticeTitle,
-                noticeImportance: resource.noticeImportance,
-                noticeStatus: resource.noticeStatus,
-                noticeEditDate: resource.noticeEditDate.split('T')[0],
-            }));
-            createNoticeElements();
-            displayNotices();
-        }
-        
-        addCreateNoticeButton(userPermission);
-    }   
-
-    // 뒤로가기 이벤트 리스너 등록
-    document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
-    });
 
     // 검색 기능 이벤트 리스너 등록
     const searchInput = document.getElementById('searchInput');
@@ -346,6 +341,7 @@ async function displayNoticeContent(noticeToken, noticeContentElement) {
 
 // 공지사항 추가 버튼 생성(권한 제한을 위해 함수화)
 function addCreateNoticeButton(userPermission) {
+    const buttonContainer = document.getElementById('button-container');
     if (userPermission == 2 || userPermission == 1) {
         const createButtonContainer = document.createElement("div");
         createButtonContainer.classList.add("create-button-container");
@@ -359,7 +355,7 @@ function addCreateNoticeButton(userPermission) {
 
         createButtonContainer.appendChild(createButton);
 
-        document.body.insertBefore(createButtonContainer, document.body.firstChild);
+        buttonContainer.appendChild(createButtonContainer);
     }
 }
 
@@ -371,4 +367,20 @@ function updatePaginationControls(totalNotices = notices.length) {
 
     document.getElementById('prevPage').disabled = (currentPage === 1);
     document.getElementById('nextPage').disabled = (currentPage === totalPages || totalPages === 0);
+}
+
+// 공지사항이 하나도 없는 경우
+function noNotice() {
+    const noticeContainer = document.getElementById("notice-container");
+    
+    const noNoticeBox = document.createElement("div");
+    noNoticeBox.classList.add("noticeBox");
+
+    // 게시글 제목 생성
+    const noNoticeTitle = document.createElement("h2");
+    noNoticeTitle.classList.add("notice-title");
+    noNoticeTitle.textContent = '작성된 공지사항이 없습니다!!';
+
+    noNoticeBox.appendChild(noNoticeTitle)
+    noticeContainer.appendChild(noNoticeBox)
 }

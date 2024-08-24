@@ -1,6 +1,7 @@
 //////////////////// Step0 : 회원인증, 사이드바, 뒤로가기 초기 세팅 ////////////////////
 let schedules = [];
 let scheduleContents = [];
+let userToken, groupToken, userPermission;
 
 window.onload = async function() {
     const page = 'GroupSchedulePage';
@@ -11,44 +12,43 @@ window.onload = async function() {
     
     response = await certification(page, data);
     
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
-    } else {
-        loadSidebar(page, userPermission, response);
+    loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
 
-        if (response.resources !== null) {
-            schedules = response.resources.map(resource => ({
-                scheduleToken: resource.scheduleToken,
-                scheduleTitle: resource.scheduleTitle,
-                scheduleStartDate: resource.scheduleStartDate ? resource.scheduleStartDate.split('T')[0] : null,
-                scheduleEndDate: resource.scheduleEndDate ? resource.scheduleEndDate.split('T')[0] : null,
-                scheduleImportance: resource.scheduleImportance,
-                scheduleStatus: resource.scheduleStatus,
-            }));
-        }
+    if (response.resources !== null) {
+        schedules = response.resources.map(resource => ({
+            scheduleToken: resource.scheduleToken,
+            scheduleTitle: resource.scheduleTitle,
+            scheduleStartDate: resource.scheduleStartDate ? resource.scheduleStartDate.split('T')[0] : null,
+            scheduleEndDate: resource.scheduleEndDate ? resource.scheduleEndDate.split('T')[0] : null,
+            scheduleImportance: resource.scheduleImportance,
+        }));
+    }
 
-        displayCalendar();  //// 달력 생성 함수 ////
-        addScheduleAddButton(userPermission)  //// 일정 추가 버튼 생성 함수 ////
-    }   
+    displayCalendar(userPermission);  //// 달력 생성 및 일정 추가 버튼 적용 ////
 
-    // 뒤로가기
-    document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
-    });
 }
 
 //// 일정 생성 함수 ////
-function displayCalendar() {
+function displayCalendar(userPermission) { 
     var calendarEl = document.getElementById('calendar');
+
+    var headerToolbarConfig = {
+        start: '',
+        center: 'title',
+        end: 'prevYear,prev,next,nextYear'
+    };
+
+    // 일정 추가 버튼이 필요한 경우 start에 추가
+    if (userPermission == 2 || userPermission == 1) {
+        headerToolbarConfig.start = 'customAddScheduleButton';
+    }
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        headerToolbar: {
-            start: 'dayGridMonth,timeGridWeek,timeGridDay',
-            center: 'title',
-            end: 'prevYear,prev,next,nextYear'
-        },
+        headerToolbar: headerToolbarConfig,
+        locale: 'ko', // 한국어로 변경
+
         events: schedules.map(schedule => ({
             id: schedule.scheduleToken,
             title: schedule.scheduleTitle,
@@ -57,14 +57,21 @@ function displayCalendar() {
             color: schedule.scheduleImportance == true ? '#FF0000' : '#0056b3', // 'True'면 빨간색, 아니면 기본 색상
             extendedProps: {
                 scheduleImportance: schedule.scheduleImportance,
-                scheduleStatus: schedule.scheduleStatus,
             }
         })),
+        customButtons: {
+            customAddScheduleButton: {
+                text: '일정 추가',
+                click: function() {
+                    window.location.href = "CreateGroupSchedulePage.html"; // 일정 추가 페이지로 이동
+                }
+            }
+        },
         eventClick: function(info) {
             displayScheduleDetails(info.event.id);
         }
-        
     });
+
     calendar.render();
 }
 
@@ -100,14 +107,12 @@ async function displayScheduleDetails(scheduleToken) {
             const scheduleEndDate = currentSchedule.scheduleEndDate || scheduleStartDate; // undefined라면 StartDate와 동일하게 출력
             const scheduleImportance = currentSchedule.scheduleImportance;
             const scheduleAlert = scheduleDetails.scheduleAlert || false; // 기본값 'False'
-            const scheduleStatus = currentSchedule.scheduleStatus;
             const scheduleContent = scheduleDetails.scheduleContent;
             const scheduleLocation = scheduleDetails.scheduleLocation;
             const scheduleAttendance = scheduleDetails.scheduleAttendance;
 
             const importanceText = scheduleImportance == true ? '중요' : '일반';
             const alertText = scheduleAlert == true ? '알람 예정' : '알람 없음';
-            const statusText = scheduleStatus == true ? '완료' : (scheduleStatus == false ? '취소' : '예정');
 
             eventDetails.innerHTML = `
                 <strong>제목:</strong> ${scheduleTitle}<br>
@@ -144,7 +149,7 @@ async function displayScheduleDetails(scheduleToken) {
 
                 //////////// 출석 자세히보기 버튼
                 attendDetailButton.onclick = function() {
-                    window.location.href = `DetailScheduleAttendancePage.html?scheduleTitle=${scheduleTitle}&scheduleAttendance=${scheduleAttendance}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheduleImportance=${scheduleImportance}&scheduleAlert=${scheduleAlert}&scheduleContent=${scheduleContent}&scheduleLocation=${scheduleLocation}&scheduleStatus=${scheduleStatus}&scheduleToken=${scheduleToken}`;
+                    window.location.href = `DetailScheduleAttendancePage.html?scheduleTitle=${scheduleTitle}&scheduleAttendance=${scheduleAttendance}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheduleImportance=${scheduleImportance}&scheduleAlert=${scheduleAlert}&scheduleContent=${scheduleContent}&scheduleLocation=${scheduleLocation}&scheduleToken=${scheduleToken}`;
                 }
             } else {
                 attendButton.style.display = "none";
@@ -159,7 +164,7 @@ async function displayScheduleDetails(scheduleToken) {
                 deleteEventButton.style.display = "inline-block";
 
                 saveButton.onclick = function() {
-                    window.location.href = `CreateGroupSchedulePage.html?scheduleTitle=${scheduleTitle}&scheduleAttendance=${scheduleAttendance}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheduleImportance=${scheduleImportance}&scheduleAlert=${scheduleAlert}&scheduleContent=${scheduleContent}&scheduleLocation=${scheduleLocation}&scheduleStatus=${scheduleStatus}&scheduleToken=${scheduleToken}`;
+                    window.location.href = `CreateGroupSchedulePage.html?scheduleTitle=${scheduleTitle}&scheduleAttendance=${scheduleAttendance}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheduleImportance=${scheduleImportance}&scheduleAlert=${scheduleAlert}&scheduleContent=${scheduleContent}&scheduleLocation=${scheduleLocation}&scheduleToken=${scheduleToken}`;
                 }
 
                 deleteEventButton.onclick = async function() {
@@ -238,4 +243,3 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
 });
-

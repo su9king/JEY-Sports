@@ -1,7 +1,7 @@
+let myData = null;
 let members = [];
 let notuserMembers = [];
 let userToken, groupToken, userPermission, scheduleToken, scheduleAttendanceCode;
-let myData = null;
 let initialMembersState = [];
 
 window.onload = async function () {
@@ -10,50 +10,29 @@ window.onload = async function () {
     groupToken = sessionStorage.getItem('groupToken');
     userPermission = sessionStorage.getItem('userPermission');
 
-    const urlParams = new URLSearchParams(window.location.search);
-    scheduleToken = urlParams.get('scheduleToken');
-
-    const scheduleTitle = urlParams.get('scheduleTitle');
-    const scheduleStartDate = urlParams.get('scheduleStartDate');
-    const scheduleEndDate = urlParams.get('scheduleEndDate');
-    const scheduleImportance = urlParams.get('scheduleImportance') == "일반" ? 0 : 1;
-    const scheduleAlert = urlParams.get('scheduleAlert') == "없음" ? 0 : 1;
+    scheduleToken = new URLSearchParams(window.location.search).get('scheduleToken');
 
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&scheduleToken=${scheduleToken}`;
 
     const response = await certification(page, data);
+    console.log(response.resources);
 
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
-    } else {
-        loadSidebar(page, userPermission, response);
-        scheduleAttendanceCode = response.resources[0][0].scheduleAttendanceCode;
-        myData = response.resources[1][0];
-        members = response.resources[2];
-        notuserMembers = response.resources[3];   // 비유저 출석 데이터
 
-        initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
+    loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
 
-        const announcement = {
-            scheduleTitle,
-            scheduleStartDate,
-            scheduleEndDate,
-            scheduleImportance,
-            scheduleAlert,
-            scheduleContent : response.resources[0][0].scheduleContent,
-            scheduleLocation : response.resources[0][0].scheduleLocation,            
-        };
 
-        displayAnnouncement(announcement);
-        displayMyData();
-        displayMembers();
-        createCodeContainer(userPermission);
-    }
+    scheduleAttendanceCode = response.resources[0][0].scheduleAttendanceCode;
+    myData = response.resources[1][0];        // 내 출석 데이터
+    members = response.resources[2];          // 멤버 출석 데이터
+    notuserMembers = response.resources[3];   // 비유저 출석 데이터
 
-    document.getElementById('backButton').addEventListener('click', function () {
-        window.history.back();
-    });
+    initialMembersState = [...members.map(member => ({ ...member })), ...notuserMembers.map(member => ({ ...member }))];
+
+    displayAnnouncement(response.resources[0][0]);
+    displayMyData();
+    displayMembers();
+    createCodeContainer(userPermission);
 
     document.getElementById('saveButton').addEventListener('click', saveAttendanceStatus);
 
@@ -70,12 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
+//////////////////////////////////////////////////// 공지사항 수정 섹션
 function displayAnnouncement(announcement) {
     document.getElementById('scheduleTitle').value = announcement.scheduleTitle;
     document.getElementById('scheduleStartDate').value = announcement.scheduleStartDate;
     document.getElementById('scheduleEndDate').value = announcement.scheduleEndDate;
-    document.getElementById('scheduleImportance').value = announcement.scheduleImportance;
-    document.getElementById('scheduleAlert').value = announcement.scheduleAlert;
+    document.getElementById('scheduleImportance').value = announcement.scheduleImportance == "일반" ? 0 : 1;
+    document.getElementById('scheduleAlert').value = announcement.scheduleAlert == "없음" ? 0 : 1;
     document.getElementById('scheduleContent').value = announcement.scheduleContent;
     document.getElementById('scheduleLocation').value = announcement.scheduleLocation;
 
@@ -111,8 +92,6 @@ function displayAnnouncement(announcement) {
         }
     });
 
-
-
     // 시작 날짜가 종료 날짜보다 늦은 경우
     scheduleEndDate.addEventListener('change', function() {
         const startDate = new Date(document.getElementById('scheduleStartDate').value);
@@ -125,6 +104,9 @@ function displayAnnouncement(announcement) {
         }
     });
 
+
+
+    // 공지사항 수정사항 저장 버튼
     const saveButton = document.getElementById('saveAnnouncementButton');
     saveButton.textContent = '공지사항 수정';
     saveButton.addEventListener('click', async function () {
@@ -153,7 +135,7 @@ function displayAnnouncement(announcement) {
         const data = await response.json();
         if (data.result == 1) {
             alert('공지사항이 수정되었습니다!');
-            window.location.href = `DetailScheduleAttendancePage.html?scheduleToken=${scheduleToken}&scheduleTitle=${announcement.scheduleTitle}&scheduleStartDate=${announcement.scheduleStartDate}&scheduleEndDate=${announcement.scheduleEndDate}&scheudleImportance=${announcement.scheudleImportance}&scheduleAlert=${announcement.scheduleAlert}&scheduleStatus=${announcement.scheduleStatus}`;
+            window.location.href = `DetailScheduleAttendancePage.html?scheduleToken=${scheduleToken}`;
         } else {
             alert('수정에 실패했습니다. 다시 시도해주세요.');
         }
@@ -161,6 +143,10 @@ function displayAnnouncement(announcement) {
 
 }
 
+
+
+//////////////////////////////////////////////////// 출석 상태 수정 섹션
+// 나의 출석 상태
 function displayMyData() {
     const myDataContainer = document.getElementById('my-data-container');
     if (myData) {
@@ -174,6 +160,7 @@ function displayMyData() {
     }
 }
 
+// 멤버들(유저+비유저) 출석 상태
 function displayMembers(filteredMembers = null) {
     const userMemberContainer = document.getElementById("user-member-container");
     userMemberContainer.innerHTML = '';
@@ -204,6 +191,8 @@ function displayMembers(filteredMembers = null) {
     }
 }
 
+
+// 출석 상태 박스 생성
 function createMemberBox(member, isMyStatus = false, isNotUser = false) {
     const memberBox = document.createElement("div");
     memberBox.classList.add("memberBox");
@@ -253,6 +242,8 @@ function createMemberBox(member, isMyStatus = false, isNotUser = false) {
     return memberBox;
 }
 
+
+// 출석 상태 수정 저장 버튼
 async function saveAttendanceStatus() {
     const datas = [];
 
@@ -304,10 +295,6 @@ async function saveAttendanceStatus() {
 
         if (result.result === 1) {
             alert('출석 상태가 저장되었습니다.');
-            // initialMembersState = [
-            //     ...members.map(member => ({ ...member })),
-            //     ...notuserMembers.map(member => ({ ...member }))
-            // ];
             location.reload();
         } else {
             alert('출석 상태 저장에 실패했습니다. 다시 시도해주세요.');
@@ -319,6 +306,7 @@ async function saveAttendanceStatus() {
 }
 
 
+// 출석 코드 박스 생성
 function createCodeContainer(permission) {
     ///////////////// 출석 코드 생성 컨테이너 생성
     const scheduleCodeContainer = document.getElementById('code-container');
@@ -380,6 +368,8 @@ function createCodeContainer(permission) {
     })
 }
 
+
+// 검색 기능
 function setupSearchInput() {
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', () => {

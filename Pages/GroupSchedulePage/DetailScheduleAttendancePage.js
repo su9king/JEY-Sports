@@ -1,7 +1,7 @@
-let members = [];
-let notuserMembers = [];
+let myData = null;        // 내 출석 데이터
+let members = [];         // 멤버 출석 데이터
+let notuserMembers = [];  // 비유저 출석 데이터
 let userToken, groupToken, userPermission, scheduleToken, scheduleAttendanceCode;
-let myData = null;  // 나의 출석 상황 데이터를 저장할 변수
 
 window.onload = async function () {
     const page = 'DetailScheduleAttendancePage';
@@ -9,41 +9,27 @@ window.onload = async function () {
     groupToken = sessionStorage.getItem('groupToken');
     userPermission = sessionStorage.getItem('userPermission');
 
-    const urlParams = new URLSearchParams(window.location.search);
-    scheduleToken = urlParams.get('scheduleToken');
-    scheduleTitle = urlParams.get('scheduleTitle');
-    scheduleStartDate = urlParams.get('scheduleStartDate');
-    scheduleEndDate = urlParams.get('scheduleEndDate');
-    scheudleImportance = urlParams.get('scheudleImportance') == true ? '중요' : '일반';
-    scheduleAlert = urlParams.get('scheduleAlert') == true ? '알람 예정' : '없음';
-    scheduleStatus = urlParams.get('scheduleStatus') == true ? '공개' : '비공개';
+    scheduleToken = new URLSearchParams(window.location.search).get('scheduleToken');
 
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&scheduleToken=${scheduleToken}`;
 
     const response = await certification(page, data);
-    console.log(response.resources)
+    console.log(response.resources);
 
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
-    } else {
-        loadSidebar(page, userPermission, response);
 
-        scheduleAttendanceCode = response.resources[0][0].scheduleAttendanceCode;
-        myData = response.resources[1][0];  // 내 출석 데이터
-        members = response.resources[2];          // 멤버 출석 데이터
-        notuserMembers = response.resources[3];   // 비유저 출석 데이터
+    loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
 
-        displayAnnouncement(response.resources[0][0]); // 공지사항 표시
-        displayMyData();  // 내 출석 데이터 표시
-        displayMembers();// 멤버 및 비유저 멤버 표시
-        createAdminContainer(userPermission); // 수정 버튼, 출석 코드 생성
-    }
 
-    // 뒤로가기 버튼
-    document.getElementById('backButton').addEventListener('click', function () {
-        window.history.back();
-    });
+    scheduleAttendanceCode = response.resources[0][0].scheduleAttendanceCode;
+    myData = response.resources[1][0];        // 내 출석 데이터
+    members = response.resources[2];          // 멤버 출석 데이터
+    notuserMembers = response.resources[3];   // 비유저 출석 데이터
+
+    displayAnnouncement(response.resources[0][0]); // 공지사항 표시
+    displayMyData();  // 내 출석 데이터 표시
+    displayMembers();  // 멤버 및 비유저 멤버 표시
+    createAdminContainer(userPermission); // 수정 버튼, 출석 코드 생성
 
     // 검색 기능 설정
     setupSearchInput();
@@ -53,12 +39,14 @@ window.onload = async function () {
 function displayAnnouncement(announcement) {
     const announcementContainer = document.getElementById("announcement-container");
 
+    const scheudleImportance = announcement.scheudleImportance == true ? '중요' : '일반';
+    const scheduleAlert = announcement.scheduleAlert == true ? '알람 예정' : '없음';
+
     announcementContainer.innerHTML = `
-        <h2>${scheduleTitle}</h2>
-        <p><strong>일정 날짜:</strong> ${scheduleStartDate} ~ ${scheduleEndDate}</p>
+        <h2>${announcement.scheduleTitle}</h2>
+        <p><strong>일정 날짜:</strong> ${announcement.scheduleStartDate} ~ ${announcement.scheduleEndDate}</p>
         <p><strong>중요도:</strong> ${scheudleImportance}</p>
         <p><strong>알람:</strong> ${scheduleAlert}</p>
-        <p><strong>공개 상태:</strong> ${scheduleStatus}</p>
         <p><strong>일정 내용:</strong> ${announcement.scheduleContent}</p>
         <p><strong>장소:</strong> ${announcement.scheduleLocation}</p>
     `;
@@ -268,7 +256,7 @@ async function createAdminContainer(userPermission) {
         
         codeButton.addEventListener('click', async () => {
             scheduleAttendanceCode = document.getElementById('attendance-code-input').value;
-            const datas = [{functionType : 3,scheduleAttendanceCode : scheduleAttendanceCode}]
+            const datas = [{functionType : 3, scheduleAttendanceCode : scheduleAttendanceCode}]
             try {
                 const response = await fetch('/EditAttendanceList', {
                     method: 'POST',
@@ -300,12 +288,13 @@ async function createAdminContainer(userPermission) {
         ///////////////// 수정하기 버튼 생성
         const editButtonContainer = document.getElementById('edit-button-container');
         editButtonContainer.innerHTML = '';
+
         const editButton = document.createElement('button');
         editButton.textContent = '수정하기';
         editButton.id = 'edit-button';
         editButtonContainer.appendChild(editButton);
         editButton.addEventListener('click', () => {
-            window.location.href = `/GroupSchedulePage/EditScheduleAttendancePage.html?scheduleToken=${scheduleToken}&scheduleTitle=${scheduleTitle}&scheduleStartDate=${scheduleStartDate}&scheduleEndDate=${scheduleEndDate}&scheudleImportance=${scheudleImportance}&scheduleAlert=${scheduleAlert}&scheduleStatus=${scheduleStatus}`;
+            window.location.href = `/GroupSchedulePage/EditScheduleAttendancePage.html?scheduleToken=${scheduleToken}`;
         });
     }
 }

@@ -10,11 +10,18 @@
     <script type="module" src="/Dues.js"></script>
     <script type="module" src="/Attend.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
     <script type="text/javascript"	src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     
 </head>
 <body>
-    <div class="content">        
+    <div class="content">    
+
+        <div id="menubar"></div>
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
+
         <div class="header">
             
             <div class="profile-image-container">
@@ -30,9 +37,6 @@
         <div id="current-schedule-container"></div>
         <div id="expected-schedule-container"></div>
 
-        <button id="backButton" class="back-button"></button>
-        <div id="sidebar"></div>
-        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
     </div>
 </body>
 </html>

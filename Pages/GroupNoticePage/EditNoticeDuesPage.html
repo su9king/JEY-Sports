@@ -9,9 +9,16 @@
     <script type="module" src="/Certification.js"></script>
     <script type="module" src="/Dues.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
 </head>
 <body>
     <div class="content">
+
+        <div id="menubar"></div>
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
+
         <div class="container">
             <h1>Edit페이지!!!</h1>
             
@@ -87,11 +94,6 @@
             <!-- 모달 오버레이 및 컨텐츠 -->
             <div id="overlay" class="overlay hidden"></div>
             <div id="payDetailModal" class="modal hidden"></div>
-
-            <!-- 뒤로가기 버튼 -->
-            <button id="backButton" class="back-button"></button>
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
         </div>
     </div>
 </body>

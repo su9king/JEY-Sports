@@ -8,17 +8,19 @@
     <link rel="stylesheet" href="GroupMemberPage.css">
     <script type="module" src="/Certification.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
 </head>
 <body>
     <div class="content">
         <div class="container">
 
+            <div id="menubar"></div>
+            <div id="sidebar"></div>
+            <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
+            
             <div id="member-container"></div> <!-- 멤버 상자가 들어갈 컨테이너 -->
             <div class="management-button-container"></div> <!-- 멤버 관리 버튼 컨테이너 -->
-
-            <button id="backButton" class="back-button"></button>
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
 
             <div id="overlay" class="overlay hidden"></div>
             <div id="memberManageModal" class="modal hidden"></div>
