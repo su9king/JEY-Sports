@@ -2,6 +2,7 @@ let myData = null;        // 내 출석 데이터
 let members = [];         // 멤버 출석 데이터
 let notuserMembers = [];  // 비유저 출석 데이터
 let userToken, groupToken, userPermission, scheduleToken, scheduleAttendanceCode;
+previousPage = new URLSearchParams(window.location.search).get('previousPage');
 
 window.onload = async function () {
     const page = 'DetailScheduleAttendancePage';
@@ -294,7 +295,7 @@ async function createAdminContainer(userPermission) {
         editButton.id = 'edit-button';
         editButtonContainer.appendChild(editButton);
         editButton.addEventListener('click', () => {
-            window.location.href = `/GroupSchedulePage/EditScheduleAttendancePage.html?scheduleToken=${scheduleToken}`;
+            window.location.href = `/GroupSchedulePage/EditScheduleAttendancePage.html?scheduleToken=${scheduleToken}&previousPage=${previousPage}`;
         });
     }
 }

@@ -13,13 +13,13 @@ function loadMenubar(groupName) {
         document.getElementById('menubar').innerHTML = data;
         document.getElementById('goToGroupMain').innerHTML = `${sessionStorage.getItem('groupName')}`;
         document.getElementById('backButton').addEventListener('click', function() {
-            window.history.back();
-            location.reload();
+            alert(previousPage);
+            window.location.href = previousPage;
         });
 
         // 로고 이미지 요소 설정 및 클릭 이벤트 추가
         const logo = document.getElementById('mainButtonImage');
-        logo.src = '/Logo.png';
+        logo.src = '/Icon.png';
         logo.addEventListener('click', function() {
             window.location.href = '/LoginPage.html';
         });

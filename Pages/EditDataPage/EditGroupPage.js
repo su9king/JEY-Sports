@@ -1,4 +1,5 @@
-//////////////////// Step0 : 회원인증, 사이드바 ////////////////////
+//////////////////// Step0 : 회원인증, 사이드바 ////////////////////\
+previousPage = "/GroupMainPage/GroupMainPage.html"
 window.onload = async function() {
     const page = 'EditGroupPage';
     const userToken = sessionStorage.getItem('userToken');

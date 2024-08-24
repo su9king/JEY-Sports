@@ -1,5 +1,5 @@
 let userID
-
+previousPage = "/PrivatePage/PrivatePage.html"
 //////////////////// Step0 : 회원인증, 사이드바 ////////////////////
 window.onload = async function() {
     const page = 'EditUserPage';
@@ -7,6 +7,10 @@ window.onload = async function() {
     const groupToken = sessionStorage.getItem('groupToken');
     const data = `userToken=${userToken}&groupToken=${groupToken}`
     
+    const userImage = sessionStorage.getItem('userImage');
+    const profileImage = document.getElementById('profileImage');
+    profileImage.src = userImage == 'null' ? `/UserImages/NULL.jpg` : `/UserImages/${userImage}`;
+
     response = await certification(page, data);
     userID = response.resources[0]['userID']
     
@@ -29,7 +33,7 @@ window.onload = async function() {
 
     // 뒤로가기
     document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
+        window.location.href = previousPage;
     });
 }
 

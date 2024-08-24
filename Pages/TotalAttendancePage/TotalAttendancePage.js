@@ -1,5 +1,5 @@
 let noticeToken, getData;
-
+previousPage = "/GroupMainPage/GroupMainPage.html"
 //////////////////// Step0 : 회원인증, 사이드바, 뒤로가기 초기 세팅 ////////////////////
 window.onload = async function() {
     const page = 'TotalAttendancePage';
@@ -67,7 +67,7 @@ function generateTable(getData) {
         }
 
         th.addEventListener("click", () => {
-            window.location.href = `/GroupSchedulePage/DetailScheduleAttendancePage.html?scheduleToken=${schedule.scheduleToken}&scheduleTitle=${schedule.scheduleTitle}&scheduleStartDate=${schedule.scheduleStartDate}&scheduleEndDate=${schedule.scheduleEndDate}&scheudleImportance=${schedule.scheudleImportance}&scheduleAlert=${schedule.scheduleAlert}`;
+            window.location.href = `/GroupSchedulePage/DetailScheduleAttendancePage.html?scheduleToken=${schedule.scheduleToken}&previousPage=/TotalAttendancePage/TotalAttendancePage.html`;
         });
 
         headerRow.appendChild(th);

@@ -126,7 +126,7 @@ async function CreateSchedule(data) {
         connection.query(`INSERT INTO Schedules 
                           (groupToken,scheduleTitle,scheduleContent,scheduleStartDate,scheduleEndDate,
                           scheduleLocation,scheduleImportance,scheduleAlert,scheduleAttendance,scheduleAttendanceCode)
-                          VALUES(?,?,?,?,?,?,?,?,?,?,?) `, 
+                          VALUES(?,?,?,?,?,?,?,?,?,?) `, 
                           [data["groupToken"],data["scheduleTitle"],
                            data["scheduleContent"],data["scheduleStartDate"],
                            data["scheduleEndDate"],data["scheduleLocation"],

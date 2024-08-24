@@ -328,7 +328,7 @@ async function GroupNoticePage(groupToken){
                 if (results.length > 0) {
                     resolve(results);
                 } else {
-                    resolve(null);
+                    resolve([]);
                 }
             }
         );
@@ -356,7 +356,7 @@ async function ScheduleAttendancePage(groupToken){
                     });
                     resolve(results);
                 } else {
-                    resolve(null);
+                    resolve([]);
                 }
             }
         );
@@ -381,7 +381,7 @@ async function NoticeDuesPage(groupToken){
                     });
                     resolve(results);
                 } else {
-                    resolve(null);
+                    resolve([]);
                 }
             }
         );
@@ -639,7 +639,7 @@ async function TotalAttendancePage(groupToken) {
         schedulesQuery
             .then(schedules => {
                 if (schedules.length === 0) {
-                    resolve(null); // 일정이 없다면 null 반환
+                    resolve([]); // 일정이 없다면 null 반환
                     return;
                 }
                 return getAttendanceForSchedules(schedules).then(attendanceData => {
@@ -736,7 +736,7 @@ async function TotalDuesPage(groupToken,userToken){
         noticeQuery
             .then(notices => {
                 if (notices.length === 0) {
-                    resolve(null); // 회비 공지사항이 없다면 null 반환
+                    resolve([]); // 회비 공지사항이 없다면 null 반환
                     return;
                 }
                 return getDuesFromNotices(notices).then(duesDatas => {

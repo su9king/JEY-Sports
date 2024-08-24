@@ -2,7 +2,7 @@
 let members = [];
 let notUserMembers = [];
 let participateRequest = [];
-
+previousPage = "/GroupMainPage/GroupMainPage.html"
 window.onload = async function() {
 	const page = 'GroupMemberPage';
 	userToken = sessionStorage.getItem('userToken');

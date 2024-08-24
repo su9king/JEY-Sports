@@ -1,7 +1,7 @@
 let notices = [];
 let currentPage = 1;
 const noticesPerPage = 10;
-
+previousPage = "/GroupMainPage/GroupMainPage.html"
 //////////////////// Step0 : 회원인증, 사이드바 ///////////////////
 window.onload = async function() {
     const page = 'ScheduleAttendancePage';
@@ -97,7 +97,7 @@ function createNoticeElements() {
         
         // 제목 클릭시 작동 - 게시글 형성
         noticeTitle.addEventListener("click", async function() {
-            window.location.href = `DetailScheduleAttendancePage.html?scheduleToken=${notice.scheduleToken}`;
+            window.location.href = `DetailScheduleAttendancePage.html?scheduleToken=${notice.scheduleToken}&previousPage=/GroupSchedulePage/ScheduleAttendancePage.html`;
         });
 
         noticeBox.appendChild(noticeTitle);
@@ -214,7 +214,7 @@ function noNotice() {
     // 게시글 제목 생성
     const noNoticeTitle = document.createElement("h2");
     noNoticeTitle.classList.add("notice-title");
-    noNoticeTitle.textContent = '작성된 출석 공지사항이 없습니다!!';
+    noNoticeTitle.textContent = '작성된 출석 일정이 없습니다!!';
 
     noNoticeBox.appendChild(noNoticeTitle)
     noticeContainer.appendChild(noNoticeBox)

@@ -2,7 +2,7 @@ let notices = [];
 let noticeContents = [];
 let currentPage = 1;
 const noticesPerPage = 10;
-
+previousPage = "/GroupMainPage/GroupMainPage.html"
 //////////////////// Step0 : 회원인증, 사이드바 ///////////////////
 window.onload = async function() {
     const page = 'GroupNoticePage';
@@ -175,7 +175,7 @@ function createNoticeElements() {
                         const noticeDetails = noticeContents.find(n => n.noticeToken === notice.noticeToken);
 
                         if (noticeDetails) {
-                            window.location.href = `CreateGroupNoticePage.html?noticeTitle=${notice.noticeTitle}&noticeType=${notice.noticeType}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&noticeDues=${noticeDetails.noticeDues}&noticeContent=${noticeDetails.noticeContent}&noticeEndDate=${noticeDetails.noticeEndDate}&noticeWriter=${noticeDetails.noticeWriter}&noticeToken=${noticeDetails.noticeToken}`;
+                            window.location.href = `CreateGroupNoticePage.html?noticeTitle=${notice.noticeTitle}&noticeType=${notice.noticeType}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&noticeDues=${noticeDetails.noticeDues}&noticeContent=${noticeDetails.noticeContent}&noticeEndDate=${noticeDetails.noticeEndDate}&noticeWriter=${noticeDetails.noticeWriter}&noticeToken=${noticeDetails.noticeToken}&previousPage=/GroupNoticePage/GroupNoticePage.html`;
                         } else {
                             alert('공지사항 내용을 불러오지 못했습니다. 제목을 클릭해 주세요.');
                         }
@@ -350,7 +350,7 @@ function addCreateNoticeButton(userPermission) {
         createButton.textContent = "공지사항 작성하기";
         createButton.classList.add("create-button");
         createButton.addEventListener("click", function() {
-            window.location.href = 'CreateGroupNoticePage.html';
+            window.location.href = `CreateGroupNoticePage.html?&previousPage=/GroupNoticePage/GroupNoticePage.html`;
         });
 
         createButtonContainer.appendChild(createButton);

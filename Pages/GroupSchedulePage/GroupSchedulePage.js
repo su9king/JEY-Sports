@@ -2,7 +2,7 @@
 let schedules = [];
 let scheduleContents = [];
 let userToken, groupToken, userPermission;
-
+previousPage = "/GroupMainPage/GroupMainPage.html"
 window.onload = async function() {
     const page = 'GroupSchedulePage';
     userToken = sessionStorage.getItem('userToken');
@@ -121,7 +121,6 @@ async function displayScheduleDetails(scheduleToken) {
                 <strong>중요도:</strong> ${importanceText}<br>
                 <strong>알람 설정:</strong> ${alertText}<br>
                 <strong>장소:</strong> ${scheduleLocation}<br>
-                <strong>진행 상태:</strong> ${statusText}<br>
                 <strong>일정 내용:</strong> ${scheduleContent}<br>
             `;
 

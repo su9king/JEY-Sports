@@ -2,7 +2,7 @@ let notices = [];
 let currentPage = 1;
 const noticesPerPage = 10;
 let userToken, groupToken, userPermission
-
+previousPage = "/GroupMainPage/GroupMainPage.html"
 //////////////////// Step0 : 회원인증, 사이드바 ///////////////////
 window.onload = async function() {
     const page = 'NoticeDuesPage';
@@ -126,7 +126,7 @@ function createNoticeElements() {
         
         // 제목 클릭시 작동 - 게시글 형성
         noticeTitle.addEventListener("click", async function() {
-            window.location.href = `DetailNoticeDuesPage.html?noticeToken=${notice.noticeToken}`;
+            window.location.href = `DetailNoticeDuesPage.html?noticeToken=${notice.noticeToken}&previousPage=/GroupNoticePage/NoticeDuesPage.html`;
         });
 
         noticeBox.appendChild(noticeTitle);
@@ -214,7 +214,7 @@ function addCreateNoticeButton(userPermission) {
         createNoticeButton.textContent = "공지사항 작성하기";
         createNoticeButton.classList.add("create-button");
         createNoticeButton.addEventListener("click", function() {
-            window.location.href = 'CreateGroupNoticePage.html';
+            window.location.href = 'CreateGroupNoticePage.html?&previousPage=/GroupNoticePage/NoticeDuesPage.html';
         });
 
         buttonContainer.appendChild(createNoticeButton);

@@ -3,7 +3,7 @@ let members = [];
 let notuserMembers = [];
 let userToken, groupToken, userPermission, noticeToken;
 let initialMembersState = [];
-
+previousPage = new URLSearchParams(window.location.search).get('previousPage');
 window.onload = async function () {
     const page = 'EditNoticeDuesPage';
     userToken = sessionStorage.getItem('userToken');
@@ -11,6 +11,7 @@ window.onload = async function () {
     userPermission = sessionStorage.getItem('userPermission');
 
     noticeToken = new URLSearchParams(window.location.search).get('noticeToken');
+    previousPage = `/GroupNoticePage/DetailNoticeDuesPage.html?noticeToken=${noticeToken}&previousPage=${previousPage}`
     
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&noticeToken=${noticeToken}`;
     

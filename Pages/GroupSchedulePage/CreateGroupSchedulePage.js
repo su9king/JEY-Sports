@@ -1,5 +1,5 @@
 let scheduleToken;
-
+previousPage = "/GroupSchedulePage/GroupSchedulePage.html"
 //////////////////// Step0 : 회원인증, 사이드바, 뒤로가기 초기 세팅 ////////////////////
 window.onload = async function() {
     const page = 'CreateGroupSchedulePage';

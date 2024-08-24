@@ -177,9 +177,6 @@ textarea {
   border-top: 5px solid #007bff; /* 화살표 두께와 색상 */
   transform: rotate(-45deg); /* 화살표 회전 */
   position: absolute;
-  top: 50%; /* 수직 중앙 정렬 */
-  left: 50%; /* 수평 중앙 정렬 */
-  transform: translate(-50%, -50%) rotate(-45deg); /* 중앙 정렬 및 회전 */
 }
 
 .back-button:hover::before {
@@ -190,4 +187,39 @@ textarea {
 .back-button:active::before {
   border-left-color: #003366; /* 클릭 시 색상 변경 */
   border-top-color: #003366; /* 클릭 시 색상 변경 */
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000; /* 다른 요소들 위에 표시하기 위해 */
+}
+.profileImage {
+  border-radius: 50%; /* 프로필 이미지를 원형으로 */
+  width: 40px;
+  height: 40px;
+}
+
+.logo {
+  height: 40px; /* 소프트웨어 마크의 높이 조정 */
+  width: auto;
+  margin-left: 40px; /* 로고를 오른쪽으로 이동 */
+}
+
+.header button {
+  margin-left: 10px; /* 버튼 간 간격 */
+  font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    color: #333;
+}
+.content {
+  margin-top: 80px; /* 상단 고정 요소 높이만큼 여백 추가 */
 }

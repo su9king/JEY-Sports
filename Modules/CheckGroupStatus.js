@@ -9,8 +9,8 @@ module.exports = {
             const todayDate = data["todayDate"];
             const groupToken = data["groupToken"];
             
-            const scheduleResources1 = await GetFutureSchedules(userToken,groupToken,todayDate,true);
-            const scheduleResources2 = await GetFutureSchedules(userToken,groupToken,todayDate,false);
+            const scheduleResources1 = await GetFutureSchedules(userToken,groupToken,todayDate);
+            const scheduleResources2 = await GetFutureSchedules2(groupToken,todayDate);
             const noticeResources = await GetNotices(userToken,groupToken,todayDate);
 
             const resources = [noticeResources,scheduleResources1,scheduleResources2];
@@ -25,8 +25,8 @@ module.exports = {
     }
 };
 
-//2주일 이내의 일정들 모두 불러오기
-async function GetFutureSchedules(userToken,groupToken,todayDate,boolean) {
+//2주일 이내의 일정(출석기능 O) 들 모두 불러오기
+async function GetFutureSchedules(userToken,groupToken,todayDate) {
     return new Promise((resolve, reject) => {
         connection.query(`SELECT sc.scheduleToken, sc.scheduleTitle, ac.attendanceStatus ,sc.scheduleStartDate ,sc.scheduleEndDate , ac.absentReason
             FROM Schedules AS sc 
@@ -35,7 +35,7 @@ async function GetFutureSchedules(userToken,groupToken,todayDate,boolean) {
             or scheduleStartDate BETWEEN ? AND DATE_ADD(?, INTERVAL 2 WEEK))
             AND sc.groupToken = ?
             AND ac.userToken = ?
-            AND sc.scheduleAttendance = ?`, [todayDate,todayDate,todayDate,groupToken,userToken,boolean], 
+            AND sc.scheduleAttendance = true`, [todayDate,todayDate,todayDate,groupToken,userToken], 
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);
@@ -48,7 +48,35 @@ async function GetFutureSchedules(userToken,groupToken,todayDate,boolean) {
                     });
                     resolve(results);  
                 } else {
-                    resolve(null);  
+                    resolve([]);  
+                }
+            }
+        );
+    });
+}
+
+//2주일 이내의 일정(출석기능 X) 들 모두 불러오기
+async function GetFutureSchedules2(groupToken,todayDate) {
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT sc.scheduleToken, sc.scheduleTitle ,sc.scheduleStartDate ,sc.scheduleEndDate
+            FROM Schedules AS sc 
+            WHERE (? BETWEEN scheduleStartDate AND scheduleEndDate 
+            or scheduleStartDate BETWEEN ? AND DATE_ADD(?, INTERVAL 2 WEEK))
+            AND sc.groupToken = ?
+            AND sc.scheduleAttendance = false`, [todayDate,todayDate,todayDate,groupToken], 
+            (error, results, fields) => {
+                if (error) {
+                    console.error('쿼리 실행 오류:', error);
+                    return reject(error);
+                }
+                if (results.length > 0) {
+                    results.forEach(schedule => {
+                        schedule.scheduleStartDate = moment(schedule.scheduleStartDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                        schedule.scheduleEndDate = moment(schedule.scheduleEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                    });
+                    resolve(results);  
+                } else {
+                    resolve([]);  
                 }
             }
         );
@@ -75,7 +103,7 @@ async function GetNotices(userToken,groupToken,todayDate) {
                 if (results.length > 0) {
                     resolve(results);  
                 } else {
-                    resolve(null);  
+                    resolve([]);  
                 }
             }
         );

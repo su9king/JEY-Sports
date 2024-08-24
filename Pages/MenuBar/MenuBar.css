@@ -105,7 +105,7 @@ body {
 
 /* -----------------------메인 버튼----------------------- */
 .main-button-image {
-    width: 60px;
+    width: auto;
     height: 40px;
     object-fit: contain; /* 이미지가 요소 안에 맞도록 비율을 유지하며 크기를 조정 */
     object-position: center; /* 이미지가 요소 내에서 중앙에 위치하도록 설정 */

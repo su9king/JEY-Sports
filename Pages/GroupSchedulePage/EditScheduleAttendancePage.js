@@ -3,6 +3,7 @@ let members = [];
 let notuserMembers = [];
 let userToken, groupToken, userPermission, scheduleToken, scheduleAttendanceCode;
 let initialMembersState = [];
+previousPage = new URLSearchParams(window.location.search).get('previousPage');
 
 window.onload = async function () {
     const page = 'EditScheduleAttendancePage';
@@ -11,6 +12,7 @@ window.onload = async function () {
     userPermission = sessionStorage.getItem('userPermission');
 
     scheduleToken = new URLSearchParams(window.location.search).get('scheduleToken');
+    previousPage = `/GroupSchedulePage/DetailScheduleAttendancePage.html?scheduleToken=${scheduleToken}&previousPage=${previousPage}`
 
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}&scheduleToken=${scheduleToken}`;
 

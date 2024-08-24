@@ -96,7 +96,7 @@ function generateTable(getData) {
 
         noticeTitleCell.addEventListener("click", () => {
             if (notice.noticeType == 2) {
-                window.location.href = `/GroupNoticePage/DetailNoticeDuesPage.html?noticeType=${notice.noticeType}&noticeToken=${notice.noticeToken}&noticeTitle=${notice.noticeTitle}&noticeChangedDate=${notice.noticeChangedDate}&noticeEndDate=${notice.noticeEndDate}&noticeImportance=${notice.noticeImportance}&noticeStatus=${notice.noticeStatus}&userDuesStatus=${notice.userDuesStatus}&noticeDues=${notice.noticeDues}`;
+                window.location.href = `/GroupNoticePage/DetailNoticeDuesPage.html?noticeToken=${notice.noticeToken}&previousPage=/TotalDuesPage/TotalDuesPage.html`;
             } else {
                 loadNoticeDeailModal(notice);
             }

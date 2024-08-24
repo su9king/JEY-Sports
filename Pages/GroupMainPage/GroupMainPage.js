@@ -3,7 +3,7 @@ const userToken = sessionStorage.getItem('userToken');
 const groupToken = sessionStorage.getItem('groupToken');
 const userPermission = sessionStorage.getItem('userPermission');
 const todayDate = new Date().toISOString().split('T')[0];
-
+previousPage = "/PrivatePage/PrivatePage.html";
 window.onload = async function() {
 
     const data = `userToken=${userToken}&groupToken=${groupToken}&userPermission=${userPermission}`
@@ -23,6 +23,7 @@ window.onload = async function() {
         });
 
         const data = await response.json();
+        console.log(data);
         if (data.result == 0) {
             alert('다시 시도해주세요!')
         } else if (data.result == 1)  {
@@ -149,7 +150,8 @@ async function alertStatusSchedule(data) {
         `;
 
         // 출석기능이 있는 경우만 버튼 생성
-        if (schedule.scheduleAttendace) { 
+        console.log(schedule.attendanceStatus === undefined)
+        if (schedule.attendanceStatus !== undefined ) { 
             const attendButton = document.createElement("button");
             attendButton.classList.add("attend-button");
             attendButton.textContent = "출석하기";
