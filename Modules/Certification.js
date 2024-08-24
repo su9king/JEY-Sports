@@ -239,10 +239,14 @@ async function EditGroupPage(groupToken){
 async function GroupMemberPage(groupToken){
 
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT usr.userID , usr.userPhone, usrorg.userPermission ,usr.userName, usr.userImage , usr.userIntro, usr.userMail
-                          FROM Users AS usr
-                          JOIN UsersOrganizations AS usrorg ON usrorg.userToken = usr.userToken
-                          WHERE usrorg.groupToken = ?`, [groupToken],
+        connection.query(`SELECT usr.userID , usr.userPhone, usrorg.userPermission ,usr.userName, usr.userImage , usr.userIntro, usr.userMail,
+            FLOOR((COUNT(CASE WHEN au.attendanceStatus = 1 THEN 1 END) * 100.0) /
+            NULLIF(COUNT(CASE WHEN au.attendanceStatus IN (1, 0) THEN 1 END), 0)) AS personalParticipationRate 
+            FROM Users AS usr
+            JOIN UsersOrganizations AS usrorg ON usrorg.userToken = usr.userToken
+            JOIN AttendanceUsers AS au ON usrorg.userToken = au.userToken
+            WHERE usrorg.groupToken = ?
+            GROUP BY usr.userID , usr.userPhone, usrorg.userPermission ,usr.userName, usr.userImage , usr.userIntro, usr.userMail`, [groupToken],
             (error, results, fields) => {
                 if (error) {
                     console.error('쿼리 실행 오류:', error);
@@ -284,7 +288,7 @@ async function GroupMemberPage2(groupToken){
 async function GroupSchedulePage(groupToken){
 
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT scheduleToken , scheduleTitle, scheduleStatus, scheduleImportance,
+        connection.query(`SELECT scheduleToken , scheduleTitle, scheduleImportance,
                           scheduleStartDate,scheduleEndDate,scheduleLocation,scheduleContent
                           FROM Schedules 
                           WHERE groupToken = ?`, [groupToken],
@@ -334,7 +338,7 @@ async function GroupNoticePage(groupToken){
 async function ScheduleAttendancePage(groupToken){
 
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT scheduleToken , scheduleTitle, scheduleStatus, scheduleImportance,
+        connection.query(`SELECT scheduleToken , scheduleTitle, scheduleImportance,
                           scheduleStartDate,scheduleEndDate,scheduleLocation,scheduleContent
                           FROM Schedules 
                           WHERE groupToken = ? and scheduleAttendance = true`, [groupToken],

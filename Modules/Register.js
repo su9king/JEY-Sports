@@ -16,8 +16,8 @@ module.exports = {
         //데이터(userID) 중복확인
         if( functionType == 0 ){
             table = "Users"
-            data = {userID : userID};
-            const result = await CheckDuplicate(table,data);
+            const data2 = {userID : userID};
+            const result = await CheckDuplicate(table,data2);
             return result;
         
         //회원가입
@@ -29,11 +29,11 @@ module.exports = {
             const phoneCheck = await checkCode(userPhone,0); 
 
 
-            //CheckDuplicate.js 의존 코드
+            //CheckDuplicate.js 의존 코드 
             //ID가 중복되지 않았다면 0 출력
             table = "Users"
-            data = {userID : userID};
-            const userIDCheck = await CheckDuplicate(table,data);
+            data2 = {userID : userID};
+            const userIDCheck = await CheckDuplicate(table,data2);
 
             if (phoneCheck == 1 && userIDCheck == 0){
                 

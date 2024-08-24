@@ -26,7 +26,6 @@ module.exports = {
             const groupIDCheck = await CheckDuplicate(table,data2);
 
             if (groupIDCheck == 0){
-                const userToken = userToken;
                 const groupName = data["groupName"];
                 const groupNumber = data["groupNumber"];
                 const groupClassification = data["groupClassification"];
@@ -48,7 +47,7 @@ module.exports = {
 };
 //==================================================함수 선언 파트
 async function CreateGroupData(userToken, groupID, groupName, groupNumber,
-    groupClassification, groupSportType, groupPW, groupImage, groupLocation, userToken) {
+    groupClassification, groupSportType, groupPW, groupImage, groupLocation) {
     
     return new Promise((resolve, reject) => {
 

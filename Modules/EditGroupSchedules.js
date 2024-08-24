@@ -125,12 +125,12 @@ async function CreateSchedule(data) {
         // 일정 추가하기
         connection.query(`INSERT INTO Schedules 
                           (groupToken,scheduleTitle,scheduleContent,scheduleStartDate,scheduleEndDate,
-                          scheduleLocation,scheduleStatus,scheduleImportance,scheduleAlert,scheduleAttendance,scheduleAttendanceCode)
+                          scheduleLocation,scheduleImportance,scheduleAlert,scheduleAttendance,scheduleAttendanceCode)
                           VALUES(?,?,?,?,?,?,?,?,?,?,?) `, 
                           [data["groupToken"],data["scheduleTitle"],
                            data["scheduleContent"],data["scheduleStartDate"],
                            data["scheduleEndDate"],data["scheduleLocation"],
-                           data["scheduleStatus"],data["scheduleImportance"],
+                           data["scheduleImportance"],
                            data["scheduleAlert"],data["scheduleAttendance"],
                            data["scheduleAttendanceCode"]], 
             (error, results, fields) => {
@@ -155,12 +155,12 @@ async function EditSchedule(data) {
         // 일정 수정하기
         connection.query(`UPDATE Schedules 
                           SET scheduleTitle = ?,scheduleContent = ? ,scheduleStartDate = ? ,scheduleEndDate = ?,
-                          scheduleLocation = ? ,scheduleStatus = ?,scheduleImportance = ? ,scheduleAlert = ?
+                          scheduleLocation = ? ,scheduleImportance = ? ,scheduleAlert = ?
                           WHERE scheduleToken = ? `, 
                           [data["scheduleTitle"],
                            data["scheduleContent"],data["scheduleStartDate"],
                            data["scheduleEndDate"],data["scheduleLocation"],
-                           data["scheduleStatus"],data["scheduleImportance"],
+                           data["scheduleImportance"],
                            data["scheduleAlert"],data["scheduleToken"]], 
             (error, results, fields) => {
                 if (error) {

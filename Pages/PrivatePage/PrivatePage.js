@@ -16,6 +16,10 @@ window.onload = async function() {
     userToken = sessionStorage.getItem('userToken')
     const data = `userToken=${userToken}`
     const response = await certification(page, data);
+
+    const userImage = sessionStorage.getItem('userImage');
+    const profileImage = document.getElementById('profileImage');
+    profileImage.src = userImage == 'null' ? `/UserImages/NULL.jpg` : `/UserImages/${userImage}`;
     
     if (response.result == 0) {
         alert('로그인 후 사용해주세요!');
