@@ -20,7 +20,7 @@
 
 
         <div class="container">
-            <h1>Edit페이지!!!</h1>
+            <h1 id="title"> 회비 사항 수정</h1>
             
             <!-- 수정하기 버튼 생성 -->
             <div id="edit-button-container"></div>
@@ -28,20 +28,20 @@
             <!-- 공지사항 섹션 -->
             <div id="announcement-container">
                 <div class="form-group">
-                    <label for="noticeTitle">공지사항 제목:</label>
+                    <label for="noticeTitle">공지사항 제목</label>
                     <input type="text" id="noticeTitle">
                 </div>
 
                 <div class="form-group">
-                    <label for="noticeImportance">중요도:</label>
+                    <label for="noticeImportance">중요도</label>
                     <select id="noticeImportance">
                         <option value="0">일반</option>
                         <option value="1">중요</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="noticeEndDate">종료 일자:</label>
+                <div class="form-group" id="endDate">
+                    <label for="noticeEndDate">종료 일자</label>
                     <input type="date" id="noticeEndDate">
 
                     <!-- '없음' 체크박스 -->
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="noticeStatus">상태:</label>
+                    <label for="noticeStatus">상태</label>
                     <select id="noticeStatus">
                         <option value="0">비공개</option>
                         <option value="1">공개</option>
@@ -58,42 +58,39 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="noticeDues">회비 금액:</label>
+                    <label for="noticeDues">회비 금액</label>
                     <input type="number" id="noticeDues" step="1000">
                 </div>
 
                 <div class="form-group">
-                    <label for="noticeContent">공지사항 내용:</label>
+                    <label for="noticeContent">공지사항 내용</label>
                     <input type="text" id="noticeContent"></input>
                 </div>
 
                 <div class="form-group">
-                    <label for="noticeWriter">공지 작성자:</label>
+                    <label for="noticeWriter">공지 작성자</label>
                     <input type="text" id="noticeWriter">
                 </div>
 
-                <button id="saveNoticeButton">변경 사항 저장</button>
+                <button id="saveAnnouncementButton">공지사항 수정</button>
             </div>
 
             <!-- 나의 출석 상태 섹션 -->
             <div id="my-data-container" class="member-container"></div>
 
-            <!-- 검색 창 -->
-            <input type="text" id="searchInput" placeholder="누가 궁금한가요!">
 
-            <!-- 저장 버튼 -->
-            <button id="saveButton">회비 페이지 저장</button>
             
             <!-- 멤버 출석 상태 섹션 -->
-            <div id="user-member-container" class="member-container"></div>
+            <div class="member-container">
+                <!-- 저장 버튼 -->
+                <button id="saveButton">출석 상태 수정</button>
 
+                <!-- 검색 -->
+                <input type="search" id="searchInput" placeholder="누가 궁금한가요!">
+                
+                <div id="user-member-container" class="member-container"></div>
+            </div>
 
-            <!-- 회비 리스트 테이블 -->
-            <div id="table-container"></div>
-
-            <!-- 모달 오버레이 및 컨텐츠 -->
-            <div id="overlay" class="overlay hidden"></div>
-            <div id="payDetailModal" class="modal hidden"></div>
         </div>
     </div>
 </body>

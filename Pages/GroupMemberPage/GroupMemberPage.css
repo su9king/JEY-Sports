@@ -1,16 +1,40 @@
+.container {
+  padding: 3px;
+  max-width: 800px;
+  margin: 60px auto 10px auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  height: 100%;
+  min-height: 800px;
+}
+
+#title {
+  font-size: 2.5em; /* 제목 크기 */
+  font-weight: bold; /* 두껍게 */
+  color: #333; /* 글자 색상 */
+  text-align: center; /* 중앙 정렬 */
+  text-transform: uppercase; /* 대문자로 변환 */
+  letter-spacing: 1px; /* 글자 간격 */
+  border-bottom: 2px solid #ccc; /* 아래쪽 테두리 */
+  padding-bottom: 10px; /* 아래쪽 패딩 */
+  font-family: 'Arial', sans-serif; /* 글꼴 설정 */
+}
+
+
+
 /* 멤버 박스 스타일 */
 .memberBox {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
-  padding: 10px;
+  padding: 2%;
   border: 1px solid #ddd;
   border-radius: 8px;
   position: relative;
-  width: calc(100% - 20px); /* 전체 너비에서 padding을 제외 */
-  max-width: 600px;
+  width: calc(100% - 34px); /* 전체 너비에서 padding을 제외 */
 }
-
+  
 /* 멤버 이미지 스타일 */
 .member-image {
   width: 60px;
@@ -25,12 +49,12 @@
   flex: 1;
 }
 
-.content {
-  width: 100%;
+.member-container {
+  border: 1px solid #ddd; /* 테두리 추가 */
+  border-radius: 8px;
+  padding: 10px;
+  margin: 3px 3px 20px 3px ;
 }
-
-
-
 
 /* 버튼 컨테이너 스타일 */
 .button-container {
@@ -38,36 +62,26 @@
   flex-direction: row; /* 버튼들이 한 줄에 배치되도록 설정 */
   justify-content: flex-end; /* 버튼들을 컨테이너의 오른쪽 끝에 정렬 */
   align-items: center; /* 버튼들을 수직으로 중앙에 맞춤 */
-  gap: 10px; /* 버튼 간의 간격 */
+  gap: 2px; /* 버튼 간의 간격 */
   margin-top: 10px; /* 컨테이너와 위 요소 간의 간격 */
 }
 
 /* 권한 변경 버튼 스타일 */
 .change-permission-button {
-  margin-right: 10px;
-  width: 100px;
+  width: 90px;
   height: 30px;
-  background-color: #2196F3; /* 파란색 */
+  background-color: #007bff; /* 파란색 */
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-/* 삭제 버튼 스타일 */
-.delete-button {
-  width: 80px;
-  height: 30px;
-  background-color: #f44336; /* 빨간색 */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+
 
 .basicBtn {
-  font-size: 14px;
-  margin-left: 10px;
+  font-size: 12px;
+  margin-left: 2px;
 }
 
 
@@ -92,9 +106,23 @@
 .change-permission-button:hover {
   background-color: #0056b3;
 }
+
+
+.delete-button {
+  width: 80px;
+  height: 30px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f44336; /* 빨간색 */
+}
+
 .delete-button:hover {
   background-color: #d32f2f;
 }
+
+
   
 /* -----------------------모달----------------------- */
 
@@ -150,6 +178,13 @@
   background: #c0392b;
 }
 
+
+
+
+
+
+
+
 /* 멤버 요청 박스 스타일 */
 .requestBox {
   display: flex;
@@ -177,19 +212,24 @@
   flex: 1;
 }
 
-/* 요청 수락 버튼 스타일 */
-.accept-button {
+.accept-button, .editDataButton {
   background: #2ecc71;
   color: #fff;
   border: none;
   border-radius: 4px;
   padding: 5px 10px;
   cursor: pointer;
+  height: 30px;
+  width: 90px;
 }
 
 .accept-button:hover {
   background: #27ae60;
 }
+
+
+
+
 
 /* 초대하기 및 등록 섹션 스타일 */
 #invite-container, #register-container {
@@ -211,7 +251,7 @@
 
 #invite-container button, #register-container button {
   padding: 10px 20px;
-  background: #3498db;
+  background: #007bff;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -231,32 +271,10 @@
 }
 
 
-
-
-  
-/* -----------------------페이지 구성요소----------------------- */
-.btn {
-  margin: 5px;
-  width: 40%;
-  max-width: 300px;
-  height: 30px;
-  border-radius: 5px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background-color: #0056b3; /* 호버 시 배경색 변화 */
-}
-
 ::placeholder {
   text-align: center;
   color: #6c757d; /* 플레이스홀더 색상 변경 */
 }
-
-
 
 
 .hidden {
@@ -264,3 +282,33 @@
 }
 
 
+.bottom-button {
+  width: 50%;
+  height: 30px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-left: calc(25%);
+}
+
+
+
+
+#invite-bottom-button {
+  background-color: #007bff; /* 빨간색 */
+}
+
+#invite-bottom-button:hover {
+  background-color: #007bff95; /* 빨간색 */
+}
+
+/* 삭제 버튼 스타일 */
+#leaveGroupBtn {
+  background-color: #f44336; /* 빨간색 */
+  font-size: 12px;
+}
+#leaveGroupBtn:hover {
+  background-color: #d32f2f;
+}

@@ -1,6 +1,7 @@
 let noticeToken, getData;
 let totalDues = 0;
 let totalDuesPaid = 0;
+previousPage = "/GroupNoticePage/NoticeDuesPage.html"
 
 //////////////////// Step0 : 회원인증, 사이드바, 뒤로가기 초기 세팅 ////////////////////
 window.onload = async function() {
@@ -14,13 +15,10 @@ window.onload = async function() {
     const response = await certification(page, data);
     getData = response.resources;
     
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
-        return;
-    }
 
     loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
+
 
     // 회비 리스트 테이블
     const tableContainer = document.getElementById("table-container");
@@ -30,10 +28,6 @@ window.onload = async function() {
     initSearchFunctionality();
     createLedgerContainer();
 
-    // 뒤로가기 버튼
-    document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
-    });
 }
 
 // JSON 데이터를 HTML 테이블로 변환하는 함수
@@ -157,7 +151,7 @@ function generateTable(getData) {
 
 // 검색 기능 초기화 (지출 내역을 대상으로 검색)
 function initSearchFunctionality() {
-    const searchBox = document.querySelector('#search-box');
+    const searchBox = document.querySelector('#searchInput');
     const duesTable = document.querySelector('#duesTable tbody');
 
     searchBox.addEventListener('keyup', function() {

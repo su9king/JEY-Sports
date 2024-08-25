@@ -12,6 +12,8 @@
 </head>
 <body>
     <div class="content">
+
+        
         
         <div id="menubar"></div>
         <div id="sidebar"></div>
@@ -19,14 +21,24 @@
 
 
         <div class="container">
-            <br><input type="text" id="searchInput" placeholder="언제가 궁금한가요!">
+            
+            <h1 id="title"> 출석 공지사항</h1>
+
+            <div class="button-container">
+                <div class="button-group">
+                  <button class="total-button" id="total-button"></button>
+                  <button class="create-button" id="create-button"></button>
+                </div>
+                <input type="search" id="searchInput" placeholder="언제가 궁금한가요!">
+            </div>
+              
             
             <div id="notice-container"></div>
             
-            <div class="pagination-controls">
-                <button id="prevPage" disabled>Previous</button>
+            <div class="pagination-controls" id="pagination-controls">
+                <button id="prevPage" disabled>이전</button>
                 <span id="currentPage">1</span> / <span id="totalPages"></span>
-                <button id="nextPage" disabled>Next</button>
+                <button id="nextPage" disabled>다음</button>
             </div>
 
         </div>

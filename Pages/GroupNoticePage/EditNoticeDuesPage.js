@@ -72,7 +72,7 @@ function displayAnnouncement(announcement) {
     //수정한 날짜 변수 설정
     const noticeEditDate = new Date().toISOString().split('T')[0];
 
-    const saveButton = document.getElementById('saveNoticeButton');
+    const saveButton = document.getElementById('saveAnnouncementButton');
     saveButton.textContent = '공지사항 수정';
     saveButton.addEventListener('click', async function () {
     

@@ -12,12 +12,14 @@
 </head>
 <body>
     <div class="content">
+
+        <div id="menubar"></div>
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
+
         <div class="container">
-
-            <div id="menubar"></div>
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
-
+            <h1 id="title"> 조직 구성원</h1>
             
             <div id="member-container"></div> <!-- 멤버 상자가 들어갈 컨테이너 -->
             <div class="management-button-container"></div> <!-- 멤버 관리 버튼 컨테이너 -->
@@ -28,7 +30,7 @@
             <div id="overlay2" class="overlay hidden"></div>
             <div id="notUserMemberManageModal" class="modal hidden"></div>
 
-            <button id="leaveGroupBtn" class="delete-button">조직 탈퇴하기</button>
+            <button id="leaveGroupBtn" class="bottom-button">조직 탈퇴하기</button>
 
         </div>
     </div>

@@ -9,29 +9,34 @@
     <script type="module" src="/Certification.js"></script>
     <script type="module" src="/Dues.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
 </head>
 <body>
-    <h2>Total 회비 페이지!!!</h2>
     <div class="content">
-        <div class="container">
-            <!-- 검색 -->
-            <input type="search" id="search-box" placeholder="지출내역의 키워드를 검색하세요!">
 
-            <!-- 회비 리스트 테이블 -->
+        <div id="menubar"></div>
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
+        <div class="container">
+            <h1 id="title">회비 확인하기</h1>
+
+            <!-- 가계부 요소 -->
             <div id="ledger-container"></div>
+
+            <!-- 검색 -->
+            <input type="search" id="searchInput" placeholder="지출내역의 키워드를 검색하세요!">
 
             <!-- 회비 리스트 테이블 -->
             <div id="table-container"></div>
 
+
             <!-- noticeType == 3, 4 자세히보기 -->
             <div id="overlay" class="overlay hidden"></div>
             <div id="noticeDetailModal" class="modal hidden"></div>
-
-            <!-- 뒤로가기 버튼 -->
-            <button id="backButton" class="back-button"></button>
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
         </div>
     </div>
 </body>
 </html>
+
+

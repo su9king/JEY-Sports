@@ -1,5 +1,5 @@
 let noticeToken, getData;
-previousPage = "/GroupMainPage/GroupMainPage.html"
+previousPage = "/GroupSchedulePage/ScheduleAttendancePage.html"
 //////////////////// Step0 : 회원인증, 사이드바, 뒤로가기 초기 세팅 ////////////////////
 window.onload = async function() {
     const page = 'TotalAttendancePage';
@@ -12,13 +12,9 @@ window.onload = async function() {
     const response = await certification(page, data);
     getData = response.resources;
     
-    if (response.result == 0) {
-        alert('로그인 후 사용해주세요!');
-        window.location.href = '/WarningPage.html';
-        return;
-    }
 
     loadSidebar(page, userPermission, response);
+    loadMenubar(sessionStorage.getItem('groupName'));
 
 
     // 회비 리스트 테이블
@@ -28,11 +24,6 @@ window.onload = async function() {
 
     initSearchFunctionality();
 
-    
-    // 뒤로가기 버튼
-    document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
-    });
 }
 
 
@@ -57,7 +48,6 @@ function generateTable(getData) {
     // 각 일정에 대한 헤더 추가
     getData.forEach(scheduleData => {
         const schedule = scheduleData[0]; // 각 행의 첫 번째 요소에 접근
-        console.log("테스트용 콘솔 : ", schedule);
         const th = document.createElement("th");
         
         if (schedule.scheduleStartDate === schedule.scheduleEndDate) {
@@ -236,7 +226,7 @@ function createGauge(percentage) {
 }
 
 function initSearchFunctionality() {
-    const payrollSearch = document.querySelector('#search-box');
+    const payrollSearch = document.querySelector('#searchInput');
     const payrollTable = document.querySelector('#attendanceTable tbody');
 
     payrollSearch.addEventListener('keyup', function() {
