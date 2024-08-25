@@ -1,8 +1,24 @@
-  /* -----------------------페이지 구성요소----------------------- */
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 60px auto 10px auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  height: 100%;
+}
+
+.button-container {
+  display: flex; /* Flexbox로 레이아웃 설정 */
+  justify-content: space-between; /* 버튼 간의 공간 분배 */
+  gap: 10px; /* 버튼 사이의 간격 조절 (필요에 따라 조정) */
+  margin-top: 15px; /* 버튼 그룹 상단에 약간의 여백 추가 */
+}
+
+
   .btn {
     margin: 5px;
-    width: 40%;
-    max-width: 300px;
+    width: 48%;
     height: 30px;
     border-radius: 5px;
     border: none;
@@ -21,17 +37,6 @@
   }
 
 
-/* 공통 스타일링 */
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  box-sizing: border-box;
-}
-
-.container {
-  padding: 20px;
-}
 
 /* 폼 요소 스타일링 */
 .form-group {
@@ -55,40 +60,6 @@ select {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
-}/* 공통 스타일링 */
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  box-sizing: border-box;
 }
 
-.container {
-  padding: 20px;
-}
 
-/* 폼 요소 스타일링 */
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="date"],
-textarea,
-select {
-  width: 100%;
-  padding: 8px;
-  margin: 4px 0;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-  
-  
-  

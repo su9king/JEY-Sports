@@ -116,11 +116,19 @@ function createNoticeElements() {
             const payBtn = document.createElement("button");
             payBtn.classList.add("pay-button");
             payBtn.textContent = "납부하기";
-            payBtn.addEventListener("click", async function () {
+            payBtn.addEventListener("click", async function (e) {
+                e.stopPropagation();
                 dues(userToken, groupToken, userPermission, notice.noticeToken, notice.noticeDues);
+                location.reload();
             })
 
-            noticeBox.appendChild(payBtn);
+            // pay-button을 우측으로 정렬
+            noticeTitle.style.position = 'relative';
+            payBtn.style.position = 'absolute';
+            payBtn.style.right = '0';
+
+
+            noticeTitle.appendChild(payBtn);
         }
 
         
@@ -205,30 +213,24 @@ function displayNotices() {
     updatePaginationControls(notices.length);
 }
 
+
 function addCreateNoticeButton(userPermission) {
-    const buttonContainer = document.getElementById("button-container");
-
-    // 공지사항 작성하기 버튼 생성
-    if (userPermission == 2 || userPermission == 1) {
-        const createNoticeButton = document.createElement("button");
-        createNoticeButton.textContent = "공지사항 작성하기";
-        createNoticeButton.classList.add("create-button");
-        createNoticeButton.addEventListener("click", function() {
-            window.location.href = 'CreateGroupNoticePage.html?&previousPage=/GroupNoticePage/NoticeDuesPage.html';
-        });
-
-        buttonContainer.appendChild(createNoticeButton);
-    }
-
-    // 전체 회비 납부 내역 보기 버튼 생성
-    const detailDuesButton = document.createElement("button");
-    detailDuesButton.textContent = "전체 회비 납부 내역 보기";
-    detailDuesButton.classList.add("create-button");
-    detailDuesButton.addEventListener("click", function() {
+    const createButton = document.getElementById("total-button");
+    createButton.textContent = "전체 회비 확인하기";
+    createButton.addEventListener("click", function() {
         window.location.href = '/TotalDuesPage/TotalDuesPage.html';
     });
 
-    buttonContainer.appendChild(detailDuesButton);
+    if (userPermission == 2 || userPermission == 1) {
+        const createButton = document.getElementById("create-button");
+        createButton.textContent = "회비 생성하기";
+        createButton.addEventListener("click", function() {
+            window.location.href = 'CreateGroupNoticePage.html?&previousPage=/GroupNoticePage/NoticeDuesPage.html';
+        });
+    } else {
+        const createButton = document.getElementById("create-button");
+        createButton.style.display = 'none'
+    }
 }
 
 

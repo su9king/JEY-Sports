@@ -40,14 +40,13 @@ function displayAnnouncement(announcement) {
 
     const duesStatusText = myData.duesStatus == true ? '납부 완료' : '아직!!!!';
 
-    document.getElementById('noticeTitle').innerText = `공지사항 제목: ${announcement.noticeTitle}`;
+    document.getElementById('noticeTitle').innerText = `${announcement.noticeTitle}`;
     document.getElementById('scheduleImportance').innerText = `중요도: ${announcement.noticeImportance}`;
     document.getElementById('noticeEditDate').innerText = `마지막 수정일: ${announcement.noticeEditDate}`;
-    document.getElementById('noticeEndDate').innerText = `기한 날짜: ${announcement.noticeEndDate}`;
-    document.getElementById('noticeStatus').innerText = `상태: ${announcement.noticeStatus}`;
-    document.getElementById('duesStatus').innerText = `내 회비 납부 상태: ${duesStatusText}`;
+    document.getElementById('noticeEndDate').innerText = `공지 날짜: ~${announcement.noticeEndDate}`;
+    document.getElementById('noticeContent').innerText = `${announcement.noticeContent}`;
     document.getElementById('noticeDues').innerText = `회비 금액: ${announcement.noticeDues}원`;
-    document.getElementById('noticeContent').innerText = `세부 공지사항 내용: ${announcement.noticeContent}`;
+    document.getElementById('duesStatus').innerText = `내 회비 납부 상태: ${duesStatusText}`;
     document.getElementById('noticeWriter').innerText = `작성자: ${announcement.noticeWriter}`;
 
 }
@@ -57,15 +56,13 @@ function displayAnnouncement(announcement) {
 // 나의 회비 납부 현황 표시
 function displayMyData(announcement) {
     const myDataContainer = document.getElementById('my-data-container');
-    if (myData) {
+
         const myTitle = document.createElement('h2');
         myTitle.textContent = '나의 회비 납부 현황';
         myDataContainer.appendChild(myTitle);
         const myBox = createMemberBox(myData, true, false);
         myDataContainer.appendChild(myBox);
-    } else {
-        myDataContainer.innerHTML = '<h2>나의 회비 납부 현황</h2><p>회비 납부 정보가 없습니다.</p>';
-    }
+
 
 
     if (myData.duesStatus == false) {
@@ -78,7 +75,7 @@ function displayMyData(announcement) {
             dues(userToken, groupToken, userPermission, noticeToken, announcement.noticeDues);
         });
 
-        myDataContainer.appendChild(payButton);
+        myTitle.appendChild(payButton);
     }
 }
 

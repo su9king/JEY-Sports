@@ -1,20 +1,24 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+.container {
+  padding: 3px;
+  max-width: 800px;
+  margin: 60px auto 10px auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(205, 86, 86, 0.1);
+  border-radius: 8px;
+  height: 100%;
+  min-height: 800px;
 }
 
-
-
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+#title {
+  font-size: 2.5em; /* 제목 크기 */
+  font-weight: bold; /* 두껍게 */
+  color: #333; /* 글자 색상 */
+  text-align: center; /* 중앙 정렬 */
+  text-transform: uppercase; /* 대문자로 변환 */
+  letter-spacing: 1px; /* 글자 간격 */
+  border-bottom: 2px solid #ccc; /* 아래쪽 테두리 */
+  padding-bottom: 10px; /* 아래쪽 패딩 */
+  font-family: 'Arial', sans-serif; /* 글꼴 설정 */
 }
 
 
@@ -28,9 +32,8 @@ body {
   border-radius: 8px;
   position: relative;
   width: calc(100% - 20px); /* 전체 너비에서 padding을 제외 */
-  max-width: 600px;
 }
-
+  
 /* 멤버 이미지 스타일 */
 .member-image {
   width: 60px;
@@ -45,59 +48,68 @@ body {
   flex: 1;
 }
 
-/* 멤버 컨테이너에 스크롤 추가 */
 .member-container {
-/*max-height: 600px;  원하는 높이 설정 */
-/*overflow-y: auto;  세로 스크롤 추가 */
-border: 1px solid #ddd; /* 테두리 추가 */
-border-radius: 8px;
-padding: 10px;
-margin-bottom: 20px;
+  border: 1px solid #ddd; /* 테두리 추가 */
+  border-radius: 8px;
+  padding: 10px;
+  margin: 3px 3px 20px 3px ;
 }
+
+
+
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+
+/* endDate 스타일 수정 */
+#endDate {
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 10px; /* 요소 간의 간격 */
+}
+
+/* 당일 체크박스 스타일 */
+#endDate label[for="noEndDate"] {
+  margin-left: 10px; /* 입력 필드와 체크박스 간의 간격 */
+  white-space: nowrap; /* 라벨 텍스트가 한 줄로 유지되도록 설정 */
+  margin-right: 10px; /* 입력 필드와 체크박스 간의 간격 조정 */
+}
+
+
+#endDate input[type="date"] {
+  flex: 1; /* 날짜 입력 필드가 가능한 공간을 차지하도록 설정 */
+}
+
+
 
 #announcement-container, #code-container, #edit-container {
   border: 1px solid #ddd; /* 테두리 추가 */
   border-radius: 8px;
   padding: 10px;
-  margin-bottom: 20px;
+  margin: 3px 3px 20px 3px ;
 }
 
 
-.form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .form-group input[type="text"],
-  .form-group input[type="date"],
-  .form-group input[type="number"],
-  .form-group select {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  #saveAnnouncementButton {
-    margin-top: 20px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #28a745;
-    color: white;
-    font-size: 16px;
-  }
-  
-  #saveAnnouncementButton:hover {
-    background-color: #218838;
-  }
   
     
 
@@ -112,12 +124,43 @@ margin-bottom: 20px;
 
 
 
+#saveButton, #saveAnnouncementButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  margin: 3px;
+  width: calc(100% - 6px);
+}
+
+#saveButton:hover, #saveAnnouncementButton:hover {
+background-color: #0056b3;
+}
 
 
 
 
 
+::placeholder {
+  text-align: center;
+  color: #6c757d; /* 플레이스홀더 색상 변경 */
+}
 
+#searchInput {
+  padding: 8px 15px;
+  font-size: 13px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 35%;
+  max-width: 300px;
+  box-sizing: border-box; /* padding과 border를 포함해 너비를 계산 */
+  margin-bottom: 10px;
+  margin-left: 3px;
+}
 
 
 

@@ -115,7 +115,7 @@ async function displayScheduleDetails(scheduleToken) {
             const alertText = scheduleAlert == true ? '알람 예정' : '알람 없음';
 
             eventDetails.innerHTML = `
-                <strong>제목:</strong> ${scheduleTitle}<br>
+                <h2> ${scheduleTitle}</h2><br>
                 <strong>시작 시간:</strong> ${scheduleStartDate}<br>
                 <strong>종료 시간:</strong> ${scheduleEndDate}<br>
                 <strong>중요도:</strong> ${importanceText}<br>

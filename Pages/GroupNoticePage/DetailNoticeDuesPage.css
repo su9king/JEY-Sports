@@ -1,13 +1,54 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+.container {
+    padding: 3px;
+    max-width: 800px;
+    margin: 60px auto 10px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    height: 100%;
+    min-height: 800px;
+  }
+
+
+
+  
+h1 {
+    font-size: 30px;
+    color: #007bff;
+    margin-bottom: 10px;
+    margin-left: 10px;
 }
 
+p {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #555;
+}
 
+h3 {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #007bff;
+    margin-left: 10px;
 
+}
+
+#edit-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin: 10px;
+    width: calc(100% - 20px);
+  }
+  
+  #edit-button:hover {
+    background-color: #0056b3;
+  }
 
 /* 멤버 박스 스타일 */
 .memberBox {
@@ -19,7 +60,6 @@ body {
   border-radius: 8px;
   position: relative;
   width: calc(100% - 20px); /* 전체 너비에서 padding을 제외 */
-  max-width: 600px;
 }
 
 /* 멤버 이미지 스타일 */
@@ -36,24 +76,19 @@ body {
   flex: 1;
 }
 
-/* 멤버 컨테이너에 스크롤 추가 */
 .member-container {
-/*max-height: 600px;  원하는 높이 설정 */
-/*overflow-y: auto;  세로 스크롤 추가 */
-border: 1px solid #ddd; /* 테두리 추가 */
-border-radius: 8px;
-padding: 10px;
-margin-bottom: 20px;
+    border: 1px solid #ddd; /* 테두리 추가 */
+    border-radius: 8px;
+    padding: 10px;
+    margin: 3px 3px 20px 3px ;
 }
 
 #announcement-container, #code-container {
   border: 1px solid #ddd; /* 테두리 추가 */
   border-radius: 8px;
   padding: 10px;
-  margin-bottom: 20px;
+  margin: 3px 3px 20px 3px ;
 }
-
-
 
 .status-button {
   padding: 10px 20px;
@@ -64,86 +99,8 @@ margin-bottom: 20px;
   cursor: pointer;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-h1 {
-    font-size: 24px;
-    color: #007bff;
-    margin-bottom: 10px;
-}
-
-p {
-    font-size: 16px;
-    margin: 5px 0;
-    color: #555;
-}
-
-h3 {
-    margin-top: 20px;
-    font-size: 20px;
-    color: #007bff;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-table th, table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-table th {
-    background-color: #007bff;
-    color: white;
-}
-
-.detail-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.detail-button:hover {
-    background-color: #0056b3;
-}
-
 .pay-button {
-    background-color: #28a745;
+    background-color: #dfa830;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -153,75 +110,22 @@ table th {
 }
 
 .pay-button:hover {
-    background-color: #218838;
+    background-color: #dfa830b0;
 }
 
-
-.hidden {
-    display: none;
-}
-
-.visible {
-    display: block;
-}
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    z-index: 1001;
-    max-width: 500px;
-    width: 80%;
-}
-
-.edit-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
+#searchInput {
+    padding: 8px 15px;
+    font-size: 13px;
     border-radius: 5px;
-    margin-top: 15px;
+    border: 1px solid #ccc;
+    width: 35%;
+    max-width: 300px;
+    box-sizing: border-box; /* padding과 border를 포함해 너비를 계산 */
+    margin-bottom: 10px;
+    margin-left: 3px;
 }
-
-.edit-button:hover {
-    background-color: #218838;
-}
-
-.save-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 15px;
-}
-
-.save-button:hover {
-    background-color: #0056b3;
-}
-
-input[type="text"], input[type="date"], input[type="number"], textarea {
-    width: 100%;
-    padding: 5px;
-    margin: 5px 0;
-    box-sizing: border-box;
-}
-
   
+::placeholder {
+  text-align: center;
+  color: #6c757d; /* 플레이스홀더 색상 변경 */
+}

@@ -341,21 +341,16 @@ async function displayNoticeContent(noticeToken, noticeContentElement) {
 
 // 공지사항 추가 버튼 생성(권한 제한을 위해 함수화)
 function addCreateNoticeButton(userPermission) {
-    const buttonContainer = document.getElementById('button-container');
+
     if (userPermission == 2 || userPermission == 1) {
-        const createButtonContainer = document.createElement("div");
-        createButtonContainer.classList.add("create-button-container");
-
-        const createButton = document.createElement("button");
+        const createButton = document.getElementById("create-button");
         createButton.textContent = "공지사항 작성하기";
-        createButton.classList.add("create-button");
         createButton.addEventListener("click", function() {
-            window.location.href = `CreateGroupNoticePage.html?&previousPage=/GroupNoticePage/GroupNoticePage.html`;
+            window.location.href = 'CreateGroupNoticePage.html?&previousPage=/GroupNoticePage/GroupNoticePage.html';
         });
-
-        createButtonContainer.appendChild(createButton);
-
-        buttonContainer.appendChild(createButtonContainer);
+    } else {
+        const createButton = document.getElementById("create-button");
+        createButton.style.display = 'none'
     }
 }
 

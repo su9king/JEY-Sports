@@ -9,20 +9,23 @@
     <script type="module" src="/Certification.js"></script>
     <script type="module" src="/Dues.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
 </head>
 <body>
-    <h2>Total 출석 페이지!!!</h2>
     <div class="content">
+
+        <div id="menubar"></div>
+        <div id="sidebar"></div>
+        <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+
         <div class="container">
-            <!-- 회비 리스트 테이블 -->
-            <input type="search" id="search-box" placeholder="누가 궁금한가요!">
+            <h1 id="title">참여율 확인하기</h1>
+
+            <!-- 검색 -->
+            <input type="search" id="searchInput" placeholder="누가 궁금한가요!">
             <!-- 회비 리스트 테이블 -->
             <div id="table-container"></div>
 
-            <!-- 뒤로가기 버튼 -->
-            <button id="backButton" class="back-button"></button>
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()">☰</button>
         </div>
     </div>
 </body>

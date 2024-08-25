@@ -1,6 +1,6 @@
 let notices = [];
 let currentPage = 1;
-const noticesPerPage = 10;
+const noticesPerPage = 5;
 previousPage = "/GroupMainPage/GroupMainPage.html"
 //////////////////// Step0 : 회원인증, 사이드바 ///////////////////
 window.onload = async function() {
@@ -177,22 +177,24 @@ function displayNotices() {
 
 // 공지사항 추가 버튼 생성(권한 제한을 위해 함수화)
 function addCreateNoticeButton(userPermission) {
-    if (userPermission == 2 || userPermission == 1 || userPermission == 0) {
-        const createButtonContainer = document.createElement("div");
-        createButtonContainer.classList.add("create-button-container");
+    const createButton = document.getElementById("total-button");
+    createButton.textContent = "전체 출석 확인하기";
+    createButton.addEventListener("click", function() {
+        window.location.href = '/TotalAttendancePage/TotalAttendancePage.html';
+    });
 
-        const createButton = document.createElement("button");
-        createButton.textContent = "전체 출석 확인하기";
-        createButton.classList.add("create-button");
+    if (userPermission == 2 || userPermission == 1) {
+        const createButton = document.getElementById("create-button");
+        createButton.textContent = "출석 생성하기";
         createButton.addEventListener("click", function() {
-            window.location.href = '/TotalAttendancePage/TotalAttendancePage.html';
+            window.location.href = '/GroupSchedulePage/CreateGroupSchedulePage.html';
         });
-
-        createButtonContainer.appendChild(createButton);
-
-        document.body.insertBefore(createButtonContainer, document.body.firstChild);
+    } else {
+        const createButton = document.getElementById("create-button");
+        createButton.style.display = 'none'
     }
 }
+
 
 // 페이지네이션 컨트롤 업데이트
 function updatePaginationControls(totalNotices = notices.length) {
@@ -207,7 +209,7 @@ function updatePaginationControls(totalNotices = notices.length) {
 // 공지사항이 하나도 없는 경우
 function noNotice() {
     const noticeContainer = document.getElementById("notice-container");
-    
+
     const noNoticeBox = document.createElement("div");
     noNoticeBox.classList.add("noticeBox");
 
@@ -216,6 +218,6 @@ function noNotice() {
     noNoticeTitle.classList.add("notice-title");
     noNoticeTitle.textContent = '작성된 출석 일정이 없습니다!!';
 
-    noNoticeBox.appendChild(noNoticeTitle)
-    noticeContainer.appendChild(noNoticeBox)
+    noNoticeBox.appendChild(noNoticeTitle);
+    noticeContainer.appendChild(noNoticeBox);
 }

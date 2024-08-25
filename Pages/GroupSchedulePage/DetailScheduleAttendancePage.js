@@ -242,8 +242,8 @@ async function createAdminContainer(userPermission) {
         }
 
         const codeInput = document.createElement('input');
-        codeInput.type = 'text';
-        codeInput.placeholder = '출석 코드를 입력하세요';
+        codeInput.type = 'search';
+        codeInput.placeholder = '출석 코드를 입력하세요!';
         codeInput.id = 'attendance-code-input';
         scheduleCodeContainer.appendChild(codeInput);
 

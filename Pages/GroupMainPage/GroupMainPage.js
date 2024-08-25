@@ -151,7 +151,7 @@ async function alertStatusSchedule(data) {
 
         // 출석기능이 있는 경우만 버튼 생성
         console.log(schedule.attendanceStatus === undefined)
-        if (schedule.attendanceStatus !== undefined ) { 
+        if (schedule.scheduleAttendace) { 
             const attendButton = document.createElement("button");
             attendButton.classList.add("attend-button");
             attendButton.textContent = "출석하기";
@@ -209,18 +209,24 @@ async function alertStatusSchedule(data) {
 
     // "오늘의 일정" 제목 생성
     if (hasTodaySchedule) {
-        const currentScheduleTitle = document.createElement("h2");
-        currentScheduleTitle.classList.add("schedule-title");
-        currentScheduleTitle.textContent = "오늘의 일정";
-        currentScheduleContainer.prepend(currentScheduleTitle);
+        if(!document.querySelector('#today-schedule-title')) {
+            const currentScheduleTitle = document.createElement("h2");
+            currentScheduleTitle.classList.add("schedule-title");
+            currentScheduleTitle.id = "today-schedule-title"
+            currentScheduleTitle.textContent = "오늘의 일정";
+            currentScheduleContainer.prepend(currentScheduleTitle);
+        }
     }
 
     // "예정 일정" 제목 생성
     if (hasExpectedSchedule) {
-        const expectedScheduleTitle = document.createElement("h2");
-        expectedScheduleTitle.classList.add("schedule-title");
-        expectedScheduleTitle.textContent = "예정 일정";
-        expectedScheduleContainer.prepend(expectedScheduleTitle);
+        if(!document.querySelector('#expected-schedule-title')) {
+            const expectedScheduleTitle = document.createElement("h2");
+            expectedScheduleTitle.classList.add("schedule-title");
+            expectedScheduleTitle.id = "expected-schedule-title"
+            expectedScheduleTitle.textContent = "예정 일정";
+            expectedScheduleContainer.prepend(expectedScheduleTitle);
+        }
     }
     
 }

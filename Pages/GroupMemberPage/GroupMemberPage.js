@@ -234,7 +234,8 @@ async function displayMembers() {
 
 			const managementModalBtn = document.createElement("button");
 			managementModalBtn.textContent = "정보 수정";
-			managementModalBtn.classList.add("btn");
+			managementModalBtn.classList.add("basicBtn");
+			managementModalBtn.classList.add("editDataButton");
 
 			managementModalBtn.addEventListener('click', function() {
 				overlay.classList.remove('hidden');
@@ -440,7 +441,9 @@ function addMemberManagementButtons(userPermission) {
 
 		const managementModalBtn = document.createElement("button");
 		managementModalBtn.textContent = "회원 초대";
-		managementModalBtn.classList.add("btn");
+		managementModalBtn.classList.add("bottom-button");
+		managementModalBtn.id = 'invite-bottom-button';
+		managementModalBtn.classList.add("basicBtn");
 
 		managementModalBtn.addEventListener('click', function() {
 			overlay.classList.remove('hidden');

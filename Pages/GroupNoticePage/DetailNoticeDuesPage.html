@@ -10,7 +10,6 @@
     <script type="module" src="/Dues.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
     <script src="/MenuBar/MenuBar.js" defer></script>
-    <script type="text/javascript"	src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 </head>
 <body>
     <div class="content">
@@ -20,10 +19,6 @@
         <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
 
         <div class="container">
-
-            
-            <!-- 수정하기 버튼 생성 -->
-            <div id="edit-button-container"></div>
 
             <!-- 공지사항 섹션 -->
             <div id="announcement-container">
@@ -42,16 +37,14 @@
                 <!-- 공개 비공개 -->
                 <p id="noticeStatus"></p>
 
-                <!-- 납부 금액 및 납부 상태 -->
-                <p id="duesStatus"></p>
-                
-
                 <!-- 세부 공지사항 내용 -->
-                <h3 id="noticeContentTitle">세부 공지사항</h3>
-                <p id="noticeContent"></p>
+                <h3 id="noticeContent"></h3>
 
                 <!-- 회비 가격 -->
                 <p id="noticeDues"></p>
+
+                <!-- 납부 금액 및 납부 상태 -->
+                <p id="duesStatus"></p>
 
                 <!-- 공지사항 작성자 -->
                 <p id="noticeWriter"></p>
@@ -59,18 +52,15 @@
 
             <!-- 나의 출석 상태 섹션 -->
             <div id="my-data-container" class="member-container"></div>
-            <!-- 검색 창 -->
-            <input type="text" id="searchInput" placeholder="누가 궁금한가요!">
+
             <!-- 멤버 출석 상태 섹션 -->
-            <div id="user-member-container" class="member-container"></div>
+            <div class="member-container">
+                <input type="search" id="searchInput" placeholder="누가 궁금한가요!">
+                <div id="user-member-container" class="member-container"></div>
+            </div>
 
-
-            <!-- 회비 리스트 테이블 -->
-            <div id="table-container"></div>
-
-            <!-- 모달 오버레이 및 컨텐츠 -->
-            <div id="overlay" class="overlay hidden"></div>
-            <div id="payDetailModal" class="modal hidden"></div>
+            <!-- 수정하기 버튼 생성 -->
+            <div id="edit-button-container"></div>
 
         </div>
     </div>

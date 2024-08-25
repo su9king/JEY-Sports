@@ -1,90 +1,138 @@
-
 .container {
+  padding: 3px;
   max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
+  margin: 60px auto 10px auto;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  height: 100%;
+  min-height: 800px;
 }
 
+#edit-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  margin: 10px;
+  width: calc(100% - 20px);
+}
 
 /* 멤버 박스 스타일 */
 .memberBox {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    position: relative;
-    width: calc(100% - 20px); /* 전체 너비에서 padding을 제외 */
-    max-width: 600px;
-  }
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  position: relative;
+  width: calc(100% - 20px); /* 전체 너비에서 padding을 제외 */
+}
   
-  /* 멤버 이미지 스타일 */
-  .member-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 15px;
-  }
-  
-  /* 멤버 정보 스타일 */
-  .member-info {
-    flex: 1;
-  }
-  
-  /* 멤버 컨테이너에 스크롤 추가 */
+/* 멤버 이미지 스타일 */
+.member-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+/* 멤버 정보 스타일 */
+.member-info {
+  flex: 1;
+}
+
 .member-container {
-  /*max-height: 600px;  원하는 높이 설정 */
-  /*overflow-y: auto;  세로 스크롤 추가 */
   border: 1px solid #ddd; /* 테두리 추가 */
   border-radius: 8px;
   padding: 10px;
-  margin-bottom: 20px;
+  margin: 3px 3px 20px 3px ;
 }
 
-#announcement-container, #my-data-container, #user-member-container, #code-container {
-  background-color: #fff;
-  padding: 20px;
+#announcement-container, #my-data-container, #user-member-container {
+  border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 800px;
+  padding: 10px;
+  margin: 3px 3px 20px 3px ;
 }
   
-  
-  
-  /* 버튼 컨테이너 스타일 */
-  .button-container {
-    display: flex; /* 수평 배치 */
-    flex-direction: row; /* 버튼들이 한 줄에 배치되도록 설정 */
-    justify-content: flex-end; /* 버튼들을 컨테이너의 오른쪽 끝에 정렬 */
-    align-items: center; /* 버튼들을 수직으로 중앙에 맞춤 */
-    gap: 10px; /* 버튼 간의 간격 */
-    margin-top: 10px; /* 컨테이너와 위 요소 간의 간격 */
-  }
-  
-  /* 권한 변경 버튼 스타일 */
-  #edit-button {
-    margin-right: 10px;
-    width: 100px;
-    height: 30px;
-    background-color: #2196F3; /* 파란색 */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  
+
+::placeholder {
+  text-align: center;
+  color: #6c757d; /* 플레이스홀더 색상 변경 */
+}
+
+#searchInput {
+  padding: 8px 15px;
+  font-size: 13px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 35%;
+  max-width: 300px;
+  box-sizing: border-box; /* padding과 border를 포함해 너비를 계산 */
+  margin-bottom: 10px;
+  margin-left: 3px;
+}
+
+
+/* 출석 코드 입력 필드 스타일 */
+#attendance-code-input {
+  padding: 10px 20px;
+  font-size: 13px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+  margin-right: 10px; /* 버튼과의 간격 */
+  margin-left: 10px; /* 버튼과의 간격 */
+}
+
+/* 출석 코드 제출 버튼 스타일 */
+#attendance-code-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+/* 버튼 hover 효과 */
+#attendance-code-button:hover {
+  background-color: #0056b3;
+}
+
+/* 코드 입력 필드와 버튼을 포함하는 컨테이너의 스타일 */
+#code-container {
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 10px; /* 입력 필드와 버튼 사이의 간격 */
+  border: 1px solid #ddd; /* 테두리 추가 */
+  border-radius: 8px;
+  padding: 10px;
+  margin: 3px ;
+}
+
+
+
+
+
+
   /* 출석 상태 버튼을 포함하는 컨테이너 스타일 */
 .attendance-status-container {
   display: flex; /* 전체 컨테이너는 기본적으로 수직 정렬 */
   flex-direction: column; /* 버튼과 결석 사유를 수직으로 배치 */
   gap: 10px; /* 버튼과 결석 사유 간의 간격 */
+  align-items: flex-end; /* 내부 요소를 우측 정렬 */
 }
 
 /* 본인의 출석 상태일 때 버튼들이 들어가는 컨테이너 */
@@ -95,6 +143,7 @@
 
 /* 출석 상태 버튼 스타일 */
 .status-button {
+  width: 100px;
   padding: 10px 20px;
   background: #3498db;
   color: #fff;
@@ -107,6 +156,8 @@
 .absent-reason-container {
   display: flex;
   flex-direction: column; /* 결석 사유를 수직으로 배치 */
+  flex-grow: 1; /* 사유가 있을 경우 컨테이너가 남은 공간을 채우게 함 */
+  float: right;
 }
 
 /* 결석 사유 스타일 */
@@ -115,27 +166,4 @@
 }
 
   
-  
-    
-  /* -----------------------페이지 구성요소----------------------- */
-  .btn {
-    margin: 5px;
-    width: 40%;
-    max-width: 300px;
-    height: 30px;
-    border-radius: 5px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .btn:hover {
-    background-color: #0056b3; /* 호버 시 배경색 변화 */
-  }
-  
-  ::placeholder {
-    text-align: center;
-    color: #6c757d; /* 플레이스홀더 색상 변경 */
-  }
   
