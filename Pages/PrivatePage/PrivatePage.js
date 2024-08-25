@@ -160,7 +160,7 @@ function createInvitedGroups(invitedGroups) {
     invitedGroupsContainer.innerHTML = '';
 
     if (invitedGroups.length === 0) {
-        invitedGroupsContainer.appendChild(noInvitedGroups);
+        //invitedGroupsContainer.appendChild(noInvitedGroups);
         return; // 그룹이 없을 경우 함수 종료
     }
 
@@ -183,7 +183,6 @@ function createInvitedGroups(invitedGroups) {
         img.alt = group['groupName']; // 이미지 설명으로 groupName 설정
         img.classList.add('button-image'); // 이미지 클래스 추가
         img.style.opacity = '0.5'; // 반투명 처리
-        img.style.width = '100%'; // 이미지 너비를 버튼에 맞춤
 
         // 초대됨 텍스트 생성
         const inviteText = document.createElement('span');
@@ -273,7 +272,7 @@ function createInvitedGroups(invitedGroups) {
 function createRequestGroups(requestGroups) {
     const requestGroupsContainer = document.getElementById('requestGroups-container');
     requestGroupsContainer.innerHTML = '';
-
+    console.log
     requestGroups.forEach(group => {
         const buttonWrapper = document.createElement('div');
         buttonWrapper.classList.add('button-wrapper'); // button-wrapper 클래스 추가
@@ -293,7 +292,6 @@ function createRequestGroups(requestGroups) {
         img.alt = group['groupName']; // 이미지 설명으로 groupName 설정
         img.classList.add('button-image'); // 이미지 클래스 추가
         img.style.opacity = '0.5'; // 반투명 처리
-        img.style.width = '100%'; // 이미지 너비를 버튼에 맞춤
 
         // "참가"와 "대기중" 텍스트 생성
         const waitingText = document.createElement('div');
@@ -454,6 +452,7 @@ function loadRequestGroupModal() {
                         }
                     } catch (error) {
                         console.error('Error:', error);
+                        alert("이미 초대받았거나, 참여 대기중이거나, 소속된 조직입니다.")
                     }
 
                 } else {

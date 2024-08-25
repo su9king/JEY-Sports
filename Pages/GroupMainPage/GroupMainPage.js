@@ -28,6 +28,14 @@ window.onload = async function() {
             alert('다시 시도해주세요!')
         } else if (data.result == 1)  {
 
+            if(data.resources[0].length == 0 && data.resources[1].length == 0 && data.resources[2].length == 0) {
+                const example = document.getElementById("example");
+                example.style.display = 'block';
+            }else{
+                const example = document.getElementById("example");
+                example.style.display = 'none';
+            }
+            
 
             alertStatusNotice(data.resources[0]);  // 회비 납부 상황 노출
 
@@ -73,6 +81,9 @@ async function alertStatusNotice(statusNotice) {
     duesContainer.innerHTML = '';
 
     // "지금 내야하는 회비" 제목 생성
+    if(statusNotice.length == 0) {
+        return
+    }
     const duesTitle = document.createElement("h2");
     duesTitle.classList.add("dues-title");
     duesTitle.textContent = "지금 내야하는 회비";
@@ -115,10 +126,17 @@ async function alertStatusNotice(statusNotice) {
 
 
 async function alertStatusSchedule(data) {
+
+    
     const currentScheduleContainer = document.getElementById("current-schedule-container");
 
     const expectedScheduleContainer = document.getElementById("expected-schedule-container");
 
+    if(data.length == 0) {
+        currentScheduleContainer.style.display = 'none';
+        expectedScheduleContainer.style.display = 'none';
+        return
+    }
     // 오늘 날짜
     const todayDate = new Date().toISOString().split('T')[0];
 
@@ -150,8 +168,8 @@ async function alertStatusSchedule(data) {
         `;
 
         // 출석기능이 있는 경우만 버튼 생성
-        console.log(schedule.attendanceStatus === undefined)
-        if (schedule.scheduleAttendace) { 
+        console.log(schedule.scheduleAttendance)
+        if (schedule.attendanceStatus !== undefined) { 
             const attendButton = document.createElement("button");
             attendButton.classList.add("attend-button");
             attendButton.textContent = "출석하기";
@@ -179,7 +197,7 @@ async function alertStatusSchedule(data) {
                     attendCheckedButton.innerText = "참석 완료!";
                     attendCheckedButton.disabled = true;
                     scheduleInfo.appendChild(attendCheckedButton);
-                } else if (schedule.attendanceStatus === 2) {
+                } else if (schedule.attendanceStatus === 0) {
                     const absentCheckedButton = document.createElement("p");
                     absentCheckedButton.classList.add("absent-checked-button");
                     absentCheckedButton.innerText = "불참 예정 ㅠㅠ";

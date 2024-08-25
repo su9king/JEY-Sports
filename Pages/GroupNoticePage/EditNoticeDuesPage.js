@@ -99,7 +99,7 @@ function displayAnnouncement(announcement) {
         const data = await response.json();
         if (data.result == 1) {
             alert('공지사항이 수정되었습니다!');
-            window.location.href = `DetailNoticeDuesPage.html?noticeToken=${noticeToken}`;
+            location.reload();
         } else {
             alert('수정에 실패했습니다. 다시 시도해주세요.');
         }

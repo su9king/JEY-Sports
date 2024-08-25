@@ -21,16 +21,25 @@
 
     <div class="container">    
 
+
         <div class="header">
-            
+            <h1 class="header-title">JUST ENJOY YOUR SPORTS</h1>
             <div class="profile-image-container">
                 <img id="groupImage" class="profile-image" src="" alt="Profile Image">
             </div>
         </div>
+
+
         <div class="main">
             <h1 id="groupName"></h1>
         </div>
 
+        <div class = "example" id = "example">
+            <h2 class = "exampleTitle">현재 출석 일정 또는 회비 내역이 하나도 없습니다. <br>지금 한번 일정이나, 회비 내역을 추가 해보세요!</h2>
+            <button class = "exampleButton" onclick="window.location.href = '/GroupSchedulePage/CreateGroupSchedulePage.html'">일정 추가하기</button>
+            <button class = "exampleButton" onclick="window.location.href = '/GroupNoticePage/CreateGroupNoticePage.html?&previousPage=/GroupMainPage/GroupMainPage.html'">회비 추가하기</button>
+
+        </div>
         <div id="dues-container"></div>
         <div id="current-schedule-container"></div>
         <div id="expected-schedule-container"></div>

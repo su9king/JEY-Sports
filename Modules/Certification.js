@@ -45,9 +45,9 @@ module.exports = {
             const groupToken = query["groupToken"];
             const data = await GroupMemberPage(groupToken);
             const data2 = await GroupMemberPage2(groupToken);
+            const data3 = await GroupMemberPage3(groupToken);
 
-            if (data == null) {
-                const data3 = await GroupMemberPage3(groupToken);
+            if (data == null || data3.length - 1 == data.length) {
                 return {result : 1 , resources : [data3,data2]};
             }else{
                 return {result : 1 , resources : [data,data2]};
@@ -529,6 +529,7 @@ async function DetailNoticeDuesPage(noticeToken,userToken) {
                         // 날짜를 한국 시간대로 변환
                         results.forEach(notice => {
                             notice.noticeCreatedDate = moment(notice.noticeCreatedDate).tz('Asia/Seoul').format('YYYY-MM-DD');
+                            notice.noticeEditDate = moment(notice.noticeEditDate).tz('Asia/Seoul').format('YYYY-MM-DD');
                             notice.noticeEndDate = moment(notice.noticeEndDate).tz('Asia/Seoul').format('YYYY-MM-DD');
                         });
                         resolveNotice(results);
@@ -614,7 +615,7 @@ async function TotalAttendancePage(groupToken) {
     return new Promise((resolve, reject) => {
         // 그룹에 해당하는 모든 일정 불러오기
         const schedulesQuery = new Promise((resolveSchedules, rejectSchedules) => {
-            connection.query(`SELECT * FROM Schedules WHERE groupToken = ?`, [groupToken],
+            connection.query(`SELECT * FROM Schedules WHERE groupToken = ? and scheduleAttendance  = true`, [groupToken],
                 (error, results) => {
                     if (error) {
                         console.error('일정 쿼리 실행 오류:', error);
