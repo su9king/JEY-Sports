@@ -24,12 +24,10 @@ window.onload = async function() {
         const groupImage = response.resources[0]["groupImage"];
         document.getElementById('groupImageSample').src = groupImage ? `/GroupImages/${groupImage}` : `/GroupImages/NULL.png`;
            
+
     
-        // 뒤로가기
-        document.getElementById('backButton').addEventListener('click', function() {
-            window.history.back();
-        });
     }
+    loadMenubar(sessionStorage.getItem('groupName'));
 }
 
 
@@ -97,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (groupImage) {
             await imageUpload(functionType, userToken, groupImage, groupToken );
             alert("조직 프로필 사진이 수정되었습니다!");
+            location.reload(true);
         }
 
     });
@@ -135,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('다시 시도해주세요!')
                 } else if (data.result == 1) {
                     alert('조직명이 성공적으로 수정되었습니다!')
+                    location.reload(true);
                 } else {
                     alert('관리자에게 문의해주세요')
                 }
@@ -235,6 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 if (data.result == 1) { 
                     alert('ID가 성공적으로 수정되었습니다!');
+                    location.reload(true);
                 } else if (data.result == 0) {
                     alert('다시 시도해주세요!');
                 } else {
@@ -290,6 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         alert('다시 시도해주세요!')
                     } else if (data.result == 1)  {
                         alert('userPW이 성공적으로 수정되었습니다!')
+                        location.reload(true);
                     } else {
                         alert('관리자에게 문의해주세요')
                     }
@@ -341,6 +343,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('다시 시도해주세요!')
                 } else if (data.result == 1)  {
                     alert('조직소개가 성공적으로 수정되었습니다!')
+                    location.reload(true);
                 } else {
                     alert('관리자에게 문의해주세요')
                 }
@@ -399,6 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 if (namedata.result == 1 && numdata.result == 1) {
                     alert('조직 계좌가 성공적으로 등록되었습니다!');
+                    location.reload(true);
                 } else if (namedata.result == 0) {
                     alert('은행명 등록에 실패했습니다!');
                 } else if (numdata.result == 0) {

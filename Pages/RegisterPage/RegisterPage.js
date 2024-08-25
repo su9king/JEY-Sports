@@ -14,11 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let consentedCheck = false;
     let emailCheck = false;
 
-    // 뒤로가기
-    document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
+    //뒤로가기
+    document.getElementById('cancel').addEventListener('click', function() {
+        window.location.href = "/LoginPage.html";
     });
-
+    registerForm.addEventListener('cancel', async function(e) {
+        e.preventDefault();
+        alert("hi")
+    })
 
     // 모든 label 요소에 클릭 이벤트를 방지하는 핸들러 추가
     const labels = document.querySelectorAll('label');
@@ -241,10 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         privacyModal.classList.add('hidden');
         });
 
-
-
-
-
+    
 
 
 
@@ -264,7 +264,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let userAddress = document.getElementById('userAddress').value;
         let userBirth = document.getElementById('userBirth').value;
         let userGender = document.querySelector('input[name="gender"]:checked');
-        let userImage = document.getElementById('userImage').files[0];
 
         const userConsented = document.getElementById('userConsented').checked;
         const userConsentedDate = userConsented ? new Date().toISOString().split('T')[0] : null;
@@ -273,7 +272,6 @@ document.addEventListener('DOMContentLoaded', function() {
         userAddress = allowNull(userAddress);
         userBirth = allowNull(userBirth);
         userGender = userGender | userGender == 'P' ? userGender.value : null;
-        userImage = userImage ? userImage : null;
         
         console.log('userGender', userGender);
         
@@ -287,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers : {'Content-Type': 'application/json'},
                 body : JSON.stringify({ functionType: functionType,
                                         userName: userName,
-                                        userImage: userImage,
+                                        userImage: null,
                                         userID: userID, 
                                         userPW: PW1, 
                                         userPhone: userPhone, 

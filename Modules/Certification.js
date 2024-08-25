@@ -45,7 +45,13 @@ module.exports = {
             const groupToken = query["groupToken"];
             const data = await GroupMemberPage(groupToken);
             const data2 = await GroupMemberPage2(groupToken);
-            return {result : 1 , resources : [data,data2]};
+
+            if (data == null) {
+                const data3 = await GroupMemberPage3(groupToken);
+                return {result : 1 , resources : [data3,data2]};
+            }else{
+                return {result : 1 , resources : [data,data2]};
+            }
 
             //// 일정 및 공지사항 회원인증 
         }else if (page == "GroupSchedulePage"){
@@ -167,7 +173,7 @@ async function EditUserPage(userToken){
 
     return new Promise((resolve, reject) => {
         connection.query(`SELECT userImage,userName,userIntro,
-            userMail, userPW 
+            userMail, userPW ,userID
             FROM Users
             WHERE userToken = ?`, [userToken],
             (error, results, fields) => {
@@ -268,6 +274,30 @@ async function GroupMemberPage2(groupToken){
     return new Promise((resolve, reject) => {
         connection.query(
             `SELECT notUserToken,userName,userPhone FROM NotUsersOrganizations
+            WHERE groupToken = ?`, [groupToken],
+            (error, results, fields) => {
+                if (error) {
+                    console.error('쿼리 실행 오류:', error);
+                    return reject(error);
+
+                } //쿼리 결과가 없다면 그룹 토큰이 잘못 됨.
+                if (results.length > 0) {
+                    resolve(results);
+                } else {
+                    resolve(null);
+                }
+            }
+        );
+    })
+}
+
+async function GroupMemberPage3(groupToken){
+
+    return new Promise((resolve, reject) => {
+        connection.query(
+            `SELECT usr.userID , usr.userPhone, usrorg.userPermission ,usr.userName, usr.userImage , usr.userIntro, usr.userMail , 0 AS personalParticipationRate
+            FROM Users AS usr
+            JOIN UsersOrganizations AS usrorg ON usrorg.userToken = usr.userToken
             WHERE groupToken = ?`, [groupToken],
             (error, results, fields) => {
                 if (error) {

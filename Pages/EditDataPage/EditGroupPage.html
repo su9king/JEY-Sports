@@ -9,11 +9,17 @@
     <script type="module" src="/ImageUpload.js"></script>
     <script type="module" src="/Certification.js"></script>
     <script src="/SideBar/SideBar.js" defer></script>
+    <script src="/MenuBar/MenuBar.js" defer></script>
 </head>
 <body>
+    <div id="menubar"></div>
+    <div id="sidebar"></div>
+    <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
+    
     <div class="content">
         <div class="container">
-            <h1>Edit Group Data</h1>
+
+            <h1>그룹정보 수정</h1>
 
             <!-- 이미지 파일 업로드 -->
             <div class="profile-image-container">
@@ -21,57 +27,50 @@
             </div>
 
             <div class="form-group">
-                <br> <label for="groupImage" id="groupImageLabel">조직 프로필 사진:</label>
                 <input type="file" id="groupImage" name="profilePicture" accept="image/jpeg, image/png">
             </div>
             <button class="btn" type="button" id="groupImageBtn">사진 변경</button>
 
-
             <!-- 새로운 이름 작성 -->
             <div class="form-group">
-                <label for="groupName">조직명:</label>
-                <input class="inputRequired" id="groupName" type="text" placeholder="New Name" require> </br>
+                <label for="groupName">조직명</label>
+                <input class="inputRequired" id="groupName" type="text" placeholder="New Name" required>
             </div>
             <button class="btn" type="button" id="groupNameBtn">조직명 변경</button>
 
-
             <!-- 새로운 ID 작성 -->
             <div class="form-group">
-                <label for="groupID">groupID:</label>
-                <input class="inputRequired" id="groupID" type="text" placeholder="New Name" require> </br>
-                <button class="btn" type="button" id="idCheckButton">Group ID Duplicate Check</button>
-                <div id="idAlert" style="display: none;">사용 가능한 조직 ID입니다!</div>
+                <label for="groupID">조직 아이디</label>
+                <div id="idAlert" style="display: none;">사용 가능한 조직 아이디 입니다!</div>
+                <input class="inputRequired" id="groupID" type="text" placeholder="New ID" required>
+                <button class="btn" type="button" id="idCheckButton">조직 아이디 중복확인</button>
+                <button class="btn" type="button" id="groupIDBtn">조직아이디 변경</button>
             </div>
-            <button class="btn" type="button" id="groupIDBtn">groupID 변경</button>
-            
-            
+
             <!-- 새로운 PW 작성 -->
             <div class="form-group">
-                <label for="PW1">비밀번호:</label>
-                <input type="password" id="PW1" placeholder="New Password" class="inputRequired" autocomplete="new-password"> </br>
+                <label for="PW1">비밀번호</label>
+                <input type="password" id="PW1" placeholder="새 비밀번호" class="inputRequired" autocomplete="new-password">
             </div>
 
             <!-- 다시 한 번 PW 작성 -->
             <div class="form-group">
-                <label for="PW2">비밀번호 확인:</label>
-                <input type="password" id="PW2" placeholder="Password Double Check" class="inputRequired" autocomplete="new-password"> </br>
+                <label for="PW2">비밀번호 확인</label>
+                <input type="password" id="PW2" placeholder="비밀번호 재입력" class="inputRequired" autocomplete="new-password">
                 <div id="pwAlert" style="display: none;">비밀번호가 일치하지 않습니다.</div>
             </div>
-
             <button class="btn" type="button" id="groupPWBtn">비밀번호 변경</button>
-
 
             <!-- 새로운 자기소개 작성 -->
             <div class="form-group">
-                <label for="groupIntro">Introduction:</label>
-                <textarea class="inputRequired" id="groupIntro" name="textarea" rows="4" >자기소개를 입력해주세요!</textarea>
+                <label for="groupIntro">그룹 소개</label>
+                <textarea class="inputRequired" id="groupIntro" name="textarea" rows="4" placeholder="그룹소개를 입력해주세요! (최대 50자)"></textarea>
             </div>
-            <button class="btn" type="button" id="groupIntroBtn">자기소개 변경</button>
-
+            <button class="btn" type="button" id="groupIntroBtn">그룹소개 변경</button>
 
             <!-- 조직 계좌 작성 -->
             <div class="form-group">
-                <label for="groupBankAccountName">은행 선택:</label>
+                <label for="groupBankAccountName">은행 선택</label>
                 <select id="groupBankAccountName">
                     <option value="empty">선택하세요</option> 
                     <option value="국민은행">국민은행</option>
@@ -82,19 +81,13 @@
                     <option value="카카오뱅크">카카오뱅크</option>
                     <option value="케이뱅크">케이뱅크</option>
                 </select>
-
-                <label for="groupBankAccountNumber">groupAccount:</label>
-                <input class="inputRequired" id="groupBankAccountNumber" type="text" placeholder="account(only Number)"> </br>
+                <input class="inputRequired" id="groupBankAccountNumber" type="text" placeholder="계좌번호('-' 제외)">
+                <button class="btn" type="button" id="groupAccountBtn">계좌번호 변경</button>
             </div>
-            <button class="btn" type="button" id="groupAccountBtn">groupAccount 변경</button>
-
+    
 
             <!-- 그룹 삭제 요청 -->
             <button class="btn leave-btn" type="button" id="deleteGroupBtn">그룹 삭제</button>
-
-            <button id="backButton" class="back-button"></button>
-            <div id="sidebar"></div>
-            <button id="toggleButton" onclick="toggleSidebar()" >☰</button>
         </div>
     </div>
 </body>

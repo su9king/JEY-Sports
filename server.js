@@ -106,7 +106,7 @@ async function checkToken(userToken,req){
 /////////////////////////////////STEP 3/////////////////////////////////////////
 // 서버 시작지점 접근 리소스 세팅
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Pages', 'LoginPage.html'));
+    res.sendFile(path.join(__dirname, 'Pages', 'MainPage.html'));
     
 });
 

@@ -3,7 +3,7 @@ window.dues = dues;
 //////////////// 회비 납부 함수 ////////////////
 async function dues(userToken, groupToken, userPermission, noticeToken, noticeDues) { 
     var IMP = window.IMP;
-    IMP.init("imp74527225");
+    IMP.init("");
     
     IMP.request_pay({
         pg: 'tosspay',

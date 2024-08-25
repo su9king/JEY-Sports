@@ -11,37 +11,33 @@
 </head>
 <body>
     <div class="header">
-        <img src="/Icon.png" onclick = "window.location.href = '/LoginPage.html' "alt="Software Logo" class="logo"> <!-- 소프트웨어 마크 -->
-        <div>
-            <button id="editProfile" onclick="window.location.href = '/EditDataPage/EditUserPage.html'">개인정보 수정</button>
-            <button id="logout" onclick="logout()">로그아웃</button>
+        <img src="/Icon.png" onclick="window.location.href = '/MainPage.html'" alt="Software Logo" class="logo"> <!-- 소프트웨어 마크 -->
+        <div class="button-container"> 
+            <button id="editProfile" class="btn" onclick="window.location.href = '/EditDataPage/EditUserPage.html'">개인정보 수정</button>
+            <button id="logout" class="btn" onclick="logout()">로그아웃</button>
             <img src="" alt="Profile Image" id="profileImage" class="profileImage"> <!-- 프로필 이미지 -->
         </div>
     </div>
     
+    
     <div class="content">
-        <button class="btn" id="createGroup">그룹등록</button>
-        <button class="btn" id="repuestGroup">그룹참여</button>
 
-        <div>
-            <h2>참여된 조직</h2>
-            <div id="button-container"></div></li>
+        <div class="button-container">
+            <div id="joinedGroups-container"></div>
+            <div id="requestGroups-container"></div>
+            <div id="invitedGroups-container"></div>
         </div>
-        
-        <div>
-            <h2>참여 요청한 조직</h2>
-            <div id="requestGroups-container"></div></li>
+
+        <div class = "btnlist">
+            <button class="btn group-action" id="createGroup">그룹등록</button>
+            <button class="btn group-action" id="requestGroup">그룹참여</button>
         </div>
-        
-        <div>
-            <h2>초대받은 조직</h2>
-            <div id="invitedGroups-container"></div></li>
-        </div>
-        
 
         <div id="overlay" class="overlay hidden"></div>
         <div id="requestGroupModal" class="modal hidden"></div>
 
+
+        </div>
     </div>
 </body>
 </html>

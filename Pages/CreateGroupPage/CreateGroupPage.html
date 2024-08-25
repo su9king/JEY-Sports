@@ -10,17 +10,26 @@
     <link rel="stylesheet" href="CreateGroupPage.css">
 </head>
 <body>
+    <div class="header">
+        <button id="backButton" class="back-button" onclick="window.location.href='/PrivatePage/PrivatePage.html'"></button>
+        <img src="/Icon.png" onclick="window.location.href = '/MainPage.html'" alt="Software Logo" class="logo"> <!-- 소프트웨어 마크 -->
+        <div style="display: flex; gap: 20px; margin-top: 10px;">
+            <button class="btn-custom" type="button" id="editProfile" onclick="window.location.href = '/EditDataPage/EditUserPage.html'">개인정보 수정</button>
+            <button class="btn-custom" type="button" id="logout" onclick="logout()">로그아웃</button>
+            <img src="" alt="Profile Image" id="profileImage" class="profileImage"> <!-- 프로필 이미지 -->
+        </div>        
+    </div>
+    
+
     <div class="container">
-        <button id="backButton">이전</button>
         <div>
-            <h1>Register Information</h1>
+            <h1>그룹등록</h1>
             <div class="inputs">
                 <form id="CreateGroupForm"> <!-- 전체 form으로 묶기 -->
-
                     <!-- 조직 이름 작성 -->
                     <div class="form-group">
-                        <label for="groupName">조직 이름:</label>
-                        <input class="inputRequired" id="groupName" type="text" placeholder="Group Name"> </br>
+                        <label for="groupName">조직 이름</label>
+                        <input class="inputRequired" id="groupName" type="text" placeholder="조직 이름"> </br>
                     </div>
 
                     <!-- 이미지 파일 업로드 -->
@@ -29,14 +38,13 @@
                     </div>
                     
                     <div class="form-group">
-                        <br> <label for="groupImage" id="groupImageLabel">조직 프로필 사진:</label>
                         <input type="file" id="groupImage" name="profilePicture" accept="image/jpeg, image/png">
                     </div>
 
                     <!-- 조직 전화 번호 입력 -->
                     <div class="form-group">
-                        <label for="groupNumber">조직 대표 번호:</label>
-                        <input class="inputRequired" id="groupNumber" type="tel" pattern="[0-9]{10,11}" placeholder="Phone Number(Only Number)" required> </br>
+                        <label for="groupNumber">조직 대표 번호</label>
+                        <input class="inputRequired" id="groupNumber" type="tel" pattern="[0-9]{10,11}" placeholder="조직 대표번호 ('-' 제외)" required> </br>
                     </div>
 
                     <!-- 조직 분류 -->
@@ -77,24 +85,26 @@
                         <label for="groupID">조직 아이디:
                             <span class="info-icon" id="infoIcon" title="조직 아이디가 필요한 이유?">?</span>
                         </label>
-                        <input class="inputRequired" id="groupID" type="text" placeholder="Group ID" required> </br>
-                        <button class="btn" type="button" id="groupIDBtn">Group ID Duplicate Check</button>
+                        <div style="display: flex; align-items: center;">
+                            <input class="inputRequired" id="groupID" type="text" placeholder="조직 아이디" required style="flex: 1; margin-right: 10px;"> 
+                            <button class="btn" type="button" id="groupIDBtn">중복확인</button>
+                        </div>
                         <div id="groupIDAlert" style="display: none;">사용 가능한 조직 ID입니다!</div>
                     </div>
 
                     <!-- 새로운 PW 작성 -->
                     <div class="form-group">
-                        <input type="password" id="groupPW" placeholder="Group Password" class="inputRequired"> </br>
+                        <input type="password" id="groupPW" placeholder="조직 비밀번호" class="inputRequired"> </br>
                     </div>
 
                     <!-- 최종 조직 등록 버튼 -->
-                    <div class="form-group">
-                        <button class="btn" type="submit">조직 등록</button>
+                    <div class="form-group button-group">
+                        <button class="Sbtn" type="submit">조직 등록</button>
+                        <button class="Nbtn" id="backButton" onclick="window.location.href='/PrivatePage/PrivatePage.html'">등록 취소</button>
                     </div>
                 </form>
             </div>
         </div>
-
 
         <!-- 모달 및 오버레이 -->
         <div id="overlay" class="overlay hidden"></div>
@@ -107,5 +117,6 @@
                 <button id="closeInfoModalButton" class="btn">닫기</button>
             </div>
         </div>
+    </div>
 </body>
 </html>

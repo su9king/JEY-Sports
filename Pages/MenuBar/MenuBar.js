@@ -13,7 +13,6 @@ function loadMenubar(groupName) {
         document.getElementById('menubar').innerHTML = data;
         document.getElementById('goToGroupMain').innerHTML = `${sessionStorage.getItem('groupName')}`;
         document.getElementById('backButton').addEventListener('click', function() {
-            alert(previousPage);
             window.location.href = previousPage;
         });
 
@@ -21,7 +20,7 @@ function loadMenubar(groupName) {
         const logo = document.getElementById('mainButtonImage');
         logo.src = '/Icon.png';
         logo.addEventListener('click', function() {
-            window.location.href = '/LoginPage.html';
+            window.location.href = '/MainPage.html';
         });
     })
     .catch(error => {

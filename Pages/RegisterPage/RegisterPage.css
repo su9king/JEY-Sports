@@ -2,39 +2,63 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+  background-color: #f2f2f2; /* 페이지 배경색을 연한 회색으로 설정 */
 }
 
 .container {
   width: 100%;
-  max-width: 500px; /* 최대 너비 설정 */
+  max-width: 950px;
   height: auto;
-  border-radius: 20px; /* 모서리를 둥글게 */
-  background-color: #f2f2f2;
-  margin: 10px auto; /* 상하 마진 추가 */
-  box-sizing: border-box; /* 패딩 포함 */
-  padding: 1rem; /* 내부 패딩 추가 */
+  border-radius: 20px;
+  background-color: #ffffff; /* 컨테이너 배경색을 흰색으로 설정 */
+  margin: 10px auto;
+  box-sizing: border-box;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 내부 요소 상하 중앙 정렬 */
+  justify-content: center;
   align-items: center;
   text-align: center;
 }
 
 .inputRequired, .input {
-  background-color: #ffffff;
-  border: none;
+  background-color: #f2f2f2; /* 입력란 배경색을 페이지의 배경색과 동일하게 설정 */
+  border: 1px solid #ccc; /* 입력란의 테두리 색상 */
   padding: 1rem;
   margin: 1rem 0;
-  width: calc(100% - 8rem); /* 패딩을 고려한 너비 설정 */
-  box-sizing: border-box; /* 패딩 포함 */
+  width: 700px;
+  box-sizing: border-box;
+  text-align: left;
 }
 
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block; /* 라벨을 블록 요소로 설정 */
+  text-align: left; /* 라벨을 왼쪽 정렬 */
+  margin-bottom: 0.5rem; /* 라벨과 입력란 사이의 여백 조정 */
+}
+
+.gender-options {
+    display: flex; /* Flexbox를 사용하여 수평 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+}
+
+.gender-options input[type="radio"] {
+    margin-right: 5px; /* 라디오 버튼과 레이블 사이의 간격 */
+}
+
+.gender-options label {
+    margin-right: 15px; /* 레이블 사이의 간격 */
+}
 
 .btn {
   margin: 5px;
-  width: 45%;
+  width: 100px;
   max-width: 300px;
-  height: 30px;
+  height: 50px;
   border-radius: 5px;
   border: none;
   background-color: #007bff;
@@ -42,24 +66,67 @@ body {
   cursor: pointer;
 }
 
-::placeholder {
-  text-align: center;
-}
-
-
-.form-group {
-  margin-bottom: 1rem; /* 그룹 간 간격 조정 */
-}
-
-#backButton {
+.Sbtn {
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  align-self: flex-start; /* 좌측 정렬을 위한 속성 추가 */
-  margin-bottom: 10px; /* 아래쪽 간격 추가 */
+  align-self: flex-start;
+  margin-bottom: 10px;
+}
+
+.Nbtn {
+  padding: 10px 20px;
+  background-color: #dfa830;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-bottom: 10px;
+}
+
+::placeholder {
+  text-align: left;
+}
+
+.input-container {
+  display: flex; /* Flexbox를 사용하여 수평 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+}
+
+.input-container .inputRequired {
+  flex-grow: 1; /* 입력란이 가능한 공간을 모두 차지하도록 설정 */
+  margin-right: 10px; /* 입력란과 버튼 사이의 간격 */
+  width: calc(600px - 100px); /* 전체 길이에서 버튼의 너비를 뺀 값 */
+  padding-right: 10px; /* 버튼과의 간격을 고려한 패딩 */
+  box-sizing: border-box; /* 패딩 포함하여 너비 계산 */
+}
+
+.header-container {
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: space-between; /* 양쪽 끝으로 정렬 */
+  padding: 10px; /* 여백 추가 (필요에 따라 조정) */
+}
+
+.header-text {
+  display: flex; /* Flexbox 사용 */
+  flex-direction: column; /* 세로 방향으로 정렬 */
+  text-align: left; /* 왼쪽 정렬 */
+}
+
+.sports-image {
+  width: 300px; /* 이미지의 너비를 설정 (필요에 따라 조정) */
+  height: auto; /* 비율 유지 */
+  margin-left: 20px; /* 이미지와 제목 사이의 간격 */
+}
+
+#idAlert {
+  color: green; /* 필요에 따라 색상 조정 */
 }
 
 
@@ -103,40 +170,37 @@ body {
 }
 
 .smallNotice {
-  font-size: 12px; /* 폰트 크기를 작게 설정 */
-  color: gray; /* 글씨 색상을 회색으로 설정 */
-  margin: 0; /* 위아래 빈 공간을 제거 */
-  padding: 0; /* 패딩을 제거 */
-  line-height: 1; /* 줄 간격을 최소화 */
+  font-size: 12px;
+  color: gray;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
 }
 
-
-
-/* -----------------------모바일----------------------- */
-@media (max-width: 600px) {
-  body {
-      font-size: 1rem; /* 16px */
-  }
-  .container {
-      width: 95%;
-      padding: 1em;
-      margin: 0 auto;
-      margin-top: 2%;
-      box-sizing: border-box;
-  }
-  .btn {
-      width: 50%;
-      max-width: 100%;
-  }
+.Sbtn,
+.Nbtn,
+.btn {
+  position: relative; /* ::before 가상 요소를 사용하기 위해 position 설정 */
+  overflow: hidden; /* 가상 요소가 부모 요소를 넘지 않도록 설정 */
+  transition: background-color 0.3s; /* 배경색 변화 시 부드러운 전환 효과 */
 }
 
-@media (min-width: 601px) {
-  body {
-      font-size: 1.125rem; /* 18px */
-  }
-  .container {
-      width: 80%;
-      max-width: 500px;
-      margin: 0 auto;
-  }
+/* 마우스를 올렸을 때의 효과 */
+.Sbtn:hover ,
+.btn:hover {
+  background-color: #0056b3; /* 마우스를 올렸을 때 배경색 변경 */
+  color: white; /* 텍스트 색상 변경 (선택사항) */
+}
+
+/* 버튼 클릭 시 효과 */
+.Sbtn:active,
+.Nbtn:active,
+.btn:active {
+  background-color: #003366; /* 클릭 시 배경색 변경 */
+  color: white; /* 클릭 시 텍스트 색상 변경 (선택사항) */
+}
+
+.Nbtn:hover{
+  background-color: #c79a20; /* 마우스를 올렸을 때 배경색 변경 */
+  color: white; /* 텍스트 색상 변경 (선택사항) */
 }

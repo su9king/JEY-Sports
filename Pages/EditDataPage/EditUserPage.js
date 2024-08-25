@@ -24,6 +24,7 @@ window.onload = async function() {
         document.getElementById('userName').value = response.resources[0]['userName'];
         document.getElementById('userIntro').value = response.resources[0]['userIntro'];
         document.getElementById('userMail').value = response.resources[0]['userMail'];
+        document.getElementById('userID').value = response.resources[0]['userID'];
 
         const userImage = sessionStorage.getItem('userImage');
         document.getElementById('userImageSample').src = userImage == 'null' ? `/UserImages/NULL.jpg` : `/UserImages/${userImage}`;

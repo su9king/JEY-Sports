@@ -1,10 +1,17 @@
 /* 공통 스타일 */
+body {
+  background-color: #f2f2f2; /* 페이지 배경색 설정 */
+  margin: 0; /* 기본 마진 제거 */
+  padding: 0; /* 기본 패딩 제거 */
+  font-family: Arial, sans-serif; /* 기본 폰트 설정 */
+}
+
 .container {
   width: 100%;
   max-width: 400px; /* 최대 너비 설정 */
   height: auto; /* 높이를 콘텐츠에 맞게 자동 조정 */
   border-radius: 20px; /* 모서리를 둥글게 */
-  background-color: #f2f2f2;
+  background-color: #ffffff; /* 컨테이너 배경색을 흰색으로 설정 */
 
   display: flex;
   flex-direction: column;
@@ -21,8 +28,8 @@
 }
 
 .input {
-  background-color: #ffffff;
-  border: 1px solid #00ccff;
+  background-color: #ffffff; /* 입력란 배경색을 흰색으로 설정 */
+  border: 1px solid #00ccff; /* 테두리 색상 설정 */
   padding: 1rem;
   margin: 1rem 0;
   width: 100%; /* 인풋 박스가 부모 요소의 너비를 채우도록 */
@@ -36,51 +43,54 @@
 
 .buttons {
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 0rem;
   width: 100%;
 }
 
 .btn {
   margin: 0.5rem 0; /* 버튼 사이 간격 */
-  width: 45%;
-  max-width: 200px; /* 최대 너비 설정 */
+  width: 100%;
   height: 40px;
   border-radius: 5px; /* 버튼 모서리를 둥글게 */
   border: none;
-  background-color: #007bff;
+  background-color: #007bff; /* 버튼 배경색 설정 */
   color: white; /* 버튼 텍스트 색상을 흰색으로 설정 */
   cursor: pointer; /* 커서를 포인터로 변경하여 버튼을 클릭할 때 인터랙션 제공 */
 }
 
 ::placeholder {
-  text-align: center;
+  text-align: center; /* 플레이스홀더 텍스트를 중앙 정렬 */
 }
 
-/* -----------------------모바일----------------------- */
-@media (max-width: 600px) {
-  body {
-      font-size: 1rem; /* 16px */
-  }
-  .container {
-      width: 90%;
-      padding: 1rem;
-  }
-  .input {
-      padding: 0.8rem;
-  }
-  .btn {
-      max-width: 30%; /* 최대 너비 해제 */
-      height: 36px;
-      margin: 5%;
-  }
+.image-container {
+  width: 100%;
+  max-width: 400px; /* 최대 너비 설정 */
+  margin: 0 auto; /* 중앙 정렬 및 아래 간격 설정 */
+  display: flex;
+  justify-content: center; /* 이미지 중앙 정렬 */
 }
 
-@media (min-width: 601px) {
-  body {
-      font-size: 1.125rem; /* 18px */
-  }
-  .container {
-      width: 80%;
-      max-width: 500px; /* 데스크탑에서 최대 너비 설정 */
-  }
+.sports-image {
+  width: 100%; /* 부모 요소의 너비에 맞춤 */
+  height: auto; /* 비율 유지 */
+  border-radius: 20px; /* 모서리 둥글게 */
+}
+/* 버튼에 대한 기본 스타일 */
+
+.btn {
+  position: relative; /* ::before 가상 요소를 사용하기 위해 position 설정 */
+  overflow: hidden; /* 가상 요소가 부모 요소를 넘지 않도록 설정 */
+  transition: background-color 0.3s; /* 배경색 변화 시 부드러운 전환 효과 */
+}
+
+/* 마우스를 올렸을 때의 효과 */
+.btn:hover {
+  background-color: #0056b3; /* 마우스를 올렸을 때 배경색 변경 */
+  color: white; /* 텍스트 색상 변경 (선택사항) */
+}
+
+/* 버튼 클릭 시 효과 */
+.btn:active {
+  background-color: #003366; /* 클릭 시 배경색 변경 */
+  color: white; /* 클릭 시 텍스트 색상 변경 (선택사항) */
 }

@@ -10,87 +10,102 @@
 <body>
     <div id="navbar"></div>
     <div class="container">
-        <button id="backButton">이전</button>
         <div>
-            <h1>Register Information</h1>
+            <div class="header-container"> <!-- 추가된 div -->
+                <div class="header-text"> <!-- 제목을 감싸는 div -->
+                    <h1>회원가입</h1>
+                    <h4>저희 소프트웨어를 통해 새로운 경험을 누려보세요!</h4>
+                </div>
+                <img src="/Icon.png" alt="Sports Image" class="sports-image">
+            </div>
+            
+            
             <div class="inputs">
-                <form id="registrationForm"> <!-- 전체 form으로 묶기 -->
-
-                    <!-- 이름 작성 -->
-                    <div class="form-group">
-                        <label for="userName">이름:</label>
-                        <input class="inputRequired" id="userName" type="text" placeholder="Your Name"> </br>
-                    </div>
-
-                    <!-- 이미지 파일 업로드 -->
-                    <div class="form-group" style="display: none;">
-                        <label for="userImage">프로필 사진:</label>
-                        <input type="file" id="userImage" name="profilePicture" accept="image/*">
-                    </div>
+                <form id="registrationForm"> <!-- 전체 form으로 묶기 --> 
 
                     <!-- 새로운 ID 작성 -->
                     <div class="form-group">
-                        <label for="userID">ID:</label>
-                        <input class="inputRequired" id="userID" type="text" placeholder="New ID" required autocomplete="username"> </br>
-                        <button class="btn" type="button" id="idCheckButton">ID Duplicate Check</button>
-                        <div id="idAlert" style="display: none;">사용 가능한 ID입니다!</div>
+                        <label for="userID">아이디
+                            <span id="idAlert" style="display: none;">사용 가능한 ID입니다!</span>
+                        </label>
+                        <div class="input-container">
+                            <input class="inputRequired" id="userID" type="text" placeholder="아이디 입력 (6~20자)" required autocomplete="username">
+                            <button class="btn" type="button" id="idCheckButton">중복확인</button>
+                        </div>
                     </div>
+                    
+                    
+
+                    <!-- 새로운 PW 작성 -->
+                    <div class="form-group">
+                        <label for="PW1">비밀번호</label>
+                        <input type="password" id="PW1" placeholder="비밀번호 입력 (8~20자)" class="inputRequired" autocomplete="new-password"> </br>
+                    </div>
+
+                    <!-- 다시 한 번 PW 작성 -->
+                    <div class="form-group">
+                        <label for="PW2">비밀번호 확인</label>
+                        <input type="password" id="PW2" placeholder="비밀번호 재입력" class="inputRequired" autocomplete="new-password"> </br>
+                        <div id="pwAlert" style="display: none;">비밀번호가 일치하지 않습니다.</div>
+                    </div>
+
+                    <!-- 이름 작성 -->
+                    <div class="form-group">
+                        <label for="userName">이름</label>
+                        <input class="inputRequired" id="userName" type="text" placeholder="이름을 입력해주세요"> </br>
+                    </div>
+
 
                     <!-- 휴대폰 번호 입력 -->
                     <div class="form-group">
-                        <label for="userPhone">휴대폰 번호:</label>
-                        <input class="inputRequired" id="userPhone" type="tel" pattern="[0-9]{10,11}" placeholder="Phone Number(Only Number)" required autocomplete="tel"> </br>
-                        <button class="btn" type="button" id="sendCodeButton">전화번호 인증번호 전송</button>
+                        <label for="userPhone">휴대폰 번호</label>
+                        <div class ="input-container">
+                        <input class="inputRequired" id="userPhone" type="tel" pattern="[0-9]{10,11}" placeholder="휴대폰 번호입력 ('-' 제외)" required autocomplete="tel"> </br>
+                        <button class="btn" type="button" id="sendCodeButton">인증번호 전송</button>
+                    </div>
                     </div>
 
                     <!-- 인증번호 작성 -->
                     <div class="form-group" id="phoneCheckForm" style="display: none;">
-                        <input class="inputRequired" id="code" type="text" placeholder="Code Number by Phone Message"> </br>
+                        <div class ="input-container">
+                        <input class="inputRequired" id="code" type="text" placeholder="인증번호를 입력해주세요"> </br>
                         <button class="btn" type="button" id="verifyCodeButton">인증하기</button>
+                    </div>
                     </div>
 
                     <!-- 이메일 작성 -->
                     <div class="form-group">
-                        <label for="userEmail">이메일:</label>
-                        <input class="inputRequired" id="userEmail" type="text" placeholder="Your Email" autocomplete="email"> </br>
+                        <label for="userEmail">이메일</label>
+                        <input class="inputRequired" id="userEmail" type="text" placeholder="이메일 주소" autocomplete="email"> </br>
                         <span id="emailFeedback"></span>
                     </div>
 
                     <!-- 주소 작성 -->
                     <div class="form-group">
-                        <label for="userAddress">주소:</label>
-                        <input class="input" id="userAddress" type="text" placeholder="Your Address" autocomplete="street-address"> </br>
+                        <label for="userAddress">주소</label>
+                        <input class="input" id="userAddress" type="text" placeholder="주소를 입력해주세요" autocomplete="street-address"> </br>
                     </div>
 
                     <!-- 성별 선택 -->
                     <div class="form-group">
-                        <label>성별:</label>
-                        <input type="radio" id="male" name="gender" value="M">
-                        <label for="male">남성</label>
-                        <input type="radio" id="female" name="gender" value="F">
-                        <label for="female">여성</label>
-                        <input type="radio" id="private" name="gender" value="P">
-                        <label for="private">미공개</label> </br>
+                        <label>성별</label>
+                        <div class="gender-options"> <!-- 추가된 div -->
+                            <input type="radio" id="male" name="gender" value="M">
+                            <label for="male">남성</label>
+                            <input type="radio" id="female" name="gender" value="F">
+                            <label for="female">여성</label>
+                            <input type="radio" id="private" name="gender" value="P">
+                            <label for="private">미공개</label>
+                        </div>
                     </div>
+
 
                     <!-- 생년월일 입력 -->
                     <div class="form-group">
-                        <label for="userBirth">생일:</label>
+                        <label for="userBirth">생일</label>
                         <input class="input" id="userBirth" type="date" placeholder="Your BirthDay"> </br>
                     </div>
 
-                    <!-- 새로운 PW 작성 -->
-                    <div class="form-group">
-                        <label for="PW1">비밀번호:</label>
-                        <input type="password" id="PW1" placeholder="New Password" class="inputRequired" autocomplete="new-password"> </br>
-                    </div>
-
-                    <!-- 다시 한 번 PW 작성 -->
-                    <div class="form-group">
-                        <label for="PW2">비밀번호 확인:</label>
-                        <input type="password" id="PW2" placeholder="Password Double Check" class="inputRequired" autocomplete="new-password"> </br>
-                        <div id="pwAlert" style="display: none;">비밀번호가 일치하지 않습니다.</div>
-                    </div>
                     
                     <!-- 개인 정보 수집 동의 -->
                     <label id="privacyPolicyLabel">
@@ -101,7 +116,8 @@
                 
                     <!-- 최종 회원가입 버튼 -->
                     <div class="form-group">
-                        <button class="btn" type="submit">회원가입</button>
+                        <button class="Sbtn" type="submit">가입완료</button>
+                        <button class="Nbtn" id ="cancel">가입취소</button>
                     </div>
                 </form>
             </div>
@@ -173,8 +189,8 @@
             <label id="checkboxLabel">
                 <input type="checkbox" id="modalPrivacyPolicy" disabled> 약관에 동의합니다. <br>
             </label>
-            <button id="finishModalButton" class="btn" disabled>확인</button>
-            <button id="closeModalButton" class="btn">닫기</button>
+            <button id="finishModalButton" class="Sbtn" disabled>확인</button>
+            <button id="closeModalButton" class="Nbtn">닫기</button>
         </div>
     </div>
     

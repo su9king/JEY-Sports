@@ -1,9 +1,79 @@
+body {
+  background-color: #f2f2f2; /* 기존 container 색상 */
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.back-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.back-button::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-left: 5px solid #007bff;
+  border-top: 5px solid #007bff;
+  transform: rotate(-45deg);
+  position: absolute;
+}
+
+.back-button:hover::before {
+  border-left-color: #0056b3;
+  border-top-color: #0056b3;
+}
+
+.back-button:active::before {
+  border-left-color: #003366;
+  border-top-color: #003366;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+  margin-left: 40px;
+  cursor: pointer; /* 포인터 커서 변경 */
+}
+
+.btn {
+  margin-left: 10px;
+  font-family: 'Arial', sans-serif;
+  color: #ffffff;
+}
+
+.profileImage {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
 .container {
   width: 90%;
-  max-width: 600px;
+  max-width: 700px;
   height: auto;
   border-radius: 20px; /* 모서리를 둥글게 */
-  background-color: #f2f2f2;
+  background-color: #ffffff; /* 기존 body 색상 */
   padding: 2rem; /* 내부 패딩 추가 */
   box-sizing: border-box;
   display: flex;
@@ -17,47 +87,47 @@
   transform: translate(-50%, -50%);
 }
 
-.form-group {
-  margin-bottom: 1.5rem; /* 폼 요소들 간의 간격 */
-}
-
 .inputRequired, .input {
   background-color: #ffffff;
   border: 1px solid #ccc; /* 경계선 추가 */
   padding: 0.75rem 1.5rem; /* 내부 패딩 */
   margin-top: 0.5rem;
   margin-bottom: 0.5rem; /* 라벨과 입력박스 사이 간격 */
-  width: calc(100% - 3rem); /* 패딩을 고려한 너비 설정 */
-  box-sizing: border-box;
-  text-align: center;
+  width: 100%; /* 입력란 너비를 100%로 설정 */
+  box-sizing: border-box; /* 패딩과 경계선을 포함한 너비 계산 */
+  text-align: left; /* 입력란 텍스트 왼쪽 정렬 */
+}
+
+.form-group {
+  margin-bottom: 1.5rem; /* 폼 요소들 간의 간격 */
+  text-align: left; /* 라벨과 입력란을 왼쪽 정렬 */
+}
+
+/* 조직 등록과 등록 취소 버튼의 크기를 일치시키고 중간에 공간 추가 */
+.button-group .btn {
+  margin: 0 5px; /* 버튼 사이 간격 추가 */
+  padding: 10px 0; /* 상하 패딩 추가 */
+}
+
+.button-group {
+  display: flex; /* 버튼을 같은 줄에 배치 */
+  justify-content: center; /* 중앙 정렬 */
+  gap: 10px; /* 버튼 사이의 간격 설정 */
+  width: 100%; /* 전체 너비 사용 */
 }
 
 .btn {
-  margin: 10px 0; /* 버튼 사이 간격 */
-  width: 400%;
-  max-width: 200px;
-  height: 30px;
-  border-radius: 5px; /* 버튼 모서리를 둥글게 */
-  border: none;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
+  padding: 10px 20px; /* 상하 패딩 */
+  min-width: 150px; /* 최소 너비 설정 (원하는 길이로 조정 가능) */
+  border-radius: 5px; /* 모서리 둥글게 */
+  border: none; /* 경계선 없애기 */
+  background-color: #007bff; /* 버튼 배경색 */
+  color: white; /* 글자 색상 */
+  cursor: pointer; /* 커서 포인터로 변경 */
 }
 
 ::placeholder {
-  text-align: center;
-}
-
-
-#backButton {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  align-self: flex-start; /* 좌측 정렬을 위한 속성 추가 */
-  margin-bottom: 10px; /* 아래쪽 간격 추가 */
+  text-align: left;
 }
 
 .profile-image-container {
@@ -81,7 +151,6 @@
 
 /* -----------------------모달----------------------- */
 
-/* 정보 아이콘 스타일 */
 .info-icon {
   display: inline-block;
   width: 20px; /* 아이콘 크기를 줄였습니다 */
@@ -95,6 +164,7 @@
   margin-left: 0.5em;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
+  
 }
 
 .info-icon:hover {
@@ -102,62 +172,105 @@
   transform: scale(1.1); /* 아이콘 크기 확대 */
 }
 
-
 .hidden {
-display: none;
+  display: none;
 }
 
 .overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: rgba(0, 0, 0, 0.5);
-z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
 .modal {
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-background: white;
-padding: 20px;
-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-z-index: 1001;
-width: 80%;
-max-width: 500px;
-max-height: 80%;
-overflow: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0,  0, 0.1);
+  z-index: 1001;
+  width: 80%;
+  max-width: 500px;
+  max-height: 80%;
+  overflow: auto;
 }
 
 .modal-content {
-margin: 20px;
+  margin: 20px;
+  text-align: left; /* 텍스트 왼쪽 정렬 */
 }
 
 #privacyContent {
-height: 200px;
-overflow-y: auto;
+  height: 200px;
+  overflow-y: auto;
 }
 
-/* -----------------------모바일----------------------- */
-@media (max-width: 480px) {
-  .container {
-      width: 95%;
-      padding: 1.5rem;
-      top: 2%;
-      transform: translate(-50%, 0); /* 수직 중앙 정렬 제거 */
-  }
+.Sbtn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
 
-  .inputRequired, .input {
-      padding: 0.5rem 1rem; /* 모바일에서 패딩 줄이기 */
-      width: calc(100% - 2rem); /* 패딩을 고려한 너비 설정 */
-  }
+.Nbtn {
+  padding: 10px 20px;
+  background-color: #dfa830 !important; /* !important 추가 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-bottom: 10px;
+}
 
-  .btn {
-      width: 100%;
-      max-width: 40%;
-      height: 35px;
-  }
+.header .btn-custom {
+  width: 100px; /* 원하는 너비로 조정 */
+  height: 30px; /* 높이는 기존과 동일하게 설정 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  border: none; /* 경계선 없애기 */
+  background-color: #007bff; /* 배경색 */
+  color: white; /* 글자 색상 */
+  cursor: pointer; /* 포인터 커서 */
+  transition: background-color 0.3s; /* 호버 효과를 위한 전환 */
+}
+
+.header .btn-custom:hover {
+  background-color: #0056b3; /* 호버 시 색상 변경 */
+}
+
+.Sbtn,
+.Nbtn,
+.btn {
+  position: relative; /* ::before 가상 요소를 사용하기 위해 position 설정 */
+  overflow: hidden; /* 가상 요소가 부모 요소를 넘지 않도록 설정 */
+  transition: background-color 0.3s; /* 배경색 변화 시 부드러운 전환 효과 */
+}
+
+/* 마우스를 올렸을 때의 효과 */
+.Sbtn:hover ,
+.btn:hover {
+  background-color: #0056b3; /* 마우스를 올렸을 때 배경색 변경 */
+  color: white; /* 텍스트 색상 변경 (선택사항) */
+}
+
+/* 버튼 클릭 시 효과 */
+.Sbtn:active,
+.Nbtn:active,
+.btn:active {
+  background-color: #003366; /* 클릭 시 배경색 변경 */
+  color: white; /* 클릭 시 텍스트 색상 변경 (선택사항) */
+}
+
+.Nbtn:hover{
+  background-color: #c79a20 !important;; /* 마우스를 올렸을 때 배경색 변경 */
+  color: white; /* 텍스트 색상 변경 (선택사항) */
 }

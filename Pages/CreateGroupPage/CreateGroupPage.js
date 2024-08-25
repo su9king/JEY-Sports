@@ -6,6 +6,9 @@ window.onload = async function() {
     const resources = await certification(page, data);
     document.getElementById('groupImageSample').src =  `/GroupImages/NULL.png`;
     
+    const userImage = sessionStorage.getItem('userImage');
+    const profileImage = document.getElementById('profileImage');
+    profileImage.src = userImage == 'null' ? `/UserImages/NULL.jpg` : `/UserImages/${userImage}`;
 }
 
 

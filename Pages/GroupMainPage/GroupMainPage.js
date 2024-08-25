@@ -60,7 +60,7 @@ window.onload = async function() {
         document.getElementById('groupImage').src = `/GroupImages/${groupImage}`;  
     }
 
-    document.getElementById('groupName').textContent = `${response.resources[0]["groupName"]}에 오신 것을 환영합니다!`
+    document.getElementById('groupName').textContent = `${response.resources[0]["groupName"]} 채널에 오신 것을 환영합니다!`
 
     
 
