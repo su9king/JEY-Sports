@@ -46,8 +46,8 @@ window.onload = async function() {
             const expectedScheduleContainer = document.getElementById("expected-schedule-container");
             expectedScheduleContainer.innerHTML = '';
 
-            alertStatusSchedule(data.resources[1]); // 출석 기능 있는 일정 사항 노출
-            alertStatusSchedule(data.resources[2]); // 출석 기능 있는 일정 사항 노출
+            alertStatusSchedule(data.resources[1],1); // 출석 기능 있는 일정 사항 노출
+            alertStatusSchedule(data.resources[2],2); // 출석 기능 있는 일정 사항 노출
 
         } else {
             alert('관리자에게 문의해주세요')
@@ -125,7 +125,7 @@ async function alertStatusNotice(statusNotice) {
 
 
 
-async function alertStatusSchedule(data) {
+async function alertStatusSchedule(data,type) {
 
     
     const currentScheduleContainer = document.getElementById("current-schedule-container");
@@ -133,8 +133,14 @@ async function alertStatusSchedule(data) {
     const expectedScheduleContainer = document.getElementById("expected-schedule-container");
 
     if(data.length == 0) {
-        currentScheduleContainer.style.display = 'none';
-        expectedScheduleContainer.style.display = 'none';
+
+        if (type == 2){
+            console.log("작동함")
+            currentScheduleContainer.style.display = 'none';
+        }else if(type == 1){
+            console.log("작동함")
+            expectedScheduleContainer.style.display = 'none';
+        }
         return
     }
     // 오늘 날짜
@@ -168,7 +174,7 @@ async function alertStatusSchedule(data) {
         `;
 
         // 출석기능이 있는 경우만 버튼 생성
-        console.log(schedule.scheduleAttendance)
+        console.log(schedule.attendanceStatus !== undefined)
         if (schedule.attendanceStatus !== undefined) { 
             const attendButton = document.createElement("button");
             attendButton.classList.add("attend-button");
@@ -200,11 +206,10 @@ async function alertStatusSchedule(data) {
                 } else if (schedule.attendanceStatus === 0) {
                     const absentCheckedButton = document.createElement("p");
                     absentCheckedButton.classList.add("absent-checked-button");
-                    absentCheckedButton.innerText = "불참 예정 ㅠㅠ";
 
                     const absentReason = document.createElement("p");
                     absentReason.classList.add("absent-reason");
-                    absentReason.innerText = `사유: ${schedule.absentReason}`;
+                    absentReason.innerText = `불참 사유: ${schedule.absentReason}`;
 
                     scheduleInfo.appendChild(absentCheckedButton);
                     scheduleInfo.appendChild(absentReason);
@@ -217,6 +222,17 @@ async function alertStatusSchedule(data) {
             // 예정 일정에는 결석하기 버튼만 추가
             if (!isToday) {
                 scheduleInfo.appendChild(absentButton);
+                if (schedule.attendanceStatus === 0) {
+                    const absentCheckedButton = document.createElement("p");
+                    absentCheckedButton.classList.add("absent-checked-button");
+
+                    const absentReason = document.createElement("p");
+                    absentReason.classList.add("absent-reason");
+                    absentReason.innerText = `불참 사유: ${schedule.absentReason}`;
+
+                    scheduleInfo.appendChild(absentCheckedButton);
+                    scheduleInfo.appendChild(absentReason);
+                }
             }
         }
 
